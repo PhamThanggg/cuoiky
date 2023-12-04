@@ -33,7 +33,6 @@
             while($row = mysqli_fetch_assoc($tkk)){
                 if($row["user_name"] == $username && $row["password"] == $password){
                     $count++;
-                    $_SESSION['user'] = $username;
                     break;
                 }
             }
