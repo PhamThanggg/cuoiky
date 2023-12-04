@@ -12,6 +12,14 @@
 </head>
 <body>
 	<?php include 'navbar.php';?>
+
+	<?php
+		include '../function.php';
+		if(!isLogin()){
+			header('location: dang_nhap.php');
+		}
+	?>
+
 	<main style="min-height: 100vh; width: 100%;">
 		<div class="" style="text-align: center;">
 			<h2>Khóa học</h2>
@@ -50,6 +58,10 @@
 
 		</div>
 	</main>
+	<?php
+	
+	?>
+
 	<?php include 'footer.php'; ?>
 </body>
 

@@ -11,27 +11,53 @@
 
 </head>
 <body>
+<?php
+            include '../function.php';
+			session_start();
+            
+			if(isset($_POST['submitLogin'])){
+                $tk = $_POST['username'];
+                $mk = $_POST['password'];
 
+                if($tk==""){
+                    echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập tên tài khoản</div>';
+                }elseif($mk==""){
+                    echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập mật khẩu </div>';
+                }else{
+                    if(checkLogin($tk, $mk)){
+						$_SESSION['user'] = $tk;
+                        header("location: khoa_hoc.php");
+                    }else{
+						echo '<div class="alert alert-danger text-center" role="alert">Tài khoản hoặc mật khẩu không chính xác</div>';
+					}
+                }
+            }
+		
+		?>
 
-	<div class="alert alert-danger text-center" role="alert">Mẫu:Tài khoản hoặc mật khẩu không chính xác</div>
 	<main style="min-height: 100vh; margin-top: 10%;">
 		<div class="d-flex justify-content-center"><h1>Đăng nhập</h1></div>
 		<div class="d-flex justify-content-center">
 			<form class="w-25" method="POST">
 				<div class="mb-3">
-				  <label for="username" class="form-label">Username</label>
-				  <input type="text" class="form-control" id="username" name="username" placeholder="Nhập username">
+				  <label for="username" class="form-label">Tài khoản</label>
+				  <input type="text" class="form-control" id="username" name="username" placeholder="Nhập tên tài khoản" value="<?php saveInputPOST('submitLogin', 'username') ?>">
 				</div>
 				<div class="mb-3">
-				    <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+				    <label for="inputPassword" class="form-labell">Mật khẩu</label>
 				    <div class="col">
-				      <input type="password" class="form-control" id="inputPassword" placeholder="Nhập Password" name="password">
+				      <input type="password" class="form-control" id="inputPassword" placeholder="Nhập mật khẩu" name="password">
 				    </div>
 				</div>
 				<input type="submit" class="btn btn-primary" name="submitLogin" value="Đăng nhập">
+				<a href="dang_ky.php">Đăng ký</a>
 			  </form>
 		</div>
 
+		<?php
+
+		
+		?>
 
 
 		

@@ -9,13 +9,29 @@
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-             Tài khoản vừa đăng nhập
+             <?php
+                session_start();
+                if(isset($_SESSION['user'])){
+                  echo $_SESSION['user'];
+                }
+             ?>
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
+            <form action="" method="post">
+              <li><a class="dropdown-item" href=""><input type="submit" name="sm" value="Đăng xuất" style="border: none; font-size: 16px; background: rgba(255, 255, 255, 0);"></a></li>
+            </form>  
           </ul>
         </li>
       </ul>
     </div>
   </div>
 </nav>
+
+<?php 
+// đăng xuất
+if(isset($_POST['sm'])){
+  unset($_SESSION['user']);
+  header("location: dang_nhap.php");
+}
+
+?>
