@@ -11,7 +11,7 @@
 
 </head>
 <body>
-        <?php
+        <?php			
             include '../function.php';
             
 			if(isset($_POST['submitLogin'])){

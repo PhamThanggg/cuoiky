@@ -12,20 +12,23 @@
 </head>
 <body>
 <?php
-            include '../function.php';
+            require_once('phpmailer/Exception.php');
+            require_once('phpmailer/PHPMailer.php');
+            require_once('phpmailer/SMTP.php');
+            include '../function.php';            
 			session_start();
             
 			if(isset($_POST['submitLogin'])){
                 $tk = $_POST['username'];
-                $mk = $_POST['password'];
 
                 if($tk==""){
                     echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập tên tài khoản</div>';
-                }elseif($mk==""){
-                    echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập mật khẩu </div>';
                 }else{
-                    if(checkLogin($tk, $mk)){
-						$_SESSION['user'] = $tk;
+                    if(checkAccount($tk)){
+                        $random = rand(100000, 999999);
+                        $passMD5 = md5($random);
+                        sendEmail($tk, "New passwork", $random);
+                        updateAccount($tk, $passMD5);
                         header("location: khoa_hoc.php");
                     }else{
 						echo '<div class="alert alert-danger text-center" role="alert">Tài khoản hoặc mật khẩu không chính xác</div>';
@@ -36,22 +39,15 @@
 		?>
 
 	<main style="min-height: 100vh; margin-top: 10%;">
-		<div class="d-flex justify-content-center"><h1>Đăng nhập</h1></div>
+		<div class="d-flex justify-content-center"><h1>Quên mật khẩu</h1></div>
 		<div class="d-flex justify-content-center">
 			<form class="w-25" method="POST">
 				<div class="mb-3">
-				  <label for="username" class="form-label">Tài khoản</label>
-				  <input type="text" class="form-control" id="username" name="username" placeholder="Nhập tên tài khoản" value="<?php saveInputPOST('submitLogin', 'username') ?>">
-				</div>
-				<div class="mb-3">
-				    <label for="inputPassword" class="form-labell">Mật khẩu</label>
-				    <div class="col">
-				      <input type="password" class="form-control" id="inputPassword" placeholder="Nhập mật khẩu" name="password">
-				    </div>
-				</div>
-				<input type="submit" class="btn btn-primary" name="submitLogin" value="Đăng nhập">
-				<a href="dang_ky.php">Đăng ký</a>
-				<a href="quen_mk.php">Quên mật khẩu</a>
+				  <label for="username" class="form-label">Email</label>
+				  <input type="text" class="form-control" id="username" name="username" placeholder="Nhập email" value="<?php saveInputPOST('submitLogin', 'username') ?>">
+				</div>				
+				<input type="submit" class="btn btn-primary" name="submitLogin" value="Xác nhận">
+				<a href="dang_nhap.php">Đăng nhập</a>
 			  </form>
 		</div>
 
