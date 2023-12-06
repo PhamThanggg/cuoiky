@@ -50,8 +50,8 @@
                 <!-- tên khóa học -->
             </p>
             <?php
-                // $id = $_GET['id'];
-                // echo '<a href="bien_tap.php?id='.$id.'" class="btn btn-primary">Trở lại</a>';
+                $id = $_GET['id'];
+                echo '<a href="bien_tap.php?id='.$id.'" class="btn btn-primary">Trở lại</a>';
             ?>
             <form action="" method="POST" enctype="multipart/form-data">
         </div>
