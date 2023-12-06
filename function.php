@@ -40,6 +40,7 @@ function checkLogin($username, $password)
 	while ($row = mysqli_fetch_assoc($tkk)) {
 		$passMD5 = md5($password);
 		if ($row["user_name"] == $username && $row["password"] == $passMD5) {
+			$_SESSION["role"] = $row["role"];
 			$count++;
 			if($row["ho_ten"]!=""){
 				$get_ht = $row["ho_ten"];

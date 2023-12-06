@@ -10,6 +10,13 @@
 	<!-- End bootstrap cdn -->
 
 </head>
+<style>
+	.card-img-top{
+		width: 380px;
+		height: 260px;
+		object-fit: contain;
+	}
+</style>
 <body>
 	<?php include 'navbar.php';?>
 
@@ -26,33 +33,23 @@
 		</div>
 		<div class="row row-cols-1 row-cols-md-3 g-4" style="margin: 0 auto; width: 80%;">
 		<!-- begin khóa học -->
-		<div class="col">
-			<div class="card">
-				<img src="../images/khoahoc.jpg" class="card-img-top" alt="Course Image">
-				<div class="card-body">
-				<h5 class="card-title">Công nghệ web</h5>
-				<a class="btn btn-primary">Truy cập</a>
-				</div>
-			</div>
-		</div>
-		<div class="col">
-			<div class="card">
-				<img src="../images/khoahoc.jpg" class="card-img-top" alt="Course Image">
-				<div class="card-body">
-				<h5 class="card-title">Nền tảng phát triển web</h5>
-				<a class="btn btn-primary">Truy cập</a>
-				</div>
-			</div>
-		</div>
-		<div class="col">
-			<div class="card">
-				<img src="../images/khoahoc.jpg" class="card-img-top" alt="Course Image">
-				<div class="card-body">
-				<h5 class="card-title">Lập trình mạng</h5>
-				<a class="btn btn-primary">Truy cập</a>
-				</div>
-			</div>
-		</div>
+		<?php 
+			include '../connectdb.php';
+			$sql = "SELECT * FROM `khoa_hoc`";
+			$result = mysqli_query($conn, $sql);
+			while ($row = mysqli_fetch_array($result)) {
+				if ($row[0] != '') {
+					echo "<div class='col'>
+							<div class='card'>
+								<img src='" . $row["anh_khoa_hoc"] . "' class='card-img-top' alt='Course Image'>
+								<div class='card-body'>
+									<h5 class='card-title'>" . $row["ten_khoa_hoc"] . "</h5>
+									<a class='btn btn-primary' href='bien_tap.php?id=" . $row["id_khoa_hoc"] . "'>Truy cap</a></div>
+								</div>
+						</div>";
+				}
+			}
+		?>
 		<!-- end khóa học -->
 			
 

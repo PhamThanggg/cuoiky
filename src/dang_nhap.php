@@ -25,10 +25,11 @@
                     echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập mật khẩu </div>';
                 }else{
                     if(checkLogin($tk, $mk)){
+
 						$_SESSION['user'] = $tk;
 	
 						// echo $_SESSION['acc']['role'];
-						
+						// $_SESSION['user'] = $tk;
                         header("location: khoa_hoc.php");
                     }else{
 						echo '<div class="alert alert-danger text-center" role="alert">Tài khoản hoặc mật khẩu không chính xác</div>';
