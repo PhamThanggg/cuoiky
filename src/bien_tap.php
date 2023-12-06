@@ -32,7 +32,7 @@
 <body>
     <?php
     session_start();
-    if (!isset($_SESSION["user"])) {
+    if(!isset($_SESSION["user"])) {
         header("Location: dang_nhap.php");
     }
     // include 'navbar.php';
@@ -47,8 +47,8 @@
                 $sql = "SELECT * FROM `khoa_hoc` WHERE id_khoa_hoc='$id'";
                 $result = mysqli_query($conn, $sql);
                 $count = 0;
-                while ($row = mysqli_fetch_array($result)) {
-                    if ($row[0] != '') {
+                while($row = mysqli_fetch_array($result)) {
+                    if($row[0] != '') {
                         echo $row["ten_khoa_hoc"];
                         $_SESSION["ten_khoa_hoc"] = $row["ten_khoa_hoc"];
                     }
@@ -86,60 +86,60 @@
                     <th>Thao tác</th>
                 </tr>
                 <tr>
-                    <?php
+                    <?php    
+                    ob_start();               
                     $role = $_SESSION['acc']['role'];
-                    echo $role;
-                    $user = $_SESSION['acc']['user'];
+                    $user = $_SESSION['acc']['id'];
                     $id = $_GET["id"];
                     include "../connectdb.php";
                     $sql = "";
-                    if($role == 1){
-                    $sql = "SELECT * FROM `cau_hoi` WHERE id_khoa_hoc='$id'";
+                    if($role == 1) {
+                        $sql = "SELECT * FROM `cau_hoi` WHERE id_khoa_hoc='$id'";
                     } else {
                         $sql = "SELECT * FROM `cau_hoi` WHERE id_khoa_hoc='$id' AND (id_user_them='$user' OR status='1')";
                     }
                     $result = mysqli_query($conn, $sql);
                     $count = 0;
-                    while ($row = mysqli_fetch_array($result)) {
-                        $count++;                        
-                        echo "<tr><td>" . $row["id_cau_hoi"] . "</td>";
-                        echo "<td>" . $row["ten_cau_hoi"] . "</td>";
-                        echo "<td>" . $row["loai_cau_hoi"] . "</td>";
-                        echo "<td>" . $row["dap_an"] . "</td>";
-                        echo "<td>" . $row["id_user_them"] . "</td>";
-                        if ($row["status"] == 1) {
-                            echo "<td>Da duyet</td>";
+                    while($row = mysqli_fetch_array($result)) {
+                        $count++;
+                        echo "<tr><td>".$row["id_cau_hoi"]."</td>";
+                        echo "<td>".$row["ten_cau_hoi"]."</td>";
+                        echo "<td>".$row["loai_cau_hoi"]."</td>";
+                        echo "<td>".$row["dap_an"]."</td>";
+                        echo "<td>".$row["id_user_them"]."</td>";
+                        if($row["status"] == 1) {
+                            echo "<td>Đã duyệt</td>";
                         } else {
-                            echo "<td>Chua duyet</td>";
+                            echo "<td>Chưa duyệt</td>";
                         }
                         echo "<td>
                                 <form method='post'>
-                                    <a style='color:black' href='xem_truoc.php?id=" . $row["id_cau_hoi"] . "'>Xem truoc</a>";
-                        if($role == 1){
-                            if($row["status"] == 0){
-                                echo "<button name='accept'>Duyet</button>";  
-                            }                     
-                            echo "<input type='hidden' name='idQuest' value='" . $row["id_cau_hoi"] . "'>";
-                            echo "<button name='delete'>Xoa</button>";
+                                    <a style='color:black' href='xem_truoc.php?id=".$row["id_cau_hoi"]."' class='btn btn-info'>Xem trước</a>";
+                        if($role == 1) {
+                            if($row["status"] == 0) {
+                                echo "<button class='btn btn-primary' name='accept'>Duyệt</button>";
+                            }
+                            echo "<input type='hidden' name='idQuest' value='".$row["id_cau_hoi"]."'>";
+                            echo "<button class='btn btn-danger' name='delete'>Xóa</button>";
                         }
-                        echo "</form>
-                        </td></tr>";
+                        echo "</form></td></tr>";
                     }
-                    if ($count == 0) {
+                    if($count == 0) {
                         echo "<td align='center' colspan='6'>Không có câu hỏi nào</td>";
                     }
-                    if (isset($_POST['accept'])) {
+                    if(isset($_POST['accept'])) {
                         $idQuestion = $_POST['idQuest'];
-                        $sql = "UPDATE `cau_hoi` SET `status`='1' WHERE id='$idQuestion'";
-                        $result = mysqli_query($conn, $sql);
-                        header("location: bien_tap.php?id=$id");
+                        $sql = "UPDATE `cau_hoi` SET `status`='1' WHERE id_cau_hoi='$idQuestion'";
+                        $result = mysqli_query($conn, $sql);                        
+                        header("location: bien_tap.php?id=$id");                        
                     }
-                    if (isset($_POST['delete'])) {
+                    if(isset($_POST['delete'])) {
                         $idQuestion = $_POST['idQuest'];
-                        $sql1 = "DELETE FROM `cau_hoi` WHERE id='$idQuestion'";
+                        $sql1 = "DELETE FROM `cau_hoi` WHERE id_cau_hoi='$idQuestion'";
                         $result1 = mysqli_query($conn, $sql1);
                         header("location: bien_tap.php?id=$id");
                     }
+                    ob_end_flush();
                     ?>
                 </tr>
             </table>

@@ -83,7 +83,7 @@
                     echo "<div class='alert alert-warning text-center' role='alert'>Bạn phải chọn đáp án</div>";
                 }
                 session_start();
-                $user = $_SESSION["acc"]["user"];
+                $user = $_SESSION["acc"]["id"];
                 $stt = 0;
                 if($_SESSION["acc"]["role"] == 1) {
                     $stt = 1;
