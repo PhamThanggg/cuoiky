@@ -84,6 +84,7 @@
                 }
                 session_start();
                 $id_user = $_SESSION["acc"]["id"];
+
                 $stt = 0;
                 if($_SESSION["acc"]["role"] == 1) {
                     $stt = 1;
