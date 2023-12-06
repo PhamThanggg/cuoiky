@@ -211,3 +211,20 @@ function updateAccountPass($id, $mkO, $mk) {
 		echo '<div class="alert alert-danger text-center" role="alert">Mật khẩu cũ không chính xác</div>';
 	}
 }
+
+// ham insert cau hoi
+function insertCauHoi($question ,$da, $arr, $type, $img, $id) {
+	include 'connectdb.php';
+	$user = $_SESSION["acc"]["id"];
+	$stt = 0;
+	if($_SESSION["acc"]["role"] == 1) {
+		$stt = 1;
+	}
+	$sql = "INSERT INTO `cau_hoi` (`ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`) VALUES ('$question' ,'$da', '$arr', '$type', '$img', '$user', '$id',$stt)";
+	$result = mysqli_query($conn, $sql);
+	if ($result){
+		return true;
+	} else {
+		return false;
+	}
+}

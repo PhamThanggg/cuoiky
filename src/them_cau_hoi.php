@@ -1,6 +1,3 @@
-<?php
-// include '../function.php'; 
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,7 +31,6 @@
             <?php
             $id = $_GET['id'];
             echo "<a href='bien_tap.php?id=$id' class='btn btn-primary'>Trở lại</a>";
-
             ?>
         </div>
         <form action="" method="POST" enctype="multipart/form-data">
@@ -58,8 +54,6 @@
                 </div>
                 <?php
                 if(isset($_POST["btn"])) {
-                    $type = $_POST["dang_cau_hoi"];
-                    $id = $_GET["id"];
                     $name = $_POST["ten_cau_hoi"];
                     $da = $_POST["da"];
                     if($name == "") {
@@ -73,11 +67,14 @@
                             $target_file = $target_dir.basename($_FILES["image"]["name"]);
                             if(move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
                                 $img = basename($_FILES["image"]["name"]);
-                            } else {
-                                echo "There was an error uploading your file.";
                             }
                         }
-                        
+                        include "../function.php";
+                        if(insertCauHoi($name, $da, "", "Điền", $img, $id)) {
+                            echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
+                        } else {
+                            echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
+                        }
                     }
                 }
                 ?>
