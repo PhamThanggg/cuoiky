@@ -69,6 +69,8 @@
                 <?php
                 $id = $_GET["id"];
                 echo "<li><a class='dropdown-item' href='cau_hoi_chon1.php?id=$id'>Câu chọn</a></li>";
+
+                echo "<li><a class='dropdown-item' href='ch_chon_nhieu.php?id=$id'>Câu chọn nhiều</a></li>";
                 ?>
             </ul>
 
