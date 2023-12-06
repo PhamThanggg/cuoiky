@@ -213,7 +213,7 @@ function updateAccountPass($id, $mkO, $mk) {
 }
 
 // ham insert cau hoi
-function insertCauHoi($question ,$da, $arr, $type, $img, $id) {
+function insertCauHoi($question, $da, $arr, $type, $img, $id) {
 	include 'connectdb.php';
 	$user = $_SESSION["acc"]["id"];
 	$stt = 0;
@@ -222,9 +222,20 @@ function insertCauHoi($question ,$da, $arr, $type, $img, $id) {
 	}
 	$sql = "INSERT INTO `cau_hoi` (`ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`) VALUES ('$question' ,'$da', '$arr', '$type', '$img', '$user', '$id',$stt)";
 	$result = mysqli_query($conn, $sql);
-	if ($result){
+	if($result) {
 		return true;
 	} else {
 		return false;
+	}
+}
+
+// ham lay cau hoi
+function getQuestion() {
+	include 'connectdb.php';
+	$sql = "";
+	if($role == 1) {
+		$sql = "SELECT * FROM `cau_hoi` WHERE id_khoa_hoc='$id'";
+	} else {
+		$sql = "SELECT * FROM `cau_hoi` WHERE id_khoa_hoc='$id' AND (id_user_them='$id_user' OR status='1')";
 	}
 }

@@ -89,16 +89,10 @@
                     <?php    
                     ob_start();               
                     $role = $_SESSION['acc']['role'];
-                    echo $role;
                     $id_user = $_SESSION['acc']['id'];
                     $id = $_GET["id"];
                     include "../connectdb.php";
-                    $sql = "";
-                    if($role == 1) {
-                        $sql = "SELECT * FROM `cau_hoi` WHERE id_khoa_hoc='$id'";
-                    } else {
-                        $sql = "SELECT * FROM `cau_hoi` WHERE id_khoa_hoc='$id' AND (id_user_them='$id_user' OR status='1')";
-                    }
+                    
                     $result = mysqli_query($conn, $sql);
                     $count = 0;
                     while($row = mysqli_fetch_array($result)) {
@@ -107,6 +101,7 @@
                         echo "<td>".$row["ten_cau_hoi"]."</td>";
                         echo "<td>".$row["loai_cau_hoi"]."</td>";
                         echo "<td>".$row["dap_an"]."</td>";
+                        
                         echo "<td>".$row["id_user_them"]."</td>";
                         if($row["status"] == 1) {
                             echo "<td>Đã duyệt</td>";
