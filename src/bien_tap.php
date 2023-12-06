@@ -89,13 +89,12 @@
                 </tr>
                 <tr>
                     <?php    
-                    ob_start();               
-                    $role = $_SESSION['acc']['role'];
+                    ob_start();
+                    $role = $_SESSION['acc']['role'];                    
                     $id_user = $_SESSION['acc']['id'];
-                    $id = $_GET["id"];
-                    include "../connectdb.php";
-                    
-                    $result = mysqli_query($conn, $sql);
+                    $id = $_GET["id"];                    
+                    include "../function.php";
+                    $result = getQuestion($id, $id_user);
                     $count = 0;
                     while($row = mysqli_fetch_array($result)) {
                         $count++;
@@ -103,8 +102,11 @@
                         echo "<td>".$row["ten_cau_hoi"]."</td>";
                         echo "<td>".$row["loai_cau_hoi"]."</td>";
                         echo "<td>".$row["dap_an"]."</td>";
-                        
-                        echo "<td>".$row["id_user_them"]."</td>";
+                        $sql = "SELECT * FROM user WHERE id_user=".$row["id_user_them"];
+                        $result1 = mysqli_query($conn, $sql);
+                        while($row1 = mysqli_fetch_array($result1)) {
+                            echo "<td>".$row1["user_name"]."</td>";
+                        }
                         if($row["status"] == 1) {
                             echo "<td>Đã duyệt</td>";
                         } else {
@@ -145,7 +147,6 @@
         </div>
     </main>
     <?php
-    // include 'footer.php'; 
     ?>
 </body>
 
