@@ -16,8 +16,8 @@
 			session_start();
             
 			if(isset($_POST['submitLogin'])){
-                $tk = $_POST['username'];
-                $mk = $_POST['password'];
+                $tk = trim($_POST['username']);
+                $mk = trim($_POST['password']);
 
                 if($tk==""){
                     echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập tên tài khoản</div>';
@@ -26,6 +26,9 @@
                 }else{
                     if(checkLogin($tk, $mk)){
 						$_SESSION['user'] = $tk;
+	
+						// echo $_SESSION['acc']['role'];
+						
                         header("location: khoa_hoc.php");
                     }else{
 						echo '<div class="alert alert-danger text-center" role="alert">Tài khoản hoặc mật khẩu không chính xác</div>';

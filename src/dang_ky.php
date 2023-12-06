@@ -15,10 +15,10 @@
             include '../function.php';
             
 			if(isset($_POST['submitLogin'])){
-                $tk = $_POST['username'];
-                $mk = $_POST['password'];
-                $remk = $_POST['repassword'];
-                $gmail = $_POST['email'];
+                $tk = trim($_POST['username']);
+                $mk = trim($_POST['password']);
+                $remk = trim($_POST['repassword']);
+                $gmail = trim($_POST['email']);
 
                 if($tk==""){
                     echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập tên tài khoản</div>';
