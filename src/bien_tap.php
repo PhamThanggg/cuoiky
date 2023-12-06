@@ -66,6 +66,10 @@
                 $id = $_GET["id"];
                 echo "<li><a class='dropdown-item' href='them_cau_hoi.php?id=$id'>Câu hỏi điền</a></li>";
                 ?>
+                <?php
+                $id = $_GET["id"];
+                echo "<li><a class='dropdown-item' href='cau_hoi_chon1.php?id=$id'>Câu chọn</a></li>";
+                ?>
             </ul>
 
         </div>
@@ -83,15 +87,16 @@
                 </tr>
                 <tr>
                     <?php
-                    $role = $_SESSION['role'];
-                    $user = $_SESSION['user'];
+                    $role = $_SESSION['acc']['role'];
+                    echo $role;
+                    $user = $_SESSION['acc']['user'];
                     $id = $_GET["id"];
                     include "../connectdb.php";
                     $sql = "";
-                    if($role == "1"){
-                    $sql = "SELECT * FROM `cau_hoi` WHERE id_cau_hoi='$id'";
+                    if($role == 1){
+                    $sql = "SELECT * FROM `cau_hoi` WHERE id_khoa_hoc='$id'";
                     } else {
-                        $sql = "SELECT * FROM `cau_hoi` WHERE id_cau_hoi='$id' AND (id_user_them='$user' OR status='1')";
+                        $sql = "SELECT * FROM `cau_hoi` WHERE id_khoa_hoc='$id' AND (id_user_them='$user' OR status='1')";
                     }
                     $result = mysqli_query($conn, $sql);
                     $count = 0;
