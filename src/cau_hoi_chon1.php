@@ -88,13 +88,15 @@
                     echo "<div class='alert alert-warning text-center' role='alert'>Tên câu hỏi không được để trống</div>";
                 } else if($da == "") {
                     echo "<div class='alert alert-warning text-center' role='alert'>Bạn phải chọn đáp án</div>";
-                }  
-                include "../function.php";              
-                if(insertCauHoi($question, $da, $arr, "Chọn 1", "", $id)) {
-                    echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
                 } else {
-                    echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
+                    include "../function.php";
+                    if(insertCauHoi($question, $da, $arr, "Chọn 1", "", $id)) {
+                        echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
+                    } else {
+                        echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
+                    }
                 }
+
             }
             ?>
 
