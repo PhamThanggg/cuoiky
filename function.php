@@ -248,9 +248,15 @@ function getQuestion($id, $id_user)
 	$role = $_SESSION['acc']['role'];
 	$sql = "";
 	if($role == 1) {
-		$sql = "SELECT * FROM `cau_hoi` WHERE id_khoa_hoc='$id'";
+		$sql = "SELECT * FROM `cau_hoi` 
+		JOIN `user` ON `cau_hoi`.id_user_them = `user`.id_user
+		JOIN `loai_cau_hoi` ON `cau_hoi`.loai_cau_hoi = `loai_cau_hoi`.id_loai
+		WHERE id_khoa_hoc='$id'";
 	} else {
-		$sql = "SELECT * FROM `cau_hoi` WHERE id_khoa_hoc='$id' AND id_user_them='$id_user'";
+		$sql = "SELECT * FROM `cau_hoi` 
+		JOIN `user` ON `cau_hoi`.`id_user_them` = `user`.`id_user`
+		JOIN `loai_cau_hoi` ON `cau_hoi`.`loai_cau_hoi` = `loai_cau_hoi`.`id_loai`
+		WHERE id_khoa_hoc='$id' AND id_user_them='$id_user'";
 	}
 	$result = mysqli_query($conn, $sql);
 	return $result;
