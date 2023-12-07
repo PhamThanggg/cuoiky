@@ -19,7 +19,7 @@
 </head>
 
 <style>
-    .input-group-text1 {
+.input-group-text1 {
     /* display: flex; */
     align-items: center;
     padding: 0.375rem 0.75rem;
@@ -58,30 +58,28 @@
         <div style="margin: 20px 13%;">
             <div class="form-group">
                 <label for="name_quiz"><span style="color: red;">*</span>Nhập tên câu hỏi</label>
-                <input class="form-control" type="text" name="ten_cau_hoi" id="" value="<?php saveInputPOST("add_da", "ten_cau_hoi"); saveInputPOST("btn", "ten_cau_hoi") ?>">
+                <input class="form-control" type="text" name="ten_cau_hoi" id=""
+                    value="<?php saveInputPOST("add_da", "ten_cau_hoi"); saveInputPOST("btn", "ten_cau_hoi") ?>">
             </div>
-            <div class="form-group">
-                <label for="name_quiz">Ảnh cho câu hỏi</label>
-                <input class="form-control" type="file" name="file_tai_len" id="">
-            </div>
+
             <div class="form-group">
                 <label for="name_quiz">Dạng câu hỏi</label>
                 <input class="form-control" value="Chọn nhiều" readonly type="text" name="dang_cau_hoi" id="">
             </div>
             <div class="form-group" style="margin-top: 20px;">
                 <label for="name_quiz">Thêm số đáp án</label>
-                    <input class="" value="<?php saveInputPOST("add_da", "count_da"); saveInputPOST("btn", "count_da") ?>" type="number" name="count_da" id="">
-                    <input class="btn-info" value="Thêm" type="submit" name="add_da" id="" >
-                    <!-- <input class="btn-info" value="Thêm 1 đáp án" type="submit" name="add_one" id=""> -->
+                <input class="" value="<?php saveInputPOST("add_da", "count_da"); saveInputPOST("btn", "count_da") ?>"
+                    type="number" name="count_da" id="">
+                <input class="btn-info" value="Thêm" type="submit" name="add_da" id="">
+                <!-- <input class="btn-info" value="Thêm 1 đáp án" type="submit" name="add_one" id=""> -->
 
-                </div>
+            </div>
             <?php
-                
                 // begin add so dap an
                 if(isset($_POST['add_da'])){
                     $sl_da = $_POST['count_da'];
                         for($i=1; $i<=$sl_da; $i++){
-                            $_SESSION["$i"] = '<div class="input-group mb-3" style="margin-top: 20px;">
+                            $_SESSION["stt".$i] = '<div class="input-group mb-3" style="margin-top: 20px;">
                             <div class="input-group-prepend">
                                 <div class="input-group-text1">
                                     <input type="checkbox" id="check1" name="'.$i.'" value="'.$i.'"> 
@@ -93,95 +91,103 @@
                 }
 
                if(isset($sl_da)){
-                $sl_da = $_POST['count_da'];
-                for($i=1; $i<=$sl_da; $i++){
-                    if(isset($_SESSION["$i"])){
-                        echo $_SESSION["$i"];
-                    }
-                }
-                }
-
-                // begin add so dap an
-
-                if(isset($_POST['btn'])){
-                    $ten_ch = $_POST['ten_cau_hoi'];
-                    if(isset($_FILES['file_tai_len'])){
-                        $img = $_FILES['file_tai_len'];
-                    }else{
-                        $img = '';
-                    }
                     $sl_da = $_POST['count_da'];
-
-                    $list_da = [];
-                    $list_datxt = [];
-                    $check_cb=0;
-                    $check_txt=0;
-                    // add vào mảng
                     for($i=1; $i<=$sl_da; $i++){
-                        if(isset($_POST[$i])){
-                            $list_da[] = $_POST[$i];
-                            $check_cb++;
-                        }else{
-                            $list_da[] = "";
-                        }
-
-                        if(isset($_POST['txt'.$i])){
-                            if($_POST['txt'.$i]!=""){
-                                $list_datxt[] = $_POST['txt'.$i];
-                                $check_txt++;
-                            }else{
-                                $list_datxt[] = "";
-                            }
+                        if(isset($_SESSION["stt"."$i"])){
+                            echo $_SESSION["stt"."$i"];
                         }
                     }
+                }
+            ?>
 
-                    
-                    //validate
-                    if($ten_ch==''){
-                        echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập tên câu hỏi</div>';
-                    }elseif($sl_da==''){
-                        echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa thêm số đáp án</div>';
-                    }elseif($check_cb==0){
-                        echo '<div class="alert alert-danger text-center" role="alert">Bạn phải tích ít nhất 1 đáp án</div>';
-                    }elseif($check_txt!=$sl_da){
-                        echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa điền đầy đủ đáp án</div>';
+            <div class="form-group">
+                <label for="name_quiz">Ảnh cho câu hỏi (Nếu có)</label>
+                <input class="form-control" type="file" name="file_tai_len" id="">
+            </div>
+            
+            <?php
+            // begin add so dap an
+            if(isset($_POST['btn'])){
+                $ten_ch = $_POST['ten_cau_hoi'];
+                $img="";
+                if(isset($_FILES['file_tai_len'])){
+                    $target_dir = "../images/";
+                        $target_file = $target_dir.basename($_FILES["file_tai_len"]["name"]);
+                        if(move_uploaded_file($_FILES["file_tai_len"]["tmp_name"], $target_file)) {
+                            $img = basename($_FILES["file_tai_len"]["name"]);
+                        }
+                }else{
+                    $img = '';
+                }
+                $sl_da = $_POST['count_da'];
+
+                $list_da = [];
+                $list_datxt = [];
+                $check_cb=0;
+                $check_txt=0;
+                // add vào mảng
+                for($i=1; $i<=$sl_da; $i++){
+                    if(isset($_POST[$i])){
+                        $list_da[] = $_POST[$i];
+                        $check_cb++;
                     }else{
-                        $da_correct='';
-                        $da_txt='';
-                        for ($i=0; $i < count($list_datxt); $i++) { 
-                            $da_txt .= $list_datxt[$i]. ', ';
-                            $da_correct .= $list_da[$i];
-                        }
-                        echo $da_correct. " ". $da_txt;
-
-                        $id_user = $_SESSION["acc"]["id"];
-                        $id = $_GET['id'];
-                        $stt=0;
-                        if($_SESSION["acc"]["role"] == 1) {
-                            $stt = 1;
-                        }
-
-                        include '../connectdb.php';
-                        $sql = "INSERT INTO `cau_hoi` (`ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`) VALUES ('$ten_ch' ,'$da_correct', '$da_txt', 'Chọn nhiều','', '$id_user', '$id',$stt)";
-                        $result = mysqli_query($conn, $sql);
-                        if($result) {
-                            echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
-                        } else {
-                            echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
-                        }
-                
+                        $list_da[] = "";
                     }
 
+                    if(isset($_POST['txt'.$i])){
+                        if($_POST['txt'.$i]!=""){
+                            $list_datxt[] = $_POST['txt'.$i];
+                            $check_txt++;
+                        }else{
+                            $list_datxt[] = "";
+                        }
+                    }
                 }
 
                 
+                //validate
+                if($ten_ch==''){
+                    echo '<br><div class="alert alert-danger text-center" role="alert">Bạn chưa nhập tên câu hỏi</div>';
+                }elseif($sl_da==''){
+                    echo '<br><div class="alert alert-danger text-center" role="alert">Bạn chưa thêm số đáp án</div>';
+                }elseif($sl_da < 2){
+                    echo '<br><div class="alert alert-danger text-center" role="alert">Bạn phải thêm ít nhất 2 đáp án</div>';
+                }elseif($check_cb==0){
+                    echo '<br><div class="alert alert-danger text-center" role="alert">Bạn phải tích ít nhất 1 đáp án</div>';
+                }elseif($check_txt!=$sl_da){
+                    echo '<br><div class="alert alert-danger text-center" role="alert">Bạn chưa điền đầy đủ đáp án</div>';
+                }else{
+                    $da_correct='';
+                    $da_txt='';
+                    for ($i=0; $i < count($list_datxt); $i++) { 
+                        $da_txt .= $list_datxt[$i]. ', ';
+                        $da_correct .= $list_da[$i];
+                    }
+                    // echo $da_correct. " ". $da_txt;
 
+                    $id_user = $_SESSION["acc"]["id"];
+                    $id = $_GET['id'];
+                    $stt=0;
+                    if($_SESSION["acc"]["role"] == 1) {
+                        $stt = 1;
+                    }
 
+                    include '../connectdb.php';
+                    $sql = "INSERT INTO `cau_hoi` (`ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`) VALUES ('$ten_ch' ,'$da_correct', '$da_txt', 'Chọn nhiều','$img', '$id_user', '$id',$stt)";
+                    $result = mysqli_query($conn, $sql);
+                    if($result) {
+                        echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
+                    } else {
+                        echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
+                    }
+                }
+            }
             ?>
+
+
             <div style="margin: 20px 0 0 0;" class="d-grid">
                 <input class="btn btn-primary btn-block" name="btn" type="submit" value="Thêm câu hỏi">
             </div>
-
         </div>
         </form>
 
