@@ -65,15 +65,21 @@
                         if(isset($_FILES["image"])) {
                             $target_dir = "../images/";
                             $target_file = $target_dir.basename($_FILES["image"]["name"]);
-                            if(move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                                $img = basename($_FILES["image"]["name"]);
+                            $allowed = array("jpg", "jpeg", "png", "gif");
+                            $duoi = pathinfo($_FILES["image"]["name"])["extension"];
+                            if (in_array(strtolower($duoi), $allowed)) {
+                                if(move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                                    $img = basename($_FILES["image"]["name"]);
+                                }
+                                include "../function.php";
+                                if(insertCauHoi($name, $da, "", "1", $img, $id)) {
+                                    echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
+                                } else {
+                                    echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
+                                }
+                            } else {
+                                echo "<div class='alert alert-warning text-center' role='alert'>Hãy chọn file ảnh</div>";
                             }
-                        }
-                        include "../function.php";
-                        if(insertCauHoi($name, $da, "", "1", $img, $id)) {
-                            echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
-                        } else {
-                            echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
                         }
                     }
                 }
