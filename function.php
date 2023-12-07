@@ -6,7 +6,7 @@ use PHPMailer\PHPMailer\Exception;
 // check login session
 function isLogin() {
 	// hàm kiểm tra đã đăng nhập chưa
-	if(isset($_SESSION['user'])) {
+	if(isset($_SESSION['acc']['user'])) {
 		return true;
 	} else {
 		return false;
@@ -241,4 +241,14 @@ function getQuestion($id, $id_user) {
 	}
 	$result = mysqli_query($conn, $sql);
 	return $result;
+}
+
+// ham lay so nguoi dung, so cau hoi, so de thi
+function getAll(){
+	include 'connectdb.php';
+	$sql = "SELECT COUNT(*) as total FROM `user`";
+	$result = mysqli_query($conn, $sql);
+	while($row = mysqli_fetch_array($result)){
+		return $row["total"];
+	}
 }

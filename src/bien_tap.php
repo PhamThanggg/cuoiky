@@ -69,7 +69,6 @@
                 <?php
                 $id = $_GET["id"];
                 echo "<li><a class='dropdown-item' href='cau_hoi_chon1.php?id=$id'>Câu chọn</a></li>";
-
                 echo "<li><a class='dropdown-item' href='ch_chon_nhieu.php?id=$id'>Câu chọn nhiều</a></li>";
                 ?>
             </ul>
@@ -125,7 +124,7 @@
                         echo "</form></td></tr>";
                     }
                     if($count == 0) {
-                        echo "<td align='center' colspan='6'>Không có câu hỏi nào</td>";
+                        echo "<td align='center' colspan='7'>Không có câu hỏi nào</td>";
                     }
                     if(isset($_POST['accept'])) {
                         $idQuestion = $_POST['idQuest'];
