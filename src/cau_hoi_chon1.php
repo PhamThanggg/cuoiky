@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thêm câu hỏi nhiều đáp án</title>
+    <title>Thêm câu hỏi 1 đáp án</title>
     <!-- Begin bootstrap cdn -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -90,7 +90,7 @@
                     echo "<div class='alert alert-warning text-center' role='alert'>Bạn phải chọn đáp án</div>";
                 } else {
                     include "../function.php";
-                    if(insertCauHoi($question, $da, $arr, "Chọn 1", "", $id)) {
+                    if(insertCauHoi($question, $da, $arr, "2", "", $id)) {
                         echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
                     } else {
                         echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";

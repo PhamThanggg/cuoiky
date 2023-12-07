@@ -78,19 +78,23 @@
                 // begin add so dap an
                 if(isset($_POST['add_da'])){
                     $sl_da = $_POST['count_da'];
-                        for($i=1; $i<=$sl_da; $i++){
-                            $_SESSION["stt".$i] = '<div class="input-group mb-3" style="margin-top: 20px;">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text1">
-                                    <input type="checkbox" id="check1" name="'.$i.'" value="'.$i.'"> 
+                        if($sl_da>=2){
+                            for($i=1; $i<=$sl_da; $i++){
+                                $_SESSION["stt".$i] = '<div class="input-group mb-3" style="margin-top: 20px;">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text1">
+                                        <input type="checkbox" id="check1" name="'.$i.'" value="'.$i.'"> 
+                                    </div>
                                 </div>
-                            </div>
-                            <input type="text" class="form-control" name="txt'.$i.'" placeholder="Nhập đáp án">
-                            </div>';
+                                <input type="text" class="form-control" name="txt'.$i.'" placeholder="Nhập đáp án">
+                                </div>';
+                            }
+                        }else{
+                             echo '<br><div class="alert alert-danger text-center" role="alert">Bạn phải thêm ít nhất 2 đáp án</div>';
                         }
                 }
 
-               if(isset($sl_da)){
+               if(isset($sl_da) && $sl_da>=2){
                     $sl_da = $_POST['count_da'];
                     for($i=1; $i<=$sl_da; $i++){
                         if(isset($_SESSION["stt"."$i"])){
@@ -173,7 +177,7 @@
                     }
 
                     include '../connectdb.php';
-                    $sql = "INSERT INTO `cau_hoi` (`ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`) VALUES ('$ten_ch' ,'$da_correct', '$da_txt', 'Chọn nhiều','$img', '$id_user', '$id',$stt)";
+                    $sql = "INSERT INTO `cau_hoi` (`ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`) VALUES ('$ten_ch' ,'$da_correct', '$da_txt', '3','$img', '$id_user', '$id',$stt)";
                     $result = mysqli_query($conn, $sql);
                     if($result) {
                         echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
