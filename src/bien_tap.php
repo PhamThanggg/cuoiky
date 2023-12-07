@@ -124,7 +124,7 @@
                         echo "</form></td></tr>";
                     }
                     if($count == 0) {
-                        echo "<td align='center' colspan='6'>Không có câu hỏi nào</td>";
+                        echo "<td align='center' colspan='7'>Không có câu hỏi nào</td>";
                     }
                     if(isset($_POST['accept'])) {
                         $idQuestion = $_POST['idQuest'];

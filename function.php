@@ -237,7 +237,7 @@ function getQuestion($id, $id_user) {
 	if($role == 1) {
 		$sql = "SELECT * FROM `cau_hoi` WHERE id_khoa_hoc='$id'";
 	} else {
-		$sql = "SELECT * FROM `cau_hoi` WHERE id_khoa_hoc='$id' AND (id_user_them='$id_user' OR status='1')";
+		$sql = "SELECT * FROM `cau_hoi` WHERE id_khoa_hoc='$id' AND id_user_them='$id_user'";
 	}
 	$result = mysqli_query($conn, $sql);
 	return $result;
