@@ -99,13 +99,9 @@
                         $count++;
                         echo "<tr><td>".$row["id_cau_hoi"]."</td>";
                         echo "<td>".$row["ten_cau_hoi"]."</td>";
-                        echo "<td>".$row["loai_cau_hoi"]."</td>";
-                        echo "<td>".$row["dap_an"]."</td>";
-                        $sql = "SELECT * FROM user WHERE id_user=".$row["id_user_them"];
-                        $result1 = mysqli_query($conn, $sql);
-                        while($row1 = mysqli_fetch_array($result1)) {
-                            echo "<td>".$row1["user_name"]."</td>";
-                        }
+                        echo "<td>".$row["loai_CH"]."</td>";
+                        echo "<td>".$row["dap_an"]."</td>";                        
+                        echo "<td>".$row["user_name"]."</td>";
                         if($row["status"] == 1) {
                             echo "<td>Đã duyệt</td>";
                         } else {
