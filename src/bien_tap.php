@@ -31,7 +31,7 @@
 
 <body>
     <?php
-    session_start();
+    include 'navbar.php';
     if(!isset($_SESSION["user"])) {
         header("Location: dang_nhap.php");
     }
@@ -68,8 +68,8 @@
                 ?>
                 <?php
                 $id = $_GET["id"];
-                echo "<li><a class='dropdown-item' href='cau_hoi_chon1.php?id=$id'>Câu chọn</a></li>";
-                echo "<li><a class='dropdown-item' href='ch_chon_nhieu.php?id=$id'>Câu chọn nhiều</a></li>";
+                echo "<li><a class='dropdown-item' href='cau_hoi_chon1.php?id=$id'>Câu hỏi chọn</a></li>";
+                echo "<li><a class='dropdown-item' href='ch_chon_nhieu.php?id=$id'>Câu hỏi chọn nhiều</a></li>";
                 ?>
             </ul>
 
@@ -99,13 +99,9 @@
                         $count++;
                         echo "<tr><td>".$row["id_cau_hoi"]."</td>";
                         echo "<td>".$row["ten_cau_hoi"]."</td>";
-                        echo "<td>".$row["loai_cau_hoi"]."</td>";
+                        echo "<td>".$row["loai_CH"]."</td>";
                         echo "<td>".$row["dap_an"]."</td>";
-                        $sql = "SELECT * FROM user WHERE id_user=".$row["id_user_them"];
-                        $result1 = mysqli_query($conn, $sql);
-                        while($row1 = mysqli_fetch_array($result1)) {
-                            echo "<td>".$row1["user_name"]."</td>";
-                        }
+                        echo "<td>".$row["user_name"]."</td>";
                         if($row["status"] == 1) {
                             echo "<td>Đã duyệt</td>";
                         } else {
@@ -146,6 +142,7 @@
         </div>
     </main>
     <?php
+        include 'footer.php';
     ?>
 </body>
 

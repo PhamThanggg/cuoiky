@@ -70,7 +70,7 @@
                             }
                         }
                         include "../function.php";
-                        if(insertCauHoi($name, $da, "", "Điền", $img, $id)) {
+                        if(insertCauHoi($name, $da, "", "1", $img, $id)) {
                             echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
                         } else {
                             echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
