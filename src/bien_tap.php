@@ -83,7 +83,11 @@
                     while($row = mysqli_fetch_array($result)) {
                         $count++;
                         echo "<tr><td>".$row["id_cau_hoi"]."</td>";
-                        echo "<td>".$row["ten_cau_hoi"]."<br><img style='width:100px;height:100px;object-fit: contain' src='../images/".$row["anh_cau_hoi"]."'></td>";
+                        echo "<td>".$row["ten_cau_hoi"]."<br>";
+                        if(!$row["anh_cau_hoi"] == ""){
+                           echo "<img style='width:100px;height:100px;object-fit: contain' src='../images/".$row["anh_cau_hoi"]."'>";
+                        }
+                        echo "</td>";
                         echo "<td>".$row["loai_CH"]."</td>";
                         echo "<td>".$row["dap_an"]."</td>";                        
                         echo "<td>".$row["user_name"]."</td>";

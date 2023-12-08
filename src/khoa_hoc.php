@@ -42,9 +42,9 @@
 					echo "<div class='col'>
 							<div class='card'>
 								<img src='" . $row["anh_khoa_hoc"] . "' class='card-img-top' alt='Course Image'>
-								<div class='card-body'>
+								<div class='card-body' style='text-align:center'>
 									<h5 class='card-title'>" . $row["ten_khoa_hoc"] . "</h5>
-									<a class='btn btn-primary' href='bien_tap.php?id=" . $row["id_khoa_hoc"] . "'>Truy cap</a></div>
+									<a style='width:40%' class='btn btn-primary' href='bien_tap.php?id=" . $row["id_khoa_hoc"] . "'>Chi tiết</a></div>
 								</div>
 						</div>";
 				}
