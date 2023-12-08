@@ -44,7 +44,7 @@
         }
 
     ?>
-    <main style="min-height: 100vh; max-width: 100%;">
+    <main style="min-height: 100vh; max-width: 100%;padding-top:70px">
         <div id="action" style="margin: 20px 0 0 13%;">
             <p class="h3">Khóa học
                 <!-- tên khóa học -->

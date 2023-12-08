@@ -28,7 +28,7 @@
 	?>
 
 	<main style="min-height: 100vh; width: 100%;">
-		<div class="" style="text-align: center;">
+		<div style="text-align: center;padding-top:70px">
 			<h2>Khóa học</h2>
 		</div>
 		<div class="row row-cols-1 row-cols-md-3 g-4" style="margin: 0 auto; width: 80%;">

@@ -65,7 +65,7 @@
     ?>
 
 <form action="" method="post">
-    <div class="container mt-3">
+    <div class="container mt-3" style="padding-top:70px">
         <div class="card p-3 text-center">
             <div class=" flex-row justify-content-center mb-3">
                 <div class="image"> <img src="https://png.pngtree.com/png-vector/20190623/ourlarge/pngtree-accountavataruser--flat-color-icon--vector-icon-banner-templ-png-image_1491720.jpg" class="rounded-circle" style="width: 100px;"></div>

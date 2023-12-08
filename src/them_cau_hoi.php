@@ -17,13 +17,12 @@
 
 <body>
     <?php
-    session_start();
+    include 'navbar.php';
     if(!isset($_SESSION["user"])) {
         header("Location: dang_nhap.php");
     }
-    // include 'navbar.php';
     ?>
-    <main style="min-height: 100vh; max-width: 100%;">
+    <main style="min-height: 100vh; max-width: 100%;padding-top:70px">
         <div id="action" style="margin: 20px 0 0 13%;">
             <p class="h3">Khóa học
                 <?php echo $_SESSION["ten_khoa_hoc"]; ?>

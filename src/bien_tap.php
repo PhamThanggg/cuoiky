@@ -1,8 +1,3 @@
-<?php
-// include '../function.php'; 
-
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,16 +12,6 @@
         integrity="	sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
     <!-- End bootstrap cdn -->
-    <style>
-        img {
-            max-width: 400px;
-        }
-
-        a {
-            text-decoration: none;
-            color: white;
-        }
-    </style>
 </head>
 
 <body>
@@ -38,7 +23,7 @@
     }
     // include 'navbar.php';
     ?>
-    <main style="min-height: 100vh; max-width: 100%;">
+    <main style="min-height: 100vh; max-width: 100%;padding-top:70px">
 
         <div id="action" style="margin: 20px 0 0 13%;">
             <p class="h3">Khóa học
@@ -81,7 +66,6 @@
                 <tr>
                     <th>STT</th>
                     <th>Tên câu hỏi</th>
-                    <th></th>
                     <th>Loại câu hỏi</th>
                     <th>Đáp án</th>
                     <th>Tác giả</th>
@@ -99,8 +83,7 @@
                     while($row = mysqli_fetch_array($result)) {
                         $count++;
                         echo "<tr><td>".$row["id_cau_hoi"]."</td>";
-                        echo "<td>".$row["ten_cau_hoi"]."</td>";
-                        echo "<td><img style='width=50px' src='../images/".$row["anh_cau_hoi"]."'></td>";
+                        echo "<td>".$row["ten_cau_hoi"]."<br><img style='width:100px;height:100px;object-fit: contain' src='../images/".$row["anh_cau_hoi"]."'></td>";
                         echo "<td>".$row["loai_CH"]."</td>";
                         echo "<td>".$row["dap_an"]."</td>";                        
                         echo "<td>".$row["user_name"]."</td>";

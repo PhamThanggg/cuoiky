@@ -19,17 +19,16 @@
 
 <body>
     <?php
-    session_start();
+    include 'navbar.php';
     if(!isset($_SESSION["user"])) {
         header("Location: dang_nhap.php");
     }
-    // include 'navbar.php';
     ?>
     <!-- 	 -->
-    <main style="min-height: 100vh; max-width: 100%;">
+    <main style="min-height: 100vh; max-width: 100%;padding-top:70px">
         <!-- <hr> -->
 
-        <div id="action" style="margin: 20px 0 0 13%;">
+        <div id="action" style="margin: 20px 0 0 13%;" >
             <p class="h3">Thêm câu hỏi </p>
             <?php
             $id = $_GET['id'];
