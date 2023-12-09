@@ -29,6 +29,7 @@
             <p class="h3">Khóa học
                 <?php
                 $id = $_GET["id"];
+                $_SESSION['id_khoa_hoc'] = $id;
                 include '../connectdb.php';
                 $sql = "SELECT * FROM `khoa_hoc` WHERE id_khoa_hoc='$id'";
                 $result = mysqli_query($conn, $sql);

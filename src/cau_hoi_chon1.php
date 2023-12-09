@@ -34,8 +34,8 @@
             $id = $_GET['id'];
             echo "<a href='bien_tap.php?id=$id' class='btn btn-primary'>Trở lại</a>";
             ?>
-            <form action="" method="POST" enctype="multipart/form-data">
         </div>
+        <form action="" method="POST" enctype="multipart/form-data">
         <div style="margin: 20px 13%;">
             <div class="form-group">
                 <label for="name_quiz">Nhập tên câu hỏi</label>

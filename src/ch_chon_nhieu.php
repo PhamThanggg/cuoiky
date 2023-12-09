@@ -53,8 +53,8 @@
                 $id = $_GET['id'];
                 echo '<a href="bien_tap.php?id='.$id.'" class="btn btn-primary">Trở lại</a>';
             ?>
-            <form action="" method="POST" enctype="multipart/form-data">
         </div>
+        <form action="" method="POST" enctype="multipart/form-data">
         <div style="margin: 20px 13%;">
             <div class="form-group">
                 <label for="name_quiz"><span style="color: red;">*</span>Nhập tên câu hỏi</label>
@@ -79,7 +79,7 @@
                 if(isset($_POST['add_da'])){
                     $sl_da = $_POST['count_da'];
                         if($sl_da>=2){
-                            for($i=1; $i<=$sl_da; $i++){
+                            for($i=0; $i<$sl_da; $i++){
                                 $_SESSION["stt".$i] = '<div class="input-group mb-3" style="margin-top: 20px;">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text1">
@@ -96,7 +96,7 @@
 
                if(isset($sl_da) && $sl_da>=2){
                     $sl_da = $_POST['count_da'];
-                    for($i=1; $i<=$sl_da; $i++){
+                    for($i=0; $i<$sl_da; $i++){
                         if(isset($_SESSION["stt"."$i"])){
                             echo $_SESSION["stt"."$i"];
                         }
@@ -130,24 +130,23 @@
                 $check_cb=0;
                 $check_txt=0;
                 // add vào mảng
-                for($i=1; $i<=$sl_da; $i++){
+                for($i=0; $i<$sl_da; $i++){
                     if(isset($_POST[$i])){
-                        $list_da[] = $_POST[$i];
+                        $list_da[$i] = $_POST[$i];
                         $check_cb++;
                     }else{
-                        $list_da[] = "";
+                        $list_da[$i] = "";
                     }
 
                     if(isset($_POST['txt'.$i])){
                         if($_POST['txt'.$i]!=""){
-                            $list_datxt[] = $_POST['txt'.$i];
+                            $list_datxt[$i] = $_POST['txt'.$i];
                             $check_txt++;
                         }else{
-                            $list_datxt[] = "";
+                            $list_datxt[$i] = "";
                         }
                     }
                 }
-
                 
                 //validate
                 if($ten_ch==''){
@@ -165,7 +164,7 @@
                     $da_txt='';
                     for ($i=0; $i < count($list_datxt); $i++) { 
                         $da_txt .= $list_datxt[$i]. ', ';
-                        $da_correct .= $list_da[$i];
+                        $da_correct .= $list_da[$i]. ', ';
                     }
                     // echo $da_correct. " ". $da_txt;
 

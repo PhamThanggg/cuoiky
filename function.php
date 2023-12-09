@@ -224,7 +224,7 @@ function updateAccountPass($id, $mkO, $mk)
 }
 
 // ham insert cau hoi
-function insertCauHoi($question, $da, $arr, $type, $img, $id)
+function 	insertCauHoi($question, $da, $arr, $type, $img, $id)
 {
 	include 'connectdb.php';
 	$user = $_SESSION["acc"]["id"];
@@ -241,10 +241,23 @@ function insertCauHoi($question, $da, $arr, $type, $img, $id)
 	}
 }
 
+// ham update cau hoi
+function updateCauHoi($question, $da, $arr, $img, $id)
+{
+	include 'connectdb.php';
+	$sql = "UPDATE `cau_hoi` SET `ten_cau_hoi`='$question',`dap_an`='$da', `correct`='$arr', `anh_cau_hoi`='$img' WHERE `id_cau_hoi`=$id";
+	$result = mysqli_query($conn, $sql);
+	if ($result) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 // ham lay cau hoi
 function getQuestion($id, $id_user)
 {
-	include 'connectdb.php';
+	include 'connectdb.php';	
 	$role = $_SESSION['acc']['role'];
 	$sql = "";
 	if($role == 1) {
@@ -258,6 +271,18 @@ function getQuestion($id, $id_user)
 		JOIN `loai_cau_hoi` ON `cau_hoi`.`loai_cau_hoi` = `loai_cau_hoi`.`id_loai`
 		WHERE id_khoa_hoc='$id' AND id_user_them='$id_user'";
 	}
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+
+//lay cau hoi xem chi tiết
+function getDetail($id){
+	include 'connectdb.php';	
+	$sql = "";
+		$sql = "SELECT * FROM `cau_hoi` 
+		JOIN `user` ON `cau_hoi`.id_user_them = `user`.id_user
+		JOIN `loai_cau_hoi` ON `cau_hoi`.loai_cau_hoi = `loai_cau_hoi`.id_loai
+		WHERE id_cau_hoi='$id'";
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }
