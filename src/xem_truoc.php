@@ -42,7 +42,7 @@
         <?php
             $id = $_SESSION['id_khoa_hoc'];
             echo "<a href='bien_tap.php?id=$id' class='btn btn-primary'>Trở lại</a>";
-            ?>
+        ?>
     </div>
 
     <?php

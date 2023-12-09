@@ -297,3 +297,50 @@ function getAll()
 		return $row["total"];
 	}
 }
+
+// lấy ngẫu nhiên 10 câu để luện tập
+function begin_practice($id_kh){
+	include 'connectdb.php';
+	$sql = "INSERT INTO luyen_tap (`id_cau_hoi`, `ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`)
+	SELECT `id_cau_hoi`, `ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`
+	FROM cau_hoi
+	WHERE (status = 1 AND id_khoa_hoc = $id_kh)
+	ORDER BY RAND() LIMIT 10";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+
+// lấy bảng luyện tập
+function get_limit10($id_kh){
+	include 'connectdb.php';
+	$sql = "SELECT * FROM luyen_tap WHERE id_khoa_hoc=$id_kh";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+
+// insert vào bảng những câu làm sai
+function insertFail($id_ch){
+	include 'connectdb.php';
+	$sql = "INSERT INTO lich_su_sai (`id_cau_hoi`, `ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`)
+	SELECT `id_cau_hoi`, `ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`
+	FROM cau_hoi
+	WHERE id_cau_hoi = $id_ch";
+	$result = mysqli_query($conn, $sql);
+	if ($result) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+// xoa du lieu trong bảng luyen_tap
+function deleteData($id_khoa_hoc){
+	include 'connectdb.php';
+	$sql = "DELETE FROM `luyen_tap` WHERE id_khoa_hoc = $id_khoa_hoc";
+	$result = mysqli_query($conn, $sql);
+	if ($result) {
+		return true;
+	} else {
+		return false;
+	}
+}
