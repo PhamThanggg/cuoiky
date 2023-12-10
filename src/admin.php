@@ -24,12 +24,37 @@
     <link href="https://cdn.jsdelivr.net/npm/chartist@0.11.0/dist/chartist.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/jqvmap@1.5.1/dist/jqvmap.min.css" rel="stylesheet">
 </head>
+<style>
+    .pagination {
+        display: flex;
+        margin-left: 20px;
+        list-style: none;
+        padding: 0;
+    }
+
+    .pagination li {
+        margin-right: 5px;
+        /* padding: 3px 20px; */
+        width: 50px;
+        height: 25px;
+        text-align:center;
+        background-color: #ccc;
+    }
+    .pagination li a{
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+    .pagination .active{
+        background-color: #f0b267 ;
+    }
+</style>
 
 <body>
     <?php
-    
+
     include "navbar.php";
-    if(isset($_SESSION["acc"])){
+    if (isset($_SESSION["acc"])) {
         if ($_SESSION["acc"]["role"] !== "1") {
             header("location: dang_nhap.php");
         }
@@ -62,30 +87,17 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="stat-widget-five">
-                                    <div class="stat-icon dib flat-color-2">
-                                        <i class="pe-7s-cart"></i>
-                                    </div>
-                                    <div class="stat-content">
-                                        <div class="text-left dib">
-                                            <div class="stat-text"><span class="count">3435</span></div>
-                                            <div class="stat-heading">Sales</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="stat-widget-five">
                                     <div class="stat-icon dib flat-color-3">
                                         <i class="pe-7s-browser"></i>
                                     </div>
                                     <div class="stat-content">
                                         <div class="text-left dib">
-                                            <div class="stat-text"><span class="count">349</span></div>
+                                            <div class="stat-text"><span class="count">
+                                                    <?php
+                                                    include "../function.php";
+                                                    echo getQs();
+                                                    ?>
+                                                </span></div>
                                             <div class="stat-heading">Templates</div>
                                         </div>
                                     </div>
@@ -93,7 +105,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-lg-3 col-md-6">
                         <div class="card">
                             <div class="card-body">
@@ -104,8 +115,9 @@
                                     <div class="stat-content">
                                         <div class="text-left dib">
                                             <div class="stat-text"><span class="count">
-                                                    <?php include "../function.php";
-                                                    echo getAll(); ?>
+                                                    <?php
+                                                    getUser();
+                                                    ?>
                                                 </span></div>
                                             <div class="stat-heading">Clients</div>
                                         </div>
@@ -122,7 +134,7 @@
                         <div class="col-xl-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="box-title">Orders </h4>
+                                    <h4 class="box-title">User </h4>
                                 </div>
                                 <div class="card-body--">
                                     <div class="table-stats order-table ov-h">
@@ -130,99 +142,92 @@
                                             <thead>
                                                 <tr>
                                                     <th class="serial">#</th>
-                                                    <th class="avatar">Avatar</th>
-                                                    <th>ID</th>
+                                                    <th>UserName</th>
                                                     <th>Name</th>
-                                                    <th>Product</th>
-                                                    <th>Quantity</th>
-                                                    <th>Status</th>
+                                                    <th>Email</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td class="serial">1.</td>
-                                                    <td class="avatar">
-                                                        <div class="round-img">
-                                                            <a href="#"><img class="rounded-circle"
-                                                                    src="images/avatar/1.jpg" alt=""></a>
-                                                        </div>
-                                                    </td>
-                                                    <td> #5469 </td>
-                                                    <td> <span class="name">Louis Stanley</span> </td>
-                                                    <td> <span class="product">iMax</span> </td>
-                                                    <td><span class="count">231</span></td>
-                                                    <td>
-                                                        <span class="badge badge-complete">Complete</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="serial">2.</td>
-                                                    <td class="avatar">
-                                                        <div class="round-img">
-                                                            <a href="#"><img class="rounded-circle"
-                                                                    src="images/avatar/2.jpg" alt=""></a>
-                                                        </div>
-                                                    </td>
-                                                    <td> #5468 </td>
-                                                    <td> <span class="name">Gregory Dixon</span> </td>
-                                                    <td> <span class="product">iPad</span> </td>
-                                                    <td><span class="count">250</span></td>
-                                                    <td>
-                                                        <span class="badge badge-complete">Complete</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="serial">3.</td>
-                                                    <td class="avatar">
-                                                        <div class="round-img">
-                                                            <a href="#"><img class="rounded-circle"
-                                                                    src="images/avatar/3.jpg" alt=""></a>
-                                                        </div>
-                                                    </td>
-                                                    <td> #5467 </td>
-                                                    <td> <span class="name">Catherine Dixon</span> </td>
-                                                    <td> <span class="product">SSD</span> </td>
-                                                    <td><span class="count">250</span></td>
-                                                    <td>
-                                                        <span class="badge badge-complete">Complete</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="serial">4.</td>
-                                                    <td class="avatar">
-                                                        <div class="round-img">
-                                                            <a href="#"><img class="rounded-circle"
-                                                                    src="images/avatar/4.jpg" alt=""></a>
-                                                        </div>
-                                                    </td>
-                                                    <td> #5466 </td>
-                                                    <td> <span class="name">Mary Silva</span> </td>
-                                                    <td> <span class="product">Magic Mouse</span> </td>
-                                                    <td><span class="count">250</span></td>
-                                                    <td>
-                                                        <span class="badge badge-pending">Pending</span>
-                                                    </td>
-                                                </tr>
-                                                <tr class=" pb-0">
-                                                    <td class="serial">5.</td>
-                                                    <td class="avatar pb-0">
-                                                        <div class="round-img">
-                                                            <a href="#"><img class="rounded-circle"
-                                                                    src="images/avatar/6.jpg" alt=""></a>
-                                                        </div>
-                                                    </td>
-                                                    <td> #5465 </td>
-                                                    <td> <span class="name">Johnny Stephens</span> </td>
-                                                    <td> <span class="product">Monitor</span> </td>
-                                                    <td><span class="count">250</span></td>
-                                                    <td>
-                                                        <span class="badge badge-complete">Complete</span>
-                                                    </td>
-                                                </tr>
+                                                <?php
+                                                $stt = 1;
+                                                $result = getUserIfno();
+                                                while ($row = mysqli_fetch_array($result)) {
+                                                    echo "<tr>
+                                                    <td class='serial'>$stt</td>
+                                                        <td> <span class='name'>" . $row["user_name"] . "</span> </td>
+                                                        <td> <span class='name'>" . $row["ho_ten"] . "</span> </td>
+                                                        <td> <span class='product'>" . $row["gmail"] . "</span> </td>
+                                                        <td>
+                                                            <form method='post'>
+                                                            <input type='hidden' name='idUser' value='" . $row["id_user"] . "'>
+                                                            <button name='delete' class='badge badge-complete'>Delete</button>
+                                                            </form>
+                                                        </td>
+                                                    </tr>";
+                                                    $stt++;
+                                                }
+                                                if (isset($_POST['delete'])) {
+                                                    deleteUser($_POST['idUser']);
+                                                }
+                                                ?>
                                             </tbody>
                                         </table>
                                     </div> <!-- /.table-stats -->
                                 </div>
+                            </div> <!-- /.card -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+                <div class="orders">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="box-title">Question </h4>
+                                </div>
+                                <div class="card-body--">
+                                    <div class="table-stats order-table ov-h">
+                                        <table class="table ">
+                                            <thead>
+                                                <tr>
+                                                    <th class="serial">#</th>
+                                                    <th>Tên câu hỏi</th>
+                                                    <th>Đáp án</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                $stt = 1;
+                                                $trang_hien_tai = isset($_GET['trang']) ? $_GET['trang'] : 0;
+                                                $result = panigationQs($trang_hien_tai);
+                                                while ($row = mysqli_fetch_array($result)) {
+                                                    echo "<tr>
+                                                        <td class='serial'>" . $row["id_cau_hoi"] . "</td>
+                                                        <td> <span class='name'>" . $row["ten_cau_hoi"] . "</span> </td>
+                                                        <td> <span class='name'>" . $row["dap_an"] . "</span> </td>
+                                                    </tr>";
+                                                    $stt++;
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div> <!-- /.table-stats -->
+                                </div>
+                                <ul class="pagination">
+                                    <?php
+                                    $socau = ceil(getQs() / 10);
+                                    for ($i = 0; $i < $socau; $i++) {
+                                        if ($trang_hien_tai == $i) {
+                                            echo "<li class='active'><a href='?trang=$i'>" . ($i + 1) . "</a></li>";
+                                        } else {
+                                            echo "<li><a href='?trang=$i'>" . ($i + 1) . "</a></li>";
+                                        }
+                                    }
+                                    ?>
+                                </ul>
                             </div> <!-- /.card -->
                         </div>
                     </div>

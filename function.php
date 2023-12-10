@@ -296,14 +296,43 @@ function getDetailSai($id)
 }
 
 // ham lay so nguoi dung
-function getAll()
+function getUser()
 {
 	include 'connectdb.php';
-	$sql = "SELECT COUNT(*) as total FROM `user`";
+	$sql = "SELECT COUNT(*) as totalUser FROM `user`";
 	$result = mysqli_query($conn, $sql);
 	while ($row = mysqli_fetch_array($result)) {
-		return $row["total"];
+		echo $row["totalUser"];
 	}
+}
+function getUserIfno()
+{
+	include 'connectdb.php';
+	$sql = "SELECT * FROM `user`";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+// xóa người dùng
+function deleteUser($user){
+	include 'connectdb.php';
+	$sql = "DELETE FROM `user` WHERE `id_user` = '$user'";
+	$result = mysqli_query($conn, $sql);
+}
+// lấy só lượng câu hỏi, phân trang câu hỏi
+function getQs()
+{
+	include 'connectdb.php';
+	$sql = "SELECT COUNT(*) as totalQs FROM `cau_hoi`";
+	$result = mysqli_query($conn, $sql);
+	while ($row = mysqli_fetch_array($result)) {
+		return $row["totalQs"];
+	}
+}
+function panigationQs($trang_hien_tai){
+	include 'connectdb.php';
+	$sql = "SELECT * FROM cau_hoi LIMIT 10 OFFSET $trang_hien_tai";
+	$result = mysqli_query($conn, $sql);
+	return $result;
 }
 
 // lấy ngẫu nhiên 10 câu để luện tập
