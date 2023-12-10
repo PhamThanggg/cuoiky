@@ -224,7 +224,7 @@ function updateAccountPass($id, $mkO, $mk)
 }
 
 // ham insert cau hoi
-function 	insertCauHoi($question, $da, $arr, $type, $img, $id)
+function insertCauHoi($question, $da, $arr, $type, $img, $id)
 {
 	include 'connectdb.php';
 	$user = $_SESSION["acc"]["id"];
@@ -257,10 +257,10 @@ function updateCauHoi($question, $da, $arr, $img, $id)
 // ham lay cau hoi
 function getQuestion($id, $id_user)
 {
-	include 'connectdb.php';	
+	include 'connectdb.php';
 	$role = $_SESSION['acc']['role'];
 	$sql = "";
-	if($role == 1) {
+	if ($role == 1) {
 		$sql = "SELECT * FROM `cau_hoi` 
 		JOIN `user` ON `cau_hoi`.id_user_them = `user`.id_user
 		JOIN `loai_cau_hoi` ON `cau_hoi`.loai_cau_hoi = `loai_cau_hoi`.id_loai
@@ -276,18 +276,26 @@ function getQuestion($id, $id_user)
 }
 
 //lay cau hoi xem chi tiết
-function getDetail($id){
-	include 'connectdb.php';	
-	$sql = "";
-		$sql = "SELECT * FROM `cau_hoi` 
+function getDetail($id)
+{
+	include 'connectdb.php';
+	$sql = "SELECT *, COUNT(*) as total FROM `cau_hoi` 
 		JOIN `user` ON `cau_hoi`.id_user_them = `user`.id_user
 		JOIN `loai_cau_hoi` ON `cau_hoi`.loai_cau_hoi = `loai_cau_hoi`.id_loai
 		WHERE id_cau_hoi='$id'";
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }
+function getDetailSai($id)
+{
+	include 'connectdb.php';
+	$sql = "SELECT *, COUNT(*) as total FROM `lich_su_sai`
+		WHERE id_cau_hoi='$id'";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
 
-// ham lay so nguoi dung, so cau hoi, so de thi
+// ham lay so nguoi dung
 function getAll()
 {
 	include 'connectdb.php';
@@ -299,7 +307,8 @@ function getAll()
 }
 
 // lấy ngẫu nhiên 10 câu để luện tập
-function begin_practice($id_kh){
+function begin_practice($id_kh)
+{
 	include 'connectdb.php';
 	$sql = "INSERT INTO luyen_tap (`id_cau_hoi`, `ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`)
 	SELECT `id_cau_hoi`, `ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`
@@ -311,7 +320,8 @@ function begin_practice($id_kh){
 }
 
 // lấy bảng luyện tập
-function get_limit10($id_kh){
+function get_limit10($id_kh)
+{
 	include 'connectdb.php';
 	$sql = "SELECT * FROM luyen_tap WHERE id_khoa_hoc=$id_kh";
 	$result = mysqli_query($conn, $sql);
@@ -319,7 +329,8 @@ function get_limit10($id_kh){
 }
 
 // insert vào bảng những câu làm sai
-function insertFail($id_ch){
+function insertFail($id_ch)
+{
 	include 'connectdb.php';
 	$sql = "INSERT INTO lich_su_sai (`id_cau_hoi`, `ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`)
 	SELECT `id_cau_hoi`, `ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`
@@ -334,7 +345,8 @@ function insertFail($id_ch){
 }
 
 // xoa du lieu trong bảng luyen_tap
-function deleteData($id_khoa_hoc){
+function deleteData($id_khoa_hoc)
+{
 	include 'connectdb.php';
 	$sql = "DELETE FROM `luyen_tap` WHERE id_khoa_hoc = $id_khoa_hoc";
 	$result = mysqli_query($conn, $sql);
@@ -343,4 +355,16 @@ function deleteData($id_khoa_hoc){
 	} else {
 		return false;
 	}
+}
+
+// xem lich su cau sai
+function getHistory($id_user, $id_kh)
+{
+	include 'connectdb.php';
+	$sql = "SELECT DISTINCT *, COUNT(*) AS so_lan FROM `lich_su_sai`
+	JOIN `loai_cau_hoi` ON `lich_su_sai`.loai_cau_hoi = `loai_cau_hoi`.id_loai
+	WHERE id_user_them=$id_user AND id_khoa_hoc=$id_kh
+	GROUP BY id_cau_hoi";
+	$result = mysqli_query($conn, $sql);
+	return $result;
 }

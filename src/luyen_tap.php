@@ -223,7 +223,7 @@
                                 }
                             }
                             $_SESSION['diem'] = 
-                            setcookie("diem", "<p style='text-align: center; font-size: 20px;' >Diem cua ban la: $diem</p>", time() + 5);
+                            setcookie("diem", "<p style='text-align: center; font-size: 20px;' >Điểm của bạn: $diem</p>", time() + 5);
                             // xoa dl trong bảng bt khi nộp bài
                             $id_kh = $_SESSION['id_khoa_hoc'];
                             deleteData($id_kh);

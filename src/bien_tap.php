@@ -47,7 +47,7 @@
             <?php
                 $id = $_GET["id"];
                 echo "<a href='luyen_tap.php?id=$id' class='btn btn-primary'>Luyện tập</a>
-                <a href='#' class='btn btn-primary'>Lịch sử câu sai</a>";
+                <a href='lich_such.php?id=$id' class='btn btn-primary'>Lịch sử câu sai</a>";
             ?>
 
             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
