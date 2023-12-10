@@ -24,44 +24,33 @@
     ?>
     <main style="min-height: 100vh; max-width: 100%;padding-top:70px">
         <div id="action" style="margin: 20px 0 0 13%;">
-            <p class="h3">Khóa học
-                <?php echo $_SESSION["ten_khoa_hoc"]; ?>
-            </p>
-            <?php
-            $id = $_GET['id'];
-            echo "<a href='bien_tap.php?id=$id' class='btn btn-primary'>Trở lại</a>";
-            ?>
+            <p class="h3">Giao BTVN</p>
+            <a href='admin.php' class='btn btn-primary'>Trở lại</a>
         </div>
         <form action="" method="POST" enctype="multipart/form-data">
             <div style="margin: 20px 13%;">
                 <div class="form-group">
-                    <label for="name_quiz"><span style="color: red;">*</span>Nhập tên câu hỏi</label>
+                    <label for="name_quiz">Nhập tiêu đề</label>
                     <input class="form-control" type="text" name="ten_cau_hoi"
                         value="<?php echo $name = isset($_POST['ten_cau_hoi']) ? $_POST['ten_cau_hoi'] : ''; ?>">
                 </div>
                 <div class="form-group">
-                    <label for="name_quiz">Ảnh cho câu hỏi</label>
+                    <label for="name_quiz">Ảnh</label>
                     <input class="form-control" name="image" type="file">
                 </div>
-                <div class="form-group">
-                    <label for="name_quiz">Dạng câu hỏi</label>
-                    <input class="form-control" value="Điền" readonly type="text" name="dang_cau_hoi">
-                </div>
                 <div style='margin: 20px 0 0 0;' class='input-group mb-3'>
-                    <input name='da' type='text' class='form-control' placeholder='Nhập đáp án'
-                        value="<?php echo $da = isset($_POST['da']) ? $_POST['da'] : ''; ?>">
+                    <textarea name='da' type='text' class='form-control' placeholder='Nội dung'></textarea>
                 </div>
                 <?php
                 if(isset($_POST["btn"])) {
                     $name = $_POST["ten_cau_hoi"];
                     $da = $_POST["da"];
                     if($name == "") {
-                        echo "Không được để trống tên câu hỏi";
-                    } else if($da == "") {
-                        echo "Không được để trống đáp án";
+                        echo "Không được để trống tiêu đề";
                     } else {
+                        include "../function.php";
                         $img = "";
-                        if(isset($_FILES["image"])&& !empty( $_FILES["image"]["name"])) {
+                        if(isset($_FILES["image"]) && !empty($_FILES["image"]["name"])) {
                             $target_dir = "../images/";
                             $target_file = $target_dir.basename($_FILES["image"]["name"]);
                             $allowed = array("jpg", "jpeg", "png", "gif");
@@ -70,15 +59,17 @@
                                 if(move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
                                     $img = basename($_FILES["image"]["name"]);
                                 }
-                                include "../function.php";
-                                if(insertCauHoi($name, $da, "", "1", $img, $id)) {
+                                if(insertBTVN($name, $img, $da)) {
                                     echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
                                 } else {
                                     echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
                                 }
                             } else {
-                                echo "<div class='alert alert-warning text-center' role='alert'>Hãy chọn file ảnh</div>";
+                                echo "<div class='alert alert-warning text-center' role='alert'>Chỉ nhận file ảnh</div>";
                             }
+                        } else {
+                            insertBTVN($name, "", $da);
+                            echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
                         }
                     }
                 }
