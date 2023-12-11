@@ -431,3 +431,34 @@ function getHistory($id_user, $id_kh)
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }
+
+// them btvn
+function insertBTVN($name, $img, $content){
+	include 'connectdb.php';
+	$ngay_gio = date("Y-m-d H:i:s");
+	$expired = date("Y-m-d H:i:s", strtotime($ngay_gio . " +3 days"));
+	$sql = "INSERT INTO `btvn`(`name`, `img`, `content`, `createDate`, `expired`) VALUES ('$name','$img','$content', '$ngay_gio', '$expired')";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+
+// lay btvn
+function getBTVN(){
+	include 'connectdb.php';
+	$sql = "SELECT * FROM `btvn`";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+function get1BT($id){
+	include 'connectdb.php';
+	$sql = "SELECT * FROM `btvn` WHERE id=$id";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+
+// delete btvn
+function deleteBTVN($id){
+	include 'connectdb.php';
+	$sql = "DELETE FROM `btvn` WHERE id=$id";
+	$result = mysqli_query($conn, $sql);
+}

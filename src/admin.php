@@ -52,15 +52,17 @@
 
 <body>
     <?php
-
+    ob_start();
     include "navbar.php";
     if (isset($_SESSION["acc"])) {
+        echo "Lỗi";
         if ($_SESSION["acc"]["role"] !== "1") {
             header("location: dang_nhap.php");
         }
     } else {
         header("location: dang_nhap.php");
     }
+    ob_end_flush();
     ?>
     <!-- Left Panel -->
     <aside id="left-panel" class="left-panel">
@@ -128,6 +130,7 @@
                     </div>
                 </div>
 
+                <!-- người dùng -->
                 <div class="clearfix"></div>
                 <div class="orders">
                     <div class="row">
@@ -180,6 +183,7 @@
                     </div>
                 </div>
 
+                <!-- câu hỏi -->
                 <div class="clearfix"></div>
                 <div class="orders">
                     <div class="row">
@@ -228,6 +232,62 @@
                                     }
                                     ?>
                                 </ul>
+                            </div> <!-- /.card -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- giao bài -->
+                <div class="clearfix"></div>
+                <div class="orders">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-body" style="display:flex">
+                                    <h4 class="box-title" style="width:100%">BTVN </h4>
+                                    <h4 class="box-title"><a href="btvn.php">Add</a> </h4>
+                                </div>
+                                <div class="card-body--">
+                                    <div class="table-stats order-table ov-h">
+                                    <table class="table ">
+                                            <thead>
+                                                <tr>
+                                                    <th class="serial">#</th>
+                                                    <th>Tiêu đề</th>
+                                                    <th>Ảnh</th>
+                                                    <th>Nội dung</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                $stt = 1;
+                                                $result = getBTVN();
+                                                while ($row = mysqli_fetch_array($result)) {
+                                                    echo "<tr>
+                                                        <td class='serial'>$stt</td>
+                                                        <td> <span class='name'>" . $row["name"] . "</span> </td>
+                                                        <td>";
+                                                        if (!$row["img"] == "") {
+                                                            echo "<img style='width:100px;height:100px;object-fit: contain' src='../images/" . $row["img"] . "'>";
+                                                        }
+                                                    echo "</td>
+                                                        <td> <span class='name'>" . $row["content"] . "</span> </td>
+                                                        <td><form method='post'>
+                                                            <input type='hidden' name='idBTVN' value='".$row["id"]."'>
+                                                            <button name='deleteBT' class='badge badge-complete'>Delete</button>
+                                                        </form></td>                                                        
+                                                    </tr>";
+                                                    $stt++;
+                                                }
+                                                if(isset($_POST["deleteBT"])){
+                                                    deleteBTVN($_POST["idBTVN"]);
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>                                
                             </div> <!-- /.card -->
                         </div>
                     </div>
