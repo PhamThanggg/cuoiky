@@ -46,9 +46,13 @@
             echo "<a href='bien_tap.php?id=$id' class='btn btn-primary'>Trở lại</a>
             <h2>Luyện tập</h2>
             <p>Thời gian bắt đầu</p>
-            <p>11:11:11:</p>
+            <p>";
+            echo isset($_SESSION['time_begin'])?$_SESSION['time_begin']:"yyyy-mm-dd 00-00-00";
+            echo "</p>
             <p>Thời gian kết thúc</p>
-            <p>11:11:11:</p>
+            <p>";
+            echo isset($_SESSION['time_end'])?$_SESSION['time_end']:"yyyy-mm-dd 00-00-00";
+            echo "</p>
             ";
         ?>
         </div>
@@ -92,25 +96,25 @@
                                                 <div class='input-group-text'>
                                                     <input name='dad$stt' value='cau$stt"."da_0' type='radio'>
                                                 </div>
-                                                <input name='cau$stt"."da_0' type='text' class='form-control' placeholder='Nhập đáp án' value='".$arr_da[0]."'>
+                                                <input name='cau$stt"."da_0' type='text' class='form-control' placeholder='Nhập đáp án' value='".$arr_da[0]."' readonly>
                                             </div>
                                             <div style='margin: 20px 0 0 0;' class='input-group mb-3'>
                                                 <div class='input-group-text'>
                                                     <input name='dad$stt' value='cau$stt"."da_1' type='radio'>
                                                 </div>
-                                                <input name='cau$stt"."da_1' type='text' class='form-control' placeholder='Nhập đáp án' value='".$arr_da[1]."'>
+                                                <input name='cau$stt"."da_1' type='text' class='form-control' placeholder='Nhập đáp án' value='".$arr_da[1]."' readonly>
                                             </div>
                                             <div style='margin: 20px 0 0 0;' class='input-group mb-3'>
                                                 <div class='input-group-text'>
                                                     <input name='dad$stt' value='cau$stt"."da_2' type='radio'>
                                                 </div>
-                                                <input name='cau$stt"."da_2' type='text' class='form-control' placeholder='Nhập đáp án' value='".$arr_da[2]."'>
+                                                <input name='cau$stt"."da_2' type='text' class='form-control' placeholder='Nhập đáp án' value='".$arr_da[2]."' readonly>
                                             </div>
                                             <div style='margin: 20px 0 0 0;' class='input-group mb-3'>
                                                 <div class='input-group-text'>
                                                     <input name='dad$stt' value='cau$stt"."da_3' type='radio'>
                                                 </div>
-                                                <input name='cau$stt"."da_3' type='text' class='form-control' placeholder='Nhập đáp án' value='".$arr_da[3]."'>
+                                                <input name='cau$stt"."da_3' type='text' class='form-control' placeholder='Nhập đáp án' value='".$arr_da[3]."' readonly>
                                             </div>";
                                         }
                                          // end câu hỏi chọn 1 
@@ -129,7 +133,7 @@
                                                         <input type="checkbox" id="check1" name="cb'.$stt.$i.'" value="'.$i.'"> 
                                                     </div>
                                                 </div>
-                                                <input type="text" class="form-control" name="cau_cn'.$stt.$i.'" placeholder="Nhập đáp án" value="'.$arr_da[$i].'">
+                                                <input type="text" class="form-control" name="cau_cn'.$stt.$i.'" placeholder="Nhập đáp án" value="'.$arr_da[$i].'" readonly>
                                                 </div>';
                                             }
                                         }
@@ -160,6 +164,18 @@
 
                         if(isset($_POST['begin'])){
                             begin_practice($id_kh);
+                            date_default_timezone_set('Asia/Ho_Chi_Minh');
+                            // tgian hiện tại
+                            $thoi_gian_begin = date("Y-m-d H:i:s");
+                            $thoi_gian_now = time();
+                            
+                            // tgian cộng thêm 15p
+                            $thoi_gian_end = $thoi_gian_now + (15 * 60);
+                            // Thời gian kết thúc
+                            $ket_thuc = date("Y-m-d H:i:s", $thoi_gian_end);
+
+                            $_SESSION['time_begin'] = $thoi_gian_begin;
+                            $_SESSION['time_end'] = $ket_thuc;
                             header("Location: luyen_tap.php?id=$id_kh");
                         }
                     ?>
@@ -169,6 +185,7 @@
                     <?php
                         
                         $listGet_cr = [];
+                        // begin submit
                         if(isset($_POST['submit'])){
                             $stt1=0;
                             
@@ -214,26 +231,39 @@
                             // echo "<br>";
                             // print_r($list_id_ch);
                             $diem = 0;
+                            $id_user = $_SESSION['acc']['id'];
                             for($i=0; $i < 10; $i++){
                                 if($list_correct[$i]==$listGet_cr[$i]){
                                     $diem += 10;
                                 }else{
                                     // neu sai thi add vao bang lich_su_sai
-                                    insertFail($list_id_ch[$i]);
+                                    insertFail($list_id_ch[$i], $id_user, $listGet_cr[$i]);
                                 }
                             }
-                            $_SESSION['diem'] = 
                             setcookie("diem", "<p style='text-align: center; font-size: 20px;' >Điểm của bạn: $diem</p>", time() + 5);
+
+                            // đấy vào bảng điểm;
+                            date_default_timezone_set('Asia/Ho_Chi_Minh');
+                            $thoi_gian_nop = date("Y-m-d H:i:s");
+                            insert_diem($diem, $id_user, $id_kh, $thoi_gian_nop);
+
                             // xoa dl trong bảng bt khi nộp bài
-                            $id_kh = $_SESSION['id_khoa_hoc'];
                             deleteData($id_kh);
-                            header("Location: luyen_tap.php?id=$id_kh");
+                            // gỡ sesion tgian
+                            if(isset($_SESSION['time_begin'])){
+                                unset($_SESSION['time_begin']);
+                            }
+                            if(isset($_SESSION['time_end'])){
+                                unset($_SESSION['time_end']);
+                            }
                             
+                            header("Location: luyen_tap.php?id=$id_kh");
                         }
+                        // end submit
+
                         if(isset($_COOKIE['diem'])){
                             echo $_COOKIE['diem'];
                         }
-
                         ob_end_flush();
                     ?>
                 </div>

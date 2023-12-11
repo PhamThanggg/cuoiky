@@ -73,9 +73,10 @@
         $id = "-1";
     }
 
-    $result = getDetailSai($id);
+    $result = getDetailSaiAll($id);
+    $i=0;
     while ($row = mysqli_fetch_array($result)) {
-        for ($i = 1; $i <= $row["total"]; $i++) {
+        // for ($i = 1; $i <= $row["total"]; $i++) {
             // bg cau hoi dien
             if ($row['loai_cau_hoi'] == 1) {
                 echo '<div style="margin: 20px 13%;">
@@ -147,7 +148,8 @@
                 }
                 echo '</div>';
             }
-        }
+        // }
+        $i++;
     }
 
     //   include 'footer.php';

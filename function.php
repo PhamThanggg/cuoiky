@@ -295,6 +295,15 @@ function getDetailSai($id)
 	return $result;
 }
 
+function getDetailSaiAll($id)
+{
+	include 'connectdb.php';
+	$sql = "SELECT * FROM `lich_su_sai`
+		WHERE id_cau_hoi='$id'";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+
 // ham lay so nguoi dung
 function getUser()
 {
@@ -358,19 +367,44 @@ function get_limit10($id_kh)
 }
 
 // insert vào bảng những câu làm sai
-function insertFail($id_ch)
+function insertFail($id_ch, $id_user, $da_false)
 {
 	include 'connectdb.php';
-	$sql = "INSERT INTO lich_su_sai (`id_cau_hoi`, `ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`)
-	SELECT `id_cau_hoi`, `ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`
-	FROM cau_hoi
-	WHERE id_cau_hoi = $id_ch";
-	$result = mysqli_query($conn, $sql);
-	if ($result) {
-		return true;
-	} else {
-		return false;
+	$sqly = "SELECT * FROM cau_hoi WHERE id_cau_hoi = $id_ch";
+	$result1 = mysqli_query($conn, $sqly);
+	while ($row = mysqli_fetch_array($result1)) {
+		$r1 = $row['id_cau_hoi'];
+		$r2 = $row['ten_cau_hoi'];
+		$r3 = $row['dap_an'];
+		$r4 = $row['correct'];
+		$r5 = $row['loai_cau_hoi'];
+		$r6 = $row['anh_cau_hoi'];
+		$r7 = $row['id_user_them'];	
+		$r8 = $row['id_khoa_hoc'];
+		$r9 = $row['status'];
 	}
+	
+		$sql = "INSERT INTO lich_su_sai (`id_cau_hoi`, `ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`)
+		VALUES ('$r1', '$r2', '$da_false', '$r4', '$r5', '$r6', '$id_user', '$r8', '$r9')";
+		
+		$result = mysqli_query($conn, $sql);
+		if ($result) {
+			return true;
+		} else {
+			return false;
+		}	
+}
+
+//insert vào bảng điểm
+function insert_diem($diem, $id_user, $id_khoa_hoc, $time){
+	include 'connectdb.php';
+	$sql = "INSERT INTO `diem`(`diem`, `id_user`, `id_khoa_hoc`, `thoi_gian`) VALUES ('$diem','$id_user','$id_khoa_hoc','$time')";
+	$result = mysqli_query($conn, $sql);
+		if ($result) {
+			return true;
+		} else {
+			return false;
+		}	
 }
 
 // xoa du lieu trong bảng luyen_tap
