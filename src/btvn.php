@@ -38,6 +38,19 @@
                     <label for="name_quiz">Ảnh</label>
                     <input class="form-control" name="image" type="file">
                 </div>
+                <div class="form-group">
+                    <select name="selectKH">
+                        <?php 
+                            include "../function.php";
+                            include '../connectdb.php';
+                            $sql = "SELECT * FROM `khoa_hoc`";
+                            $result = mysqli_query($conn, $sql);
+                            while ($row = mysqli_fetch_array($result)) {
+                                echo "<option value='".$row["id_khoa_hoc"]."'>".$row["ten_khoa_hoc"]."</option>";
+                            }
+                        ?>
+                    </select>
+                </div>
                 <div style='margin: 20px 0 0 0;' class='input-group mb-3'>
                     <textarea name='da' type='text' class='form-control' placeholder='Nội dung'></textarea>
                 </div>
@@ -45,10 +58,10 @@
                 if(isset($_POST["btn"])) {
                     $name = $_POST["ten_cau_hoi"];
                     $da = $_POST["da"];
+                    $selectKH = $_POST["selectKH"];
                     if($name == "") {
-                        echo "Không được để trống tiêu đề";
-                    } else {
-                        include "../function.php";
+                        echo "<div class='alert alert-warning text-center' role='alert'>Không được để trống tiêu đề</div>";
+                    } else {                        
                         $img = "";
                         if(isset($_FILES["image"]) && !empty($_FILES["image"]["name"])) {
                             $target_dir = "../images/";
@@ -59,17 +72,17 @@
                                 if(move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
                                     $img = basename($_FILES["image"]["name"]);
                                 }
-                                if(insertBTVN($name, $img, $da)) {
-                                    echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
+                                if(insertBTVN($selectKH, $name, $img, $da)) {
+                                    echo "<div class='alert alert-success text-center' role='alert'>Thêm thành công</div>";
                                 } else {
-                                    echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
+                                    echo "<div class='alert alert-warning text-center' role='alert'>Thêm thất bại</div>";
                                 }
                             } else {
                                 echo "<div class='alert alert-warning text-center' role='alert'>Chỉ nhận file ảnh</div>";
                             }
                         } else {
-                            insertBTVN($name, "", $da);
-                            echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
+                            insertBTVN($selectKH, $name, "", $da);
+                            echo "<div class='alert alert-success text-center' role='alert'>Thêm thành công</div>";
                         }
                     }
                 }

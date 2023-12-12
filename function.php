@@ -102,12 +102,10 @@ function checkRegister($tk, $mk, $gmail)
 // ham send email
 function sendEmail($to, $subject, $message)
 {
-	//Create an instance; passing `true` enables exceptions
 	$mail = new PHPMailer(true);
 
 	try {
-		//Server settings
-		// $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      
+		//Server settings                     
 		$mail->isSMTP();
 		$mail->Host = 'smtp.gmail.com';
 		$mail->SMTPAuth = true;
@@ -295,11 +293,11 @@ function getDetailSai($id)
 	return $result;
 }
 
-function getDetailSaiAll($id)
+function getDetailSaiAll($id, $id_user)
 {
 	include 'connectdb.php';
 	$sql = "SELECT * FROM `lich_su_sai`
-		WHERE id_cau_hoi='$id'";
+		WHERE id_cau_hoi='$id' AND id_user_them=$id_user";
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }
@@ -322,7 +320,8 @@ function getUserIfno()
 	return $result;
 }
 // xóa người dùng
-function deleteUser($user){
+function deleteUser($user)
+{
 	include 'connectdb.php';
 	$sql = "DELETE FROM `user` WHERE `id_user` = '$user'";
 	$result = mysqli_query($conn, $sql);
@@ -337,7 +336,8 @@ function getQs()
 		return $row["totalQs"];
 	}
 }
-function panigationQs($trang_hien_tai){
+function panigationQs($trang_hien_tai)
+{
 	include 'connectdb.php';
 	$sql = "SELECT * FROM cau_hoi LIMIT 10 OFFSET $trang_hien_tai";
 	$result = mysqli_query($conn, $sql);
@@ -379,32 +379,33 @@ function insertFail($id_ch, $id_user, $da_false)
 		$r4 = $row['correct'];
 		$r5 = $row['loai_cau_hoi'];
 		$r6 = $row['anh_cau_hoi'];
-		$r7 = $row['id_user_them'];	
+		$r7 = $row['id_user_them'];
 		$r8 = $row['id_khoa_hoc'];
 		$r9 = $row['status'];
 	}
-	
-		$sql = "INSERT INTO lich_su_sai (`id_cau_hoi`, `ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`)
+
+	$sql = "INSERT INTO lich_su_sai (`id_cau_hoi`, `ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`)
 		VALUES ('$r1', '$r2', '$da_false', '$r4', '$r5', '$r6', '$id_user', '$r8', '$r9')";
-		
-		$result = mysqli_query($conn, $sql);
-		if ($result) {
-			return true;
-		} else {
-			return false;
-		}	
+
+	$result = mysqli_query($conn, $sql);
+	if ($result) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 //insert vào bảng điểm
-function insert_diem($diem, $id_user, $id_khoa_hoc, $time){
+function insert_diem($diem, $id_user, $id_khoa_hoc, $time)
+{
 	include 'connectdb.php';
 	$sql = "INSERT INTO `diem`(`diem`, `id_user`, `id_khoa_hoc`, `thoi_gian`) VALUES ('$diem','$id_user','$id_khoa_hoc','$time')";
 	$result = mysqli_query($conn, $sql);
-		if ($result) {
-			return true;
-		} else {
-			return false;
-		}	
+	if ($result) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 // xoa du lieu trong bảng luyen_tap
@@ -425,7 +426,6 @@ function getHistory($id_user, $id_kh)
 {
 	include 'connectdb.php';
 	$sql = "SELECT DISTINCT *, COUNT(*) AS so_lan FROM `lich_su_sai`
-	JOIN `loai_cau_hoi` ON `lich_su_sai`.loai_cau_hoi = `loai_cau_hoi`.id_loai
 	WHERE id_user_them=$id_user AND id_khoa_hoc=$id_kh
 	GROUP BY id_cau_hoi";
 	$result = mysqli_query($conn, $sql);
@@ -433,23 +433,32 @@ function getHistory($id_user, $id_kh)
 }
 
 // them btvn
-function insertBTVN($name, $img, $content){
+function insertBTVN($idKH, $name, $img, $content)
+{
 	include 'connectdb.php';
 	$ngay_gio = date("Y-m-d H:i:s");
 	$expired = date("Y-m-d H:i:s", strtotime($ngay_gio . " +3 days"));
-	$sql = "INSERT INTO `btvn`(`name`, `img`, `content`, `createDate`, `expired`) VALUES ('$name','$img','$content', '$ngay_gio', '$expired')";
+	$sql = "INSERT INTO `btvn`(`id_khoa_hoc`,`name`, `img`, `content`, `createDate`, `expired`) VALUES ('$idKH', '$name','$img','$content', '$ngay_gio', '$expired')";
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }
 
 // lay btvn
-function getBTVN(){
+function btvn(){
 	include 'connectdb.php';
 	$sql = "SELECT * FROM `btvn`";
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }
-function get1BT($id){
+function getBTVN($id)
+{
+	include 'connectdb.php';
+	$sql = "SELECT * FROM `btvn` WHERE id_khoa_hoc='$id' AND expired > NOW()";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+function get1BT($id)
+{
 	include 'connectdb.php';
 	$sql = "SELECT * FROM `btvn` WHERE id=$id";
 	$result = mysqli_query($conn, $sql);
@@ -457,7 +466,8 @@ function get1BT($id){
 }
 
 // delete btvn
-function deleteBTVN($id){
+function deleteBTVN($id)
+{
 	include 'connectdb.php';
 	$sql = "DELETE FROM `btvn` WHERE id=$id";
 	$result = mysqli_query($conn, $sql);

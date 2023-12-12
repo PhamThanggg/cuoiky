@@ -107,11 +107,18 @@
     ?>
 
     <main style="min-height: 100vh; width: 100%;margin:70px 0">
+        <p class="h3" style="margin-left:160px">Khóa học
+            <?php
+            echo $_SESSION["ten_khoa_hoc"];
+            ?>
+            <!--Tên khóa học  -->
+        </p>
         <div class="row row-cols-1 row-cols-md-3 g-4" style="margin: 0 auto; width: 80%;">
             <div class="content-wrap" style="width:100%">
                 <?php
                 include "../connectdb.php";
-                $result = getBTVN();
+                $id = $_GET["id"];
+                $result = getBTVN($id);
                 $stt = 1;
                 while ($row = mysqli_fetch_array($result)) {
                     echo "<div class='topic '>
@@ -119,14 +126,14 @@
                     </div>
                     <div class='exercise-item '>
                         <div class='exercise-info'>
-                            <div class='title'>". $row["name"] ." (Hệ thống đóng khi đủ 5 bạn nộp nhanh - lưu ý các bạn nén
+                            <div class='title'>" . $row["name"] . " (Hệ thống đóng khi đủ 5 bạn nộp nhanh - lưu ý các bạn nén
                                 thành file zip để nộp)</div>
                             <div class='decs'>
-                                <div class='decs-item'>Hạn nộp: ". $row["expired"] ."</div>
+                                <div class='decs-item'>Hạn nộp: " . $row["expired"] . "</div>
                                 <div class='decs-item'></div>
                             </div>
                         </div>
-                        <a href='chitiet_bt.php?idBT=".$row["id"]."' class='btn-cus'>Chi tiết</a>
+                        <a href='chitiet_bt.php?idBT=" . $row["id"] . "' class='btn-cus'>Chi tiết</a>
                     </div>";
                     $stt++;
                 }

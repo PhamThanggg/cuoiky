@@ -73,7 +73,7 @@
         $id = "-1";
     }
 
-    $result = getDetailSaiAll($id);
+    $result = getDetailSaiAll($id, $_SESSION['acc']['id']);
     $i=0;
     while ($row = mysqli_fetch_array($result)) {
         // for ($i = 1; $i <= $row["total"]; $i++) {
@@ -81,7 +81,7 @@
             if ($row['loai_cau_hoi'] == 1) {
                 echo '<div style="margin: 20px 13%;">
                 <div class="form-group" style="display: flex; align-items: center;">
-                    <p class="exam">Lần ' . $i . ': </p>
+                    <p class="exam">Lần ' . ($i+1) . ': </p>
                     <p style="font-size:20px">' . $row['ten_cau_hoi'] . '</p>
                 </div>
                 <div class="form-group">';
@@ -97,7 +97,7 @@
                 $arr_da = explode(", ", $row['correct']);
                 echo '<div style="margin: 20px 13%;">
                         <div class="form-group" style="display: flex; align-items: center;">
-                            <p class="exam">Lần ' . $i . ': </p>
+                            <p class="exam">Lần ' . ($i+1) . ': </p>
                             <p style="font-size:20px">' . $row['ten_cau_hoi'] . '</p>
                         </div>';
                 foreach ($arr_da as $key) {
@@ -121,7 +121,7 @@
 
                 echo '<div style="margin: 20px 13%;">
                 <div class="form-group" style="display: flex; align-items: center;">
-                    <p class="exam">Lần ' . $i . ': </p>
+                    <p class="exam">Lần ' . ($i+1) . ': </p>
                     <p style="font-size:20px">' . $row['ten_cau_hoi'] . '</p>
                 </div>
                 <div class="form-group">';

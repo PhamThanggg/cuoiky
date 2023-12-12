@@ -59,11 +59,7 @@
 
 		</div>
 	</main>
-
-	<div class="card-body" style="text-align:center">
-		<a style="width:40%" class="btn btn-primary" href="xembtvn.php">Bài tập</a>
-	</div>
-
+	
 	<?php include 'footer.php'; ?>
 </body>
 

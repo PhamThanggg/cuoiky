@@ -37,16 +37,18 @@
         /* padding: 3px 20px; */
         width: 50px;
         height: 25px;
-        text-align:center;
+        text-align: center;
         background-color: #ccc;
     }
-    .pagination li a{
+
+    .pagination li a {
         display: block;
         width: 100%;
         height: 100%;
     }
-    .pagination .active{
-        background-color: #f0b267 ;
+
+    .pagination .active {
+        background-color: #f0b267;
     }
 </style>
 
@@ -55,15 +57,14 @@
     ob_start();
     include "navbar.php";
     if (isset($_SESSION["acc"])) {
-        echo "Lỗi";
         if ($_SESSION["acc"]["role"] !== "1") {
             header("location: dang_nhap.php");
         }
     } else {
         header("location: dang_nhap.php");
-    }
-    ob_end_flush();
+    }    
     ?>
+
     <!-- Left Panel -->
     <aside id="left-panel" class="left-panel">
         <nav class="navbar navbar-expand-sm navbar-default">
@@ -164,7 +165,7 @@
                                                         <td>
                                                             <form method='post'>
                                                             <input type='hidden' name='idUser' value='" . $row["id_user"] . "'>
-                                                            <button name='delete' class='badge badge-complete'>Delete</button>
+                                                            <button type='submit' name='delete' class='badge badge-complete'>Delete</button>
                                                             </form>
                                                         </td>
                                                     </tr>";
@@ -172,6 +173,7 @@
                                                 }
                                                 if (isset($_POST['delete'])) {
                                                     deleteUser($_POST['idUser']);
+                                                    header("refresh:0");
                                                 }
                                                 ?>
                                             </tbody>
@@ -205,8 +207,10 @@
                                             <tbody>
                                                 <?php
                                                 $stt = 1;
-                                                $trang_hien_tai = isset($_GET['trang']) ? $_GET['trang'] : 0;
-                                                $result = panigationQs($trang_hien_tai);
+                                                $trang_hien_tai = isset($_GET['trang']) ? ($_GET['trang']) : 0;
+                                                if ($trang_hien_tai > 0)
+                                                    $trang_hien_tai *= 10;
+                                                $result = panigationQs(($trang_hien_tai));
                                                 while ($row = mysqli_fetch_array($result)) {
                                                     echo "<tr>
                                                         <td class='serial'>" . $row["id_cau_hoi"] . "</td>
@@ -224,7 +228,7 @@
                                     <?php
                                     $socau = ceil(getQs() / 10);
                                     for ($i = 0; $i < $socau; $i++) {
-                                        if ($trang_hien_tai == $i) {
+                                        if (($trang_hien_tai / 10) == $i) {
                                             echo "<li class='active'><a href='?trang=$i'>" . ($i + 1) . "</a></li>";
                                         } else {
                                             echo "<li><a href='?trang=$i'>" . ($i + 1) . "</a></li>";
@@ -249,7 +253,7 @@
                                 </div>
                                 <div class="card-body--">
                                     <div class="table-stats order-table ov-h">
-                                    <table class="table ">
+                                        <table class="table ">
                                             <thead>
                                                 <tr>
                                                     <th class="serial">#</th>
@@ -260,34 +264,35 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php
+                                                <?php                                                
                                                 $stt = 1;
-                                                $result = getBTVN();
+                                                $result = btvn();
                                                 while ($row = mysqli_fetch_array($result)) {
                                                     echo "<tr>
                                                         <td class='serial'>$stt</td>
                                                         <td> <span class='name'>" . $row["name"] . "</span> </td>
                                                         <td>";
-                                                        if (!$row["img"] == "") {
-                                                            echo "<img style='width:100px;height:100px;object-fit: contain' src='../images/" . $row["img"] . "'>";
-                                                        }
+                                                    if (!$row["img"] == "") {
+                                                        echo "<img style='width:100px;height:100px;object-fit: contain' src='../images/" . $row["img"] . "'>";
+                                                    }
                                                     echo "</td>
-                                                        <td> <span class='name'>" . $row["content"] . "</span> </td>
+                                                    <td> <span class='name'>" . $row["content"] . "</span> </td>
                                                         <td><form method='post'>
-                                                            <input type='hidden' name='idBTVN' value='".$row["id"]."'>
-                                                            <button name='deleteBT' class='badge badge-complete'>Delete</button>
+                                                            <input type='hidden' name='idBTVN' value='" . $row["id"] . "'>
+                                                            <button type='submit' name='deleteBT' class='badge badge-complete'>Delete</button>
                                                         </form></td>                                                        
                                                     </tr>";
                                                     $stt++;
                                                 }
-                                                if(isset($_POST["deleteBT"])){
+                                                if (isset($_POST["deleteBT"])) {
                                                     deleteBTVN($_POST["idBTVN"]);
+                                                    header("Location: admin.php");
                                                 }
                                                 ?>
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>                                
+                                </div>
                             </div> <!-- /.card -->
                         </div>
                     </div>
@@ -309,6 +314,7 @@
                 </div>
             </div>
         </footer>
+        <!-- <?php ob_end_flush(); ?> -->
     </div>
     <!-- /#right-panel -->
 

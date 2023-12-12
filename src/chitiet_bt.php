@@ -39,9 +39,9 @@
                 <div class="header"
                     style="padding: 5px; width: 100%; height: 4%; background-color: #485fc7; color: #fff; font-weight: bold; border-top-left-radius: .375em; border-top-right-radius: .375em;"
                     title="Tên bài tập">' . $row["name"] . ' (Hệ thống đóng khi đủ 5 bạn nộp nhanh - lưu ý các bạn nén thành file zip để nộp) </div>';
-            if($row["img"]){
+            if($row["img"] != ""){
                 echo '<img style="width:100%;height:96%;object-fit: contain;"
-                src="https://uploads.nguoidothi.net.vn/content/f29d9806-6f25-41c0-bcf8-4095317e3497.jpg" alt="">';
+                src="../images/'.$row["img"].'" alt="">';
             } else {
                 echo $row["content"];
             }

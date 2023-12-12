@@ -43,10 +43,10 @@
                 ?>
                 <!--Tên khóa học  -->
             </p>
-            <a href="khoa_hoc.php" class="btn btn-primary">Trở lại</a>
+            <a href="khoa_hoc.php" class="btn btn-primary">Trở lại</a>            
             <?php
                 $id = $_GET["id"];
-                echo "<a href='luyen_tap.php?id=$id' class='btn btn-primary'>Luyện tập</a>
+                echo "<a href='xembtvn.php?id=$id' class='btn btn-primary'>BTVN</a> <a href='luyen_tap.php?id=$id' class='btn btn-primary'>Luyện tập</a>
                 <a href='lich_such.php?id=$id' class='btn btn-primary'>Lịch sử câu sai</a>";
             ?>
 

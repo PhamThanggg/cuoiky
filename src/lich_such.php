@@ -63,7 +63,7 @@
                     $id_user = $_SESSION['acc']['id'];
                     $id = $_GET["id"];
                     include "../function.php";
-                    $result = getHistory($id, $id_user);
+                    $result = getHistory($id_user, $id);
                     $count = 0;
                     $stt = 0;
                     while ($row = mysqli_fetch_array($result)) {
