@@ -88,7 +88,7 @@
                 if (!$row["anh_cau_hoi"] == "") {
                     echo "<br><img style='width:450px;object-fit: contain; margin-bottom:20px' src='../images/" . $row["anh_cau_hoi"] . "'>";
                 }
-                echo '<input type="text" class="form-control" value=' . $row["dap_an"] . ' readonly></div></div>';
+                echo '<input type="text" class="form-control" readonly value=' . $row["dap_an"] . '></div></div>';
             }
             // end cau hoi dien
     
