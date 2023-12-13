@@ -23,7 +23,8 @@
 </style>
 
 <body>
-    <?php
+    <?php   
+    ob_start(); 
     include "navbar.php";
     include "../function.php";
     if (!isLogin()) {
@@ -39,18 +40,27 @@
                 <div class="header"
                     style="padding: 5px; width: 100%; height: 4%; background-color: #485fc7; color: #fff; font-weight: bold; border-top-left-radius: .375em; border-top-right-radius: .375em;"
                     title="Tên bài tập">' . $row["name"] . ' (Hệ thống đóng khi đủ 5 bạn nộp nhanh - lưu ý các bạn nén thành file zip để nộp) </div>';
-            if($row["img"] != ""){
+            if ($row["img"] != "") {
                 echo '<img style="width:100%;height:96%;object-fit: contain;"
-                src="../images/'.$row["img"].'" alt="">';
+                src="../images/' . $row["img"] . '" alt="">';
             } else {
                 echo $row["content"];
             }
+            $arrayBT = explode(",", $row["quantity"]);            
+            $dem =0;
+            for ($x = 0; $x < count($arrayBT); $x++) {         
+                if($_SESSION["acc"]["id"] == $arrayBT[$x]){
+                    $dem++;
+                }
+            }
             echo '</div>
-            <div id="nopBai-container">
-                <h5
-                    style="margin: auto 0; background-color: #f14668; color: #fff; border-radius: 25px; padding: 5px;  width: 250px; text-align: center;">
-                    Trạng thái: Chưa nộp</h5><br>
-                <button id="timeUploadFile"
+            <div id="nopBai-container"><h5 style="margin: auto 0; background-color: #f14668; color: #fff; border-radius: 25px; padding: 5px;  width: 250px; text-align: center;">Trạng thái: ';
+            if($dem == 0){
+                echo 'Chưa nộp';
+            } else {
+                echo 'Đã nộp';
+            }
+            echo '</h5><br><button id="timeUploadFile"
                     style="margin: auto 0; background-color: #28a745; color: #fff; border-radius: 25px; width: fit-content; padding: 10px; display: flex; align-items: center; border: none; gap: 10px; outline: none;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
                         class="bi bi-calendar-check" viewBox="0 0 16 16">
@@ -68,16 +78,34 @@
                     <tbody>
                         <tr>
                             <th colspan="3" style="text-align: center;">Bài nộp được chấp nhận</th>
-                        </tr>
-                        <tr>
-                            <th style="color: #ff4d4f; background: #fff2f0; border-color: #ffccc7;">Chưa có bài nộp được
-                                chấp nhận</th>
-                        </tr>
-                    </tbody>
+                        </tr>';            
+            if($dem == 0){
+                if ($row["quantity"] == "" || count($arrayBT) < 5) {
+                    echo '<tr><th>
+                                <form method="post">
+                                    <input type="file">
+                                    <button type="submit" name="btnBtvn">Nộp bài</button>
+                                </form>
+                            </th></tr>';
+                }
+                echo '<tr><th style="color: #ff4d4f; background: #fff2f0; border-color: #ffccc7;">Chưa có bài nộp được
+                            chấp nhận</th></tr>';
+            }
+            echo "</tbody>
                 </table>
-            </div>';
+            </div>";
+        }        
+        if(isset($_POST['btnBtvn'])){
+            $result = get1BT($id);
+            while ($row = mysqli_fetch_array($result)) {
+                if($dem == 0){
+                    updateBTVN($row["id"], $row["quantity"].', '.$_SESSION["acc"]["id"]);
+                    header("Location: chitiet_bt.php?idBT=$id");
+                }
+            }
         }
-        ?>        
+        ob_end_flush();
+        ?>
     </main>
 </body>
 
