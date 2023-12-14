@@ -284,14 +284,14 @@ function getDetail($id)
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }
-function getDetailSai($id)
-{
-	include 'connectdb.php';
-	$sql = "SELECT *, COUNT(*) as total FROM `lich_su_sai`
-		WHERE id_cau_hoi='$id'";
-	$result = mysqli_query($conn, $sql);
-	return $result;
-}
+// function getDetailSai($id)
+// {
+// 	include 'connectdb.php';
+// 	$sql = "SELECT *, COUNT(*) as total FROM `lich_su_sai`
+// 		WHERE id_cau_hoi='$id'";
+// 	$result = mysqli_query($conn, $sql);
+// 	return $result;
+// }
 
 function getDetailSaiAll($id, $id_user)
 {
@@ -473,11 +473,17 @@ function insertBTVN($idKH, $name, $img, $content)
 	include 'connectdb.php';
 	$ngay_gio = date("Y-m-d H:i:s");
 	$expired = date("Y-m-d H:i:s", strtotime($ngay_gio . " +3 days"));
-	$sql = "INSERT INTO `btvn`(`id_khoa_hoc`,`name`, `img`, `content`, `createDate`, `expired`) VALUES ('$idKH', '$name','$img','$content', '$ngay_gio', '$expired')";
+	$sql = "INSERT INTO `btvn`(`id_khoa_hoc`,`name`, `img`, `content`, `createDate`, `expired`, `quantity`) VALUES ('$idKH', '$name','$img','$content', '$ngay_gio', '$expired', '')";
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }
-
+//update so nguoi nop bai
+function updateBTVN($id, $quantity)
+{
+	include 'connectdb.php';
+	$sql = "UPDATE `btvn` SET `quantity`='$quantity' WHERE id='$id'";
+	$result = mysqli_query($conn, $sql);
+}
 // lay btvn
 function btvn(){
 	include 'connectdb.php';
