@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light" style="position: fixed;z-index:1000;left:0;right:0;top:0">
   <div class="container-fluid">
     <a class="navbar-brand" href="khoa_hoc.php">Khóa học</a>
-    <a class="navbar-brand" href="#">Kỳ thi</a>
+    <a class="navbar-brand" href="ky_thi.php">Kỳ thi</a>
     <?php
     session_start();
     if ($_SESSION["acc"]["role"] == "1") {

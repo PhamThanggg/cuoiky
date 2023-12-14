@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quizz</title>
+    <title>Quizz kiểm tra</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -39,15 +39,25 @@
             header("Location: dang_nhap.php");
         }
         $id_user = $_SESSION['acc']['id'];
-        $id_kh = $_SESSION['id_khoa_hoc'];
+        // id của bài ktra
+        if(isset($_GET['idKT'])){
+            $idKT=$_GET['idKT'];
+        }
+
+        // lay thong tin trong bảng kỳ thi
+        $kqkt = get_KT($idKT);
+        while($rowkt = mysqli_fetch_array($kqkt)){
+            $id_kh=$rowkt['id_khoa_hoc'];
+            $so_lan_cho_phep = $rowkt['so_lan'];
+            $thoi_gian_lam = $rowkt['thoi_gian_lam'];
+        }
     ?>
     <section class="main-section" style="margin-top: 70px;">
         <div style="position: fixed; margin-left: 20px;">
             <?php
-            $id = $_SESSION['id_khoa_hoc'];
-            echo "<a href='bien_tap.php?id=$id' class='btn btn-primary'>Trở lại</a>
-            <h2>Luyện tập</h2>";
-            $kq = getDiem($id_user, $id_kh, '0');
+            echo "<a href='ky_thi.php' class='btn btn-primary'>Trở lại</a>
+            <h2>Kỳ thi</h2>";
+            $kq = getDiemKT($id_user, $id_kh, $idKT);
             $thoiGianEnd=0;
             while($roww = mysqli_fetch_array($kq)){
                 $thoiGianEnd = $roww['thoi_gian_end'];
@@ -59,6 +69,7 @@
                 echo $roww['thoi_gian_cuoi']!=''?$roww['thoi_gian_cuoi']:"yyyy-mm-dd 00-00-00";
                 echo "</p>
                 ";
+
             }
         ?>
         </div>
@@ -176,23 +187,38 @@
                         }
 
                         if(isset($_POST['begin'])){
-                            // ramdom cau hoi
-                            begin_practice($id_kh, $_SESSION['acc']['id'], 10, 0, 0);
-                            date_default_timezone_set('Asia/Ho_Chi_Minh');
-                            // tgian hiện tại
-                            $thoi_gian_begin = date("Y-m-d H:i:s");
-                            $thoi_gian_now = time();
-                            
-                            // tgian cộng thêm 10p
-                            $thoi_gian_end = $thoi_gian_now + (10 * 60);
-                            
-                            // Thời gian kết thúc
-                            $ket_thuc = date("Y-m-d H:i:s", $thoi_gian_end);
+                            if(count_userKT($id_user, $idKT)){
+                                $count = mysqli_fetch_array(count_userKT($id_user, $idKT));
+                            }
+                            // echo $count[0];
+                            if($count[0] < $so_lan_cho_phep){
+                                include '../connectdb.php';
+                                $sql_KT = "SELECT * FROM ky_thi WHERE id_KT=$idKT";
+                                $result1 = mysqli_query($conn, $sql_KT);
+                                while($rowKT = mysqli_fetch_array($result1)){
+                                    // ramdom cau hoi
+                                    begin_practice($rowKT['id_khoa_hoc'],$_SESSION['acc']['id'],  $rowKT['so_luong_cau'], $idKT, 1);
+                                }
+    
+                                date_default_timezone_set('Asia/Ho_Chi_Minh');
+                                // tgian hiện tại
+                                $thoi_gian_begin = date("Y-m-d H:i:s");
+                                $thoi_gian_now = time();
+                                
+                                // tgian cộng thêm 10p
+                                $thoi_gian_end = $thoi_gian_now + ($thoi_gian_lam * 60);
+                                
+                                // Thời gian kết thúc
+                                $ket_thuc = date("Y-m-d H:i:s", $thoi_gian_end);
+    
+                                //insert cac dl vao bang diem
+                                $id_lt=1;
+                                insert_diem($id_user, $id_kh, $thoi_gian_begin, $ket_thuc, $id_lt, $thoi_gian_end, $idKT);
+                                header("Location: LamBai_KT.php?idKT=$idKT");
+                            }else{
+                                echo "<p style='margin-left: 1000px'>Bạn đã hết số lần làm bai</p>";
+                            }
 
-                            //insert cac dl vao bang diem
-                            $id_lt=0;
-                            insert_diem($id_user, $id_kh, $thoi_gian_begin, $ket_thuc, $id_lt, $thoi_gian_end, "0");
-                            header("Location: luyen_tap.php?id=$id_kh");
                         }
                     ?>
                     
@@ -255,7 +281,7 @@
                             // đấy vào bảng điểm;
                             date_default_timezone_set('Asia/Ho_Chi_Minh');
                             $thoi_gian_nop = date("Y-m-d H:i:s");
-                            update_diem($id_user, $id_kh, '0', $diem, $thoi_gian_nop);
+                            update_diem($id_user, $id_kh, '1', $diem, $thoi_gian_nop);
 
                             // xoa dl trong bảng bt khi nộp bài
                             deleteData($id_kh, $id_user);
@@ -264,7 +290,7 @@
                                 unset($_SESSION['thoi_gian_end']);
                             }
                             
-                            header("Location: luyen_tap.php?id=$id_kh");
+                            header("Location: LamBai_KT.php?idKT=$idKT");
                         }
                         // end submit
 

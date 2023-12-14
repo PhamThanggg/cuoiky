@@ -345,12 +345,12 @@ function panigationQs($trang_hien_tai)
 }
 
 // lấy ngẫu nhiên 10 câu để luện tập
-function begin_practice($id_kh, $id_user)
+function begin_practice($id_kh, $id_user, $sl, $id_KT, $id_quizz)
 {
 	include 'connectdb.php';
 	$sqly = "SELECT * FROM cau_hoi 
 	WHERE (status = 1 AND id_khoa_hoc = $id_kh)
-	ORDER BY RAND() LIMIT 10";
+	ORDER BY RAND() LIMIT $sl";
 	$result1 = mysqli_query($conn, $sqly);
 	while ($row = mysqli_fetch_array($result1)) {
 		$r1 = $row['id_cau_hoi'];
@@ -362,8 +362,8 @@ function begin_practice($id_kh, $id_user)
 		$r7 = $row['id_user_them'];
 		$r8 = $row['id_khoa_hoc'];
 		$r9 = $row['status'];
-		$sql = "INSERT INTO luyen_tap (`id_cau_hoi`, `ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`)
-			VALUES ('$r1', '$r2', '$r3', '$r4', '$r5', '$r6', '$id_user', '$r8', '$r9')";
+		$sql = "INSERT INTO luyen_tap (`id_cau_hoi`, `ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`, `id_KT`, `id_quizz`)
+			VALUES ('$r1', '$r2', '$r3', '$r4', '$r5', '$r6', '$id_user', '$r8', '$r9', '$id_KT', $id_quizz)";
 		$result = mysqli_query($conn, $sql);
 	}
 
@@ -409,10 +409,10 @@ function insertFail($id_ch, $id_user, $da_false)
 }
 
 //insert vào bảng điểm
-function insert_diem($id_user, $id_khoa_hoc, $time_bg, $time_end, $id_quizz, $thoi_gian_end)
+function insert_diem($id_user, $id_khoa_hoc, $time_bg, $time_end, $id_quizz, $thoi_gian_end, $id_KT)
 {
 	include 'connectdb.php';
-	$sql = "INSERT INTO `diem`(`id_user`, `id_khoa_hoc`, `thoi_gian_dau`, `thoi_gian_cuoi`, `id_quizz`, `thoi_gian_end`) VALUES ('$id_user','$id_khoa_hoc','$time_bg','$time_end', '$id_quizz', $thoi_gian_end)";
+	$sql = "INSERT INTO `diem`(`id_user`, `id_khoa_hoc`, `thoi_gian_dau`, `thoi_gian_cuoi`, `id_quizz`, `thoi_gian_end`, `id_KT`) VALUES ('$id_user','$id_khoa_hoc','$time_bg','$time_end', '$id_quizz', $thoi_gian_end, '$id_KT')";
 	$result = mysqli_query($conn, $sql);
 	if ($result) {
 		return true;
@@ -443,11 +443,20 @@ function getDiem($id_user, $id_kh, $id_quizz){
 	return $result;
 }
 
+//lay diem KT
+function getDiemKT($id_user, $id_kh, $id_KT){
+	include 'connectdb.php';
+	$sql = "SELECT * FROM `diem`
+	WHERE id_user=$id_user AND id_khoa_hoc=$id_kh AND thoi_gian='' AND id_KT=$id_KT";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+
 // xoa du lieu trong bảng luyen_tap
-function deleteData($id_khoa_hoc)
+function deleteData($id_khoa_hoc, $id_user)
 {
 	include 'connectdb.php';
-	$sql = "DELETE FROM `luyen_tap` WHERE id_khoa_hoc = $id_khoa_hoc";
+	$sql = "DELETE FROM `luyen_tap` WHERE id_khoa_hoc = $id_khoa_hoc AND id_user_them = $id_user";
 	$result = mysqli_query($conn, $sql);
 	if ($result) {
 		return true;
@@ -471,12 +480,27 @@ function getHistory($id_user, $id_kh)
 function insertBTVN($idKH, $name, $img, $content)
 {
 	include 'connectdb.php';
+	date_default_timezone_set('Asia/Ho_Chi_Minh');
 	$ngay_gio = date("Y-m-d H:i:s");
 	$expired = date("Y-m-d H:i:s", strtotime($ngay_gio . " +3 days"));
 	$sql = "INSERT INTO `btvn`(`id_khoa_hoc`,`name`, `img`, `content`, `createDate`, `expired`, `quantity`) VALUES ('$idKH', '$name','$img','$content', '$ngay_gio', '$expired', '')";
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }
+
+// them btvn
+function insertKyThi($tieu_de, $noi_dung, $so_luong, $so_lan, $id_kh, $thoi_gian)
+{
+	include 'connectdb.php';
+	date_default_timezone_set('Asia/Ho_Chi_Minh');
+	$ngay_gio = date("Y-m-d H:i:s");
+	$expired = date("Y-m-d H:i:s", strtotime($ngay_gio . " +3 days"));
+	$sql = "INSERT INTO `ky_thi`(`tieu_de`, `noi_dung`, `so_luong_cau`, `so_lan`, `thoi_gian_mo`, `thoi_gian_dong`, `id_khoa_hoc`, `thoi_gian_lam`) 
+	VALUES ('$tieu_de','$noi_dung','$so_luong','$so_lan','$ngay_gio','$expired','$id_kh','$thoi_gian')";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+
 //update so nguoi nop bai
 function updateBTVN($id, $quantity)
 {
@@ -512,4 +536,60 @@ function deleteBTVN($id)
 	include 'connectdb.php';
 	$sql = "DELETE FROM `btvn` WHERE id=$id";
 	$result = mysqli_query($conn, $sql);
+}
+
+// lấy thong tin ky thi
+function KyThi(){
+	include 'connectdb.php';
+	$sql = "SELECT * FROM `ky_thi`";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+
+// delete btvn
+function deleteKyThi($id)
+{
+	include 'connectdb.php';
+	$sql = "DELETE FROM `ky_thi` WHERE id_KT=$id";
+	$result = mysqli_query($conn, $sql);
+}
+
+// get all ky thi
+function getKyTHi()
+{
+	include 'connectdb.php';
+	$sql = "SELECT * FROM `ky_thi`
+	JOIN `khoa_hoc` ON `ky_thi`.id_khoa_hoc=`khoa_hoc`.id_khoa_hoc
+	WHERE `ky_thi`.thoi_gian_dong > NOW()";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+
+
+// get 1 ky thi
+function get_KT($id_KT)
+{
+	include 'connectdb.php';
+	$sql = "SELECT * FROM `ky_thi`
+	WHERE id_KT=$id_KT";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+
+// đếm số ky thi
+function count_KT()
+{
+	include 'connectdb.php';
+	$sql = "SELECT COUNT(*) FROM `ky_thi`";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+
+// dem so lan 1 user đã làm bài kiểm tra
+function count_userKT($id_user, $id_kt){
+	include 'connectdb.php';
+	$sql = "SELECT COUNT(*) FROM `diem`
+	WHERE id_user = $id_user AND id_KT = $id_kt";
+	$result = mysqli_query($conn, $sql);
+	return $result;
 }

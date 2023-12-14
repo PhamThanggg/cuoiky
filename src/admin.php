@@ -145,7 +145,7 @@
                                         <table class="table ">
                                             <thead>
                                                 <tr>
-                                                    <th class="serial">#</th>
+                                                    <th class="serial">Stt</th>
                                                     <th>UserName</th>
                                                     <th>Name</th>
                                                     <th>Email</th>
@@ -199,7 +199,7 @@
                                         <table class="table ">
                                             <thead>
                                                 <tr>
-                                                    <th class="serial">#</th>
+                                                    <th class="serial">Stt</th>
                                                     <th>Tên câu hỏi</th>
                                                     <th>Đáp án</th>
                                                 </tr>
@@ -256,7 +256,7 @@
                                         <table class="table ">
                                             <thead>
                                                 <tr>
-                                                    <th class="serial">#</th>
+                                                    <th class="serial">Stt</th>
                                                     <th>Tiêu đề</th>
                                                     <th>Ảnh</th>
                                                     <th>Nội dung</th>
@@ -286,6 +286,63 @@
                                                 }
                                                 if (isset($_POST["deleteBT"])) {
                                                     deleteBTVN($_POST["idBTVN"]);
+                                                    header("Location: admin.php");
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div> <!-- /.card -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- giao bài thi trắc nghiệm -->
+                <div class="clearfix"></div>
+                <div class="orders">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-body" style="display:flex">
+                                    <h4 class="box-title" style="width:100%">Kỳ thi</h4>
+                                    <h4 class="box-title"><a href="them_bai_thi.php">Add</a> </h4>
+                                </div>
+                                <div class="card-body--">
+                                    <div class="table-stats order-table ov-h">
+                                        <table class="table ">
+                                            <thead>
+                                                <tr>
+                                                    <th class="serial" style="width: 30px;">Stt</th>
+                                                    <th style="width: 200px;">Tiêu đề</th>
+                                                    <th style="width: 300px;">Nội dung</th>
+                                                    <th style="width: 80px;">Số câu</th>
+                                                    <th style="width: 140px;">Số lần được làm</th>
+                                                    <th style="width: 140px;">Thời gian làm</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php                                                
+                                                $stt = 1;
+                                                $resultKT = KyThi();
+                                                while ($row = mysqli_fetch_array($resultKT)) {
+                                                    echo "<tr>
+                                                        <td class='serial'>$stt</td>
+                                                        <td> <span class='name'>" . $row["tieu_de"] . "</span> </td>
+                                                        <td> <span class='name' >" . $row["noi_dung"] . "</span> </td>
+                                                        <td><span class='name'>" . $row["so_luong_cau"] . "</span></td>
+                                                        <td> <span class='name'>" . $row["so_lan"] . "</span> </td>
+                                                        <td> <span class='name'>" . $row["thoi_gian_lam"] . " phút </span> </td>
+                                                        <td><form method='post'>
+                                                            <input type='hidden' name='idKT' value='" . $row["id_KT"] . "'>
+                                                            <button type='submit' name='deleteKT' class='badge badge-complete'>Delete</button>
+                                                        </form></td>                                                        
+                                                    </tr>";
+                                                    $stt++;
+                                                }
+                                                if (isset($_POST["deleteKT"])) {
+                                                    deleteKyThi($_POST["idKT"]);
                                                     header("Location: admin.php");
                                                 }
                                                 ?>
