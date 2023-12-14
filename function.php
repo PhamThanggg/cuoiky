@@ -345,23 +345,36 @@ function panigationQs($trang_hien_tai)
 }
 
 // lấy ngẫu nhiên 10 câu để luện tập
-function begin_practice($id_kh)
+function begin_practice($id_kh, $id_user)
 {
 	include 'connectdb.php';
-	$sql = "INSERT INTO luyen_tap (`id_cau_hoi`, `ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`)
-	SELECT `id_cau_hoi`, `ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`
-	FROM cau_hoi
+	$sqly = "SELECT * FROM cau_hoi 
 	WHERE (status = 1 AND id_khoa_hoc = $id_kh)
 	ORDER BY RAND() LIMIT 10";
-	$result = mysqli_query($conn, $sql);
+	$result1 = mysqli_query($conn, $sqly);
+	while ($row = mysqli_fetch_array($result1)) {
+		$r1 = $row['id_cau_hoi'];
+		$r2 = $row['ten_cau_hoi'];
+		$r3 = $row['dap_an'];
+		$r4 = $row['correct'];
+		$r5 = $row['loai_cau_hoi'];
+		$r6 = $row['anh_cau_hoi'];
+		$r7 = $row['id_user_them'];
+		$r8 = $row['id_khoa_hoc'];
+		$r9 = $row['status'];
+		$sql = "INSERT INTO luyen_tap (`id_cau_hoi`, `ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`)
+			VALUES ('$r1', '$r2', '$r3', '$r4', '$r5', '$r6', '$id_user', '$r8', '$r9')";
+		$result = mysqli_query($conn, $sql);
+	}
+
 	return $result;
 }
 
 // lấy bảng luyện tập
-function get_limit10($id_kh)
+function get_limit10($id_kh, $id_user)
 {
 	include 'connectdb.php';
-	$sql = "SELECT * FROM luyen_tap WHERE id_khoa_hoc=$id_kh";
+	$sql = "SELECT * FROM luyen_tap WHERE id_khoa_hoc=$id_kh AND id_user_them=$id_user";
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }
@@ -396,16 +409,38 @@ function insertFail($id_ch, $id_user, $da_false)
 }
 
 //insert vào bảng điểm
-function insert_diem($diem, $id_user, $id_khoa_hoc, $time)
+function insert_diem($id_user, $id_khoa_hoc, $time_bg, $time_end, $id_quizz, $thoi_gian_end)
 {
 	include 'connectdb.php';
-	$sql = "INSERT INTO `diem`(`diem`, `id_user`, `id_khoa_hoc`, `thoi_gian`) VALUES ('$diem','$id_user','$id_khoa_hoc','$time')";
+	$sql = "INSERT INTO `diem`(`id_user`, `id_khoa_hoc`, `thoi_gian_dau`, `thoi_gian_cuoi`, `id_quizz`, `thoi_gian_end`) VALUES ('$id_user','$id_khoa_hoc','$time_bg','$time_end', '$id_quizz', $thoi_gian_end)";
 	$result = mysqli_query($conn, $sql);
 	if ($result) {
 		return true;
 	} else {
 		return false;
 	}
+}
+
+function update_diem($id_user, $id_kh, $id_quizz, $diem, $time_submit)
+{
+	include 'connectdb.php';
+	$sql = "UPDATE `diem` SET `diem`='$diem',`thoi_gian`='$time_submit' 
+	WHERE id_user=$id_user AND id_khoa_hoc=$id_kh AND thoi_gian='' AND id_quizz=$id_quizz";
+	$result = mysqli_query($conn, $sql);
+	if ($result) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+//lay diem
+function getDiem($id_user, $id_kh, $id_quizz){
+	include 'connectdb.php';
+	$sql = "SELECT * FROM `diem`
+	WHERE id_user=$id_user AND id_khoa_hoc=$id_kh AND thoi_gian='' AND id_quizz=$id_quizz";
+	$result = mysqli_query($conn, $sql);
+	return $result;
 }
 
 // xoa du lieu trong bảng luyen_tap

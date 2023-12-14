@@ -50,7 +50,7 @@
         include '../function.php';
 
         if(!isLogin()){
-            // header('location: dang_nhap.php');
+            header('location: dang_nhap.php');
         }
 
       if(isset($_GET["id"])){

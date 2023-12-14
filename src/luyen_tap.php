@@ -38,25 +38,31 @@
         if (!isset($_SESSION["user"])) {
             header("Location: dang_nhap.php");
         }
+        $id_user = $_SESSION['acc']['id'];
+        $id_kh = $_SESSION['id_khoa_hoc'];
     ?>
     <section class="main-section" style="margin-top: 70px;">
         <div style="position: fixed; margin-left: 20px;">
             <?php
             $id = $_SESSION['id_khoa_hoc'];
             echo "<a href='bien_tap.php?id=$id' class='btn btn-primary'>Trở lại</a>
-            <h2>Luyện tập</h2>
-            <p>Thời gian bắt đầu</p>
-            <p>";
-            echo isset($_SESSION['time_begin'])?$_SESSION['time_begin']:"yyyy-mm-dd 00-00-00";
-            echo "</p>
-            <p>Thời gian kết thúc</p>
-            <p>";
-            echo isset($_SESSION['time_end'])?$_SESSION['time_end']:"yyyy-mm-dd 00-00-00";
-            echo "</p>
-            ";
+            <h2>Luyện tập</h2>";
+            $kq = getDiem($id_user, $id_kh, '0');
+            $thoiGianEnd=0;
+            while($roww = mysqli_fetch_array($kq)){
+                $thoiGianEnd = $roww['thoi_gian_end'];
+                echo "<p>Thời gian bắt đầu</p><p>";
+                echo $roww['thoi_gian_dau']!=''?$roww['thoi_gian_dau']:"yyyy-mm-dd 00-00-00";
+                echo "</p>
+                <p>Thời gian kết thúc</p>
+                <p>";
+                echo $roww['thoi_gian_cuoi']!=''?$roww['thoi_gian_cuoi']:"yyyy-mm-dd 00-00-00";
+                echo "</p>
+                ";
+            }
         ?>
         </div>
-        <form action="" method="post">
+        <form action="" method="post" id="form">
             <div class="container">
                 <div class="row justify-content-center">
 
@@ -65,20 +71,21 @@
                             <div class="card-body">
 
                                 <?php 
-                                    $id_kh = $_SESSION['id_khoa_hoc'];
                                     $stt = 0;
                                     $list_correct=[];
                                     $list_id_ch=[];
-                                    $result = get_limit10($id_kh);
+                                    $result = get_limit10($id_kh, $_SESSION['acc']['id']);
                                     while($row = mysqli_fetch_array($result)){
                                         
                                         // begin câu hỏi điền
-                                        echo "<h5 class='card-title py-2' style='margin-top: 10px;'>Câu $stt: ". $row['ten_cau_hoi']." </h5>";
+                                        echo "<h5 class='card-title py-2' style='margin-top: 10px;'>Câu "; echo ($stt+1). ": "; echo $row['ten_cau_hoi']." </h5>";
                                         if($row['loai_cau_hoi']==1){
                                             $list_correct[]=$row['dap_an'];
                                             $list_id_ch[]=$row['id_cau_hoi'];
+                                            if (!$row["anh_cau_hoi"] == "") {
+                                                echo "<br><img style='width:450px;object-fit: contain' src='../images/" . $row["anh_cau_hoi"] . "'>";
+                                            }
                                             echo "
-                                
                                             <div style='margin: 5px 0 0 0;' class='input-group mb-3'>
                                                 <input name='cau_dien$stt' type='text' class='form-control' placeholder='Nhập đáp án'
                                                     value=''>
@@ -91,16 +98,19 @@
                                             $arr_da = explode(", ", $row['correct']);
                                             $list_correct[]=$row['dap_an'];
                                             $list_id_ch[]=$row['id_cau_hoi'];
+                                            if (!$row["anh_cau_hoi"] == "") {
+                                                echo "<br><img style='width:450px;object-fit: contain' src='../images/" . $row["anh_cau_hoi"] . "'>";
+                                            }
                                             echo "
                                             <div style='margin: 20px 0 0 0;' class='input-group mb-3'>
                                                 <div class='input-group-text'>
-                                                    <input name='dad$stt' value='cau$stt"."da_0' type='radio'>
+                                                    <input name='dad$stt' value='cau$stt"."da_0' type='radio' >
                                                 </div>
                                                 <input name='cau$stt"."da_0' type='text' class='form-control' placeholder='Nhập đáp án' value='".$arr_da[0]."' readonly>
                                             </div>
                                             <div style='margin: 20px 0 0 0;' class='input-group mb-3'>
                                                 <div class='input-group-text'>
-                                                    <input name='dad$stt' value='cau$stt"."da_1' type='radio'>
+                                                    <input name='dad$stt' value='cau$stt"."da_1' type='radio' >
                                                 </div>
                                                 <input name='cau$stt"."da_1' type='text' class='form-control' placeholder='Nhập đáp án' value='".$arr_da[1]."' readonly>
                                             </div>
@@ -125,6 +135,9 @@
                                             $list_correct[]=$row['dap_an'];
                                             $list_id_ch[]=$row['id_cau_hoi'];
                                             $count_sl = count($arr_da)-1;
+                                            if (!$row["anh_cau_hoi"] == "") {
+                                                echo "<br><img style='width:450px;object-fit: contain' src='../images/" . $row["anh_cau_hoi"] . "'>";
+                                            }
                                             for($i = 0; $i < $count_sl; $i++){
                                                 echo '
                                                 <div class="input-group mb-3" style="margin-top: 20px;">
@@ -154,7 +167,7 @@
                     <?php
                         if($stt!=0){
                             echo '<div class="col-md-8 mb-5">
-                            <input type="submit" class="btn btn-success" name="submit" value="Nộp bài"></input>
+                            <input type="submit" id="sm" class="btn btn-success" name="submit" value="Nộp bài"></input>
                             </div>';
                         }else{
                             echo '<div class="col-md-8 mb-5">
@@ -163,19 +176,22 @@
                         }
 
                         if(isset($_POST['begin'])){
-                            begin_practice($id_kh);
+                            // ramdom cau hoi
+                            begin_practice($id_kh, $_SESSION['acc']['id']);
                             date_default_timezone_set('Asia/Ho_Chi_Minh');
                             // tgian hiện tại
                             $thoi_gian_begin = date("Y-m-d H:i:s");
                             $thoi_gian_now = time();
                             
-                            // tgian cộng thêm 15p
-                            $thoi_gian_end = $thoi_gian_now + (15 * 60);
+                            // tgian cộng thêm 10p
+                            $thoi_gian_end = $thoi_gian_now + (10 * 60);
+                            
                             // Thời gian kết thúc
                             $ket_thuc = date("Y-m-d H:i:s", $thoi_gian_end);
 
-                            $_SESSION['time_begin'] = $thoi_gian_begin;
-                            $_SESSION['time_end'] = $ket_thuc;
+                            //insert cac dl vao bang diem
+                            $id_lt=0;
+                            insert_diem($id_user, $id_kh, $thoi_gian_begin, $ket_thuc, $id_lt, $thoi_gian_end);
                             header("Location: luyen_tap.php?id=$id_kh");
                         }
                     ?>
@@ -225,13 +241,7 @@
                                 $stt1++;
                             }
 
-                            // print_r($list_correct);
-                            // echo "<br>";
-                            // print_r($listGet_cr);
-                            // echo "<br>";
-                            // print_r($list_id_ch);
                             $diem = 0;
-                            $id_user = $_SESSION['acc']['id'];
                             for($i=0; $i < 10; $i++){
                                 if($list_correct[$i]==$listGet_cr[$i]){
                                     $diem += 10;
@@ -245,16 +255,13 @@
                             // đấy vào bảng điểm;
                             date_default_timezone_set('Asia/Ho_Chi_Minh');
                             $thoi_gian_nop = date("Y-m-d H:i:s");
-                            insert_diem($diem, $id_user, $id_kh, $thoi_gian_nop);
+                            update_diem($id_user, $id_kh, '0', $diem, $thoi_gian_nop);
 
                             // xoa dl trong bảng bt khi nộp bài
                             deleteData($id_kh);
                             // gỡ sesion tgian
-                            if(isset($_SESSION['time_begin'])){
-                                unset($_SESSION['time_begin']);
-                            }
-                            if(isset($_SESSION['time_end'])){
-                                unset($_SESSION['time_end']);
+                            if(isset($_SESSION['thoi_gian_end'])){
+                                unset($_SESSION['thoi_gian_end']);
                             }
                             
                             header("Location: luyen_tap.php?id=$id_kh");
@@ -272,6 +279,22 @@
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        var phpSessionValue = "<?php echo $thoiGianEnd; ?>";
+        console.log(phpSessionValue);
+        var clientTime = new Date().getTime()/1000;
+        var timeDifference = phpSessionValue - clientTime;
+        console.log(timeDifference);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                var form = document.getElementById('sm');
+                console.log(form);
+
+                form.click();
+            }, timeDifference*1000);
+        });
+    </script>
 </body>
 
 </html>
