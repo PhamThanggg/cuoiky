@@ -638,3 +638,18 @@ function count_userKT($id_user, $id_kt){
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }
+
+// lay khoa hoc
+function getKhoaHoc(){
+	include 'connectdb.php';
+	$sql = "SELECT * FROM `khoa_hoc`";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+//them khoa hoc
+function insertKhoaHoc($name, $img){
+	include 'connectdb.php';
+	$sql = "INSERT INTO `khoa_hoc`(`ten_khoa_hoc`, `anh_khoa_hoc`) VALUES ('$name', '$img')";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}

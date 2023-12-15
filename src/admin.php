@@ -185,6 +185,53 @@
                     </div>
                 </div>
 
+                <!-- thêm khóa học -->
+                <div class="clearfix"></div>
+                <div class="orders">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-body" style="display:flex">
+                                    <h4 class="box-title" style="width:100%">Khóa học</h4>
+                                    <h4 class="box-title"><a href="them_khoa_hoc.php">Add</a> </h4>
+                                </div>
+                                <div class="card-body--">
+                                    <div class="table-stats order-table ov-h">
+                                        <table class="table ">
+                                            <thead>
+                                                <tr>
+                                                    <th class="serial" style="width: 30px;">Stt</th>
+                                                    <th style="width: 200px;">Tên khóa</th>
+                                                    <th style="width: 300px;">Ảnh</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php                                                
+                                                $stt = 1;
+                                                $resultKT = getKhoaHoc();
+                                                while ($row = mysqli_fetch_array($resultKT)) {
+                                                    echo "<tr>
+                                                        <td class='serial'>$stt</td>
+                                                        <td> <span class='name'>" . $row["ten_khoa_hoc"] . "</span> </td>
+                                                        <td> <img src='../images/" . $row["anh_khoa_hoc"] . "'> </td>
+                                                        <td><form method='post'>
+                                                            <input type='hidden' name='idKT' value='" . $row["id_khoa_hoc"] . "'>
+                                                            <button type='submit' name='deleteKH' class='badge badge-complete'>Delete</button>
+                                                        </form></td>                                                        
+                                                    </tr>";
+                                                    $stt++;
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- câu hỏi -->
                 <div class="clearfix"></div>
                 <div class="orders">
@@ -241,7 +288,7 @@
                     </div>
                 </div>
 
-                <!-- giao bài -->
+                <!-- giao btvn -->
                 <div class="clearfix"></div>
                 <div class="orders">
                     <div class="row">
@@ -350,27 +397,13 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div> <!-- /.card -->
+                            </div>
                         </div>
                     </div>
-                </div>
+                </div>                
             </div>
         </div>
 
-        <div class="clearfix"></div>
-
-        <footer class="site-footer">
-            <div class="footer-inner bg-white">
-                <div class="row">
-                    <div class="col-sm-6">
-                        Copyright &copy; TIENNGUYEN
-                    </div>
-                    <div class="col-sm-6 text-right">
-
-                    </div>
-                </div>
-            </div>
-        </footer>
         <!-- <?php ob_end_flush(); ?> -->
     </div>
     <!-- /#right-panel -->
