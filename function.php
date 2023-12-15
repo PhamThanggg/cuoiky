@@ -99,6 +99,21 @@ function checkRegister($tk, $mk, $gmail)
 	}
 }
 
+// check tiếng việt có dấu
+function checkTV($str){
+	$pattern = '/[áàảãạâấầẩẫậăắằẳẵặéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵđÁÀẢÃẠÂẤẦẨẪẬĂẮẰẲẴẶÉÈẺẼẸÊẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÚÙỦŨỤƯỨỪỬỮỰÝỲỶỸỴĐ]/';
+    return preg_match($pattern, $str) > 0;
+}
+
+// check dấu cách
+function checkDauCach($str){
+	if (strpos($str, ' ')) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // ham send email
 function sendEmail($to, $subject, $message)
 {
@@ -268,6 +283,32 @@ function getQuestion($id, $id_user)
 		JOIN `user` ON `cau_hoi`.`id_user_them` = `user`.`id_user`
 		JOIN `loai_cau_hoi` ON `cau_hoi`.`loai_cau_hoi` = `loai_cau_hoi`.`id_loai`
 		WHERE id_khoa_hoc='$id' AND id_user_them='$id_user'";
+	}
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+
+function getQuestionPT($id, $id_user, $curr_page)
+{
+	include 'connectdb.php';
+	$offset = ($curr_page - 1) * 10;
+
+	$role = $_SESSION['acc']['role'];
+	$sql = "";
+	if ($role == 1) {
+		$sql = "SELECT * FROM `cau_hoi` 
+		JOIN `user` ON `cau_hoi`.id_user_them = `user`.id_user
+		JOIN `loai_cau_hoi` ON `cau_hoi`.loai_cau_hoi = `loai_cau_hoi`.id_loai
+		WHERE id_khoa_hoc='$id'
+		ORDER BY `id_cau_hoi` ASC 
+		LIMIT 10 OFFSET $offset";
+	} else {
+		$sql = "SELECT * FROM `cau_hoi` 
+		JOIN `user` ON `cau_hoi`.`id_user_them` = `user`.`id_user`
+		JOIN `loai_cau_hoi` ON `cau_hoi`.`loai_cau_hoi` = `loai_cau_hoi`.`id_loai`
+		WHERE id_khoa_hoc='$id' AND id_user_them='$id_user'
+		ORDER BY `id_cau_hoi` ASC 
+		LIMIT 10 OFFSET $offset";
 	}
 	$result = mysqli_query($conn, $sql);
 	return $result;
@@ -466,12 +507,16 @@ function deleteData($id_khoa_hoc, $id_user)
 }
 
 // xem lich su cau sai
-function getHistory($id_user, $id_kh)
+function getHistory($id_user, $id_kh, $curr_page)
 {
 	include 'connectdb.php';
+	$offset = ($curr_page-1)*10;
+
 	$sql = "SELECT DISTINCT *, COUNT(*) AS so_lan FROM `lich_su_sai`
 	WHERE id_user_them=$id_user AND id_khoa_hoc=$id_kh
-	GROUP BY id_cau_hoi";
+	GROUP BY id_cau_hoi
+	ORDER BY `id_cau_hoi` ASC 
+	LIMIT 10 OFFSET $offset";
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }

@@ -9,8 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="	sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
+        integrity="	sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
     <!-- End bootstrap cdn -->
 </head>
 
@@ -43,7 +43,7 @@
                 ?>
                 <!--Tên khóa học  -->
             </p>
-            <a href="khoa_hoc.php" class="btn btn-primary">Trở lại</a>            
+            <a href="khoa_hoc.php" class="btn btn-primary">Trở lại</a>
             <?php
                 $id = $_GET["id"];
                 echo "<a href='xembtvn.php?id=$id' class='btn btn-primary'>BTVN</a> <a href='luyen_tap.php?id=$id' class='btn btn-primary'>Luyện tập</a>
@@ -84,9 +84,19 @@
                     $id_user = $_SESSION['acc']['id'];
                     $id = $_GET["id"];
                     include "../function.php";
-                    $result = getQuestion($id, $id_user);
+                    include "../connectdb.php";
+                    $kq = mysqli_query($conn, "SELECT COUNT(*) FROM `cau_hoi` WHERE `status`=1");
+                    $roww = mysqli_fetch_array($kq);
+                    $so_luong_page = ceil($roww[0] / 10);
+
+                    // $result = getQuestion($id, $id_user);
+                    $curr_page = isset($_GET['curr_page'])?$_GET['curr_page']:1;
+                    $pre = ($curr_page > 1)?$curr_page - 1:1;
+                    $next = ($curr_page < $so_luong_page)?$curr_page + 1:$so_luong_page;
+
+                    $result = getQuestionPT($id, $id_user, $curr_page);
                     $count = 0;
-                    $stt = 0;
+                    $stt = ($curr_page-1)*10;
                     while ($row = mysqli_fetch_array($result)) {
                         $count++;
                         $stt++;
@@ -137,7 +147,27 @@
                     ?>
                 </tr>
             </table>
-
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item <?php echo ($curr_page==1)?"disabled":"" ?>">
+                        <a class="page-link" href="<?php echo "bien_tap.php?id=$id&curr_page=$pre"?>" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    <?php for($i = 1; $i <= $so_luong_page; $i++){ ?>
+                        <li class="page-item <?php echo ($i == $curr_page)?"active":"" ?>">
+                            <a class="page-link" href="<?php echo "bien_tap.php?id=$id&curr_page=$i"?>"><?=$i?></a>
+                        </li>
+                    <?php } ?>
+                    <li class="page-item <?php echo ($curr_page==$so_luong_page)?"disabled":""?>">
+                        <a class="page-link" href="<?php echo "bien_tap.php?id=$id&curr_page=$next"?>" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </main>
     <?php

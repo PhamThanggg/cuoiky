@@ -23,6 +23,10 @@
                     echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập tên tài khoản</div>';
                 }elseif($mk==""){
                     echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập mật khẩu </div>';
+                }elseif(checkTV($tk) || checkDauCach($tk)){
+                    echo '<div class="alert alert-danger text-center" role="alert">Tên tài khoản phải được viết liền không dấu</div>';
+                }elseif(checkTV($mk) || checkDauCach($mk)){
+                    echo '<div class="alert alert-danger text-center" role="alert">Mật khẩu phải được viết liền không dấu</div>';
                 }else{
                     if(checkLogin($tk, $mk)){
 

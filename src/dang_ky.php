@@ -28,6 +28,12 @@
                     echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập lại mật khẩu </div>';
                 }elseif($gmail==""){
                     echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập email </div>';
+                }elseif(checkTV($tk) || checkDauCach($tk)){
+                    echo '<div class="alert alert-danger text-center" role="alert">Tên tài khoản phải được viết liền không dấu</div>';
+                }elseif(checkTV($mk) || checkDauCach($mk)){
+                    echo '<div class="alert alert-danger text-center" role="alert">Mật khẩu phải được viết liền không dấu</div>';
+                }elseif(checkTV($gmail) || checkDauCach($gmail)){
+                    echo '<div class="alert alert-danger text-center" role="alert">Mật khẩu phải được viết liền không dấu</div>';
                 }else{
                     if($mk == $remk){
                         if(checkRegister($tk, $mk, $gmail)){

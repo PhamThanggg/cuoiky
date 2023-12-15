@@ -63,9 +63,22 @@
                     $id_user = $_SESSION['acc']['id'];
                     $id = $_GET["id"];
                     include "../function.php";
-                    $result = getHistory($id_user, $id);
+                    include "../connectdb.php";
+                    $kq = mysqli_query($conn, "SELECT COUNT(DISTINCT id_cau_hoi) FROM `lich_su_sai`
+                    WHERE id_user_them=$id_user AND id_khoa_hoc=$id
+                    ");
+
+                    $roww = mysqli_fetch_array($kq);
+                    $so_luong_page = ceil($roww[0] / 10);
+
+                    // $result = getQuestion($id, $id_user);
+                    $curr_page = isset($_GET['curr_page'])?$_GET['curr_page']:1;
+                    $pre = ($curr_page > 1)?$curr_page - 1:1;
+                    $next = ($curr_page < $so_luong_page)?$curr_page + 1:$so_luong_page;
+
+                    $result = getHistory($id_user, $id, $curr_page);
                     $count = 0;
-                    $stt = 0;
+                    $stt = ($curr_page -1)*10;
                     while ($row = mysqli_fetch_array($result)) {
                         $count++;
                         $stt++;
@@ -84,6 +97,27 @@
                     ?>
                 </tr>
             </table>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item <?php echo ($curr_page==1)?"disabled":"" ?>">
+                        <a class="page-link" href="<?php echo "bien_tap.php?id=$id&curr_page=$pre"?>" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    <?php for($i = 1; $i <= $so_luong_page; $i++){ ?>
+                        <li class="page-item <?php echo ($i == $curr_page)?"active":"" ?>">
+                            <a class="page-link" href="<?php echo "bien_tap.php?id=$id&curr_page=$i"?>"><?=$i?></a>
+                        </li>
+                    <?php } ?>
+                    <li class="page-item <?php echo ($curr_page==$so_luong_page)?"disabled":""?>">
+                        <a class="page-link" href="<?php echo "bien_tap.php?id=$id&curr_page=$next"?>" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
 
         </div>
     </main>
