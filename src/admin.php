@@ -185,7 +185,7 @@
                     </div>
                 </div>
 
-                <!-- thêm khóa học -->
+                <!-- khóa học -->
                 <div class="clearfix"></div>
                 <div class="orders">
                     <div class="row">
@@ -400,7 +400,51 @@
                             </div>
                         </div>
                     </div>
-                </div>                
+                </div>  
+                
+                <!-- điểm -->
+                <div class="clearfix"></div>
+                <div class="orders">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-body" style="display:flex">
+                                    <h4 class="box-title" style="width:100%">Điểm</h4>
+                                </div>
+                                <div class="card-body--">
+                                    <div class="table-stats order-table ov-h">
+                                        <table class="table ">
+                                            <thead>
+                                                <tr>
+                                                    <th class="serial" style="width: 30px;">Stt</th>
+                                                    <th style="width: 200px;">Tên khóa học</th>
+                                                    <th style="width: 200px;">Tên người làm</th>
+                                                    <th style="width: 300px;">Điểm</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php                                                
+                                                $stt = 1;
+                                                $resultKT = getDiemLT();
+                                                while ($row = mysqli_fetch_array($resultKT)) {
+                                                    echo "<tr>
+                                                        <td class='serial'>$stt</td>
+                                                        <td> <span class='name'>" . $row["ten_khoa_hoc"] . "</span> </td>
+                                                        <td> <span class='name'>" . $row["user_name"] . "</span> </td>
+                                                        <td> <span class='name'>" . $row["diem"] . "</span> </td>
+                                                                                                              
+                                                    </tr>";
+                                                    $stt++;
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

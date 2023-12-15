@@ -653,3 +653,13 @@ function insertKhoaHoc($name, $img){
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }
+
+// lấy bảng điểm
+function getDiemLT(){
+	include 'connectdb.php';
+	$sql = "SELECT * FROM `diem` 
+			JOIN `user` ON `user`.id_user = `diem`.id_user
+			JOIN `khoa_hoc` ON `khoa_hoc`.id_khoa_hoc = `diem`.id_khoa_hoc";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
