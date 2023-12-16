@@ -42,6 +42,11 @@
         // id của bài ktra
         if(isset($_GET['idKT'])){
             $idKT=$_GET['idKT'];
+        }else{
+            $idKT=-1;
+            $id_kh = -1;
+            $so_lan_cho_phep = -1;
+            $thoi_gian_lam = -1;
         }
 
         // lay thong tin trong bảng kỳ thi
@@ -163,6 +168,33 @@
                                         }
                                         // end cau hoi chon nhiều 
 
+                                          // begin cau hoi select option
+                                          if($row['loai_cau_hoi']==4){
+                                            $arr_da = explode(", ", $row['correct']);
+                                            // tach da đúng trong tiêu đề
+                                            $dap_an_dung = explode(", ", $row['dap_an']);
+
+                                            $list_correct[]=$row['dap_an'];
+                                            $list_id_ch[]=$row['id_cau_hoi'];
+
+                                            // tách câu hỏi con thiếu
+                                            $ch = explode("...", $dap_an_dung[0]);
+                                            $_SESSION['select'.$stt] = $dap_an_dung[0];
+                                            
+                                            echo "  <div style='margin: 20px 0 0 0;' class='input-group mb-3'>
+                                            <label for='selectOption'>$ch[0]</label>
+                                            <select name='selectOption$stt' id='selectOption'>
+                                                <option value='$arr_da[0]'>$arr_da[0]</option>
+                                                <option value='$arr_da[1]'>$arr_da[1]</option>
+                                                <option value='$arr_da[2]'>$arr_da[2]</option>
+                                            </select>
+                                            <label for='selectOption'>$ch[1]</label>
+
+                                        </div>";
+
+                                        }
+                                        // end cau hoi select option 
+
                                         if(!isset($_SESSION['list_correct'])){
                                             $_SESSION['list_correct'] = $list_correct;
                                         }
@@ -261,6 +293,13 @@
                                     }
 
                                     $listGet_cr[] = $da_correct;
+                                }
+                                
+                                // cau hoi select option
+                                elseif(isset($_POST["selectOption$stt1"])){
+                                    $da = $_SESSION['select'.$stt1].", ".$_POST["selectOption$stt1"];
+                                    echo $da;
+                                    $listGet_cr[]=$da;
                                 }else{
                                     $listGet_cr[] = "";
                                 }

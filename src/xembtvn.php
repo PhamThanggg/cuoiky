@@ -118,7 +118,11 @@
             <div class="content-wrap" style="width:100%">
                 <?php
                 include "../connectdb.php";
-                $id = $_GET["id"];
+                if(isset($_GET["id"])){
+                    $id = $_GET["id"];
+                }else{
+                    $id = -1;
+                }
                 $result = getBTVN($id);
                 $stt = 1;
                 while ($row = mysqli_fetch_array($result)) {

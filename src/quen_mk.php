@@ -19,7 +19,7 @@
 			session_start();
             
 			if(isset($_POST['submitLogin'])){
-                $tk = $_POST['username'];
+                $tk = trim($_POST['username']);
 
                 if($tk==""){
                     echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập tên tài khoản</div>';

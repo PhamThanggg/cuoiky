@@ -50,7 +50,11 @@
                 <!-- tên khóa học -->
             </p>
             <?php
-                $id = $_GET['id'];
+                if(isset($_GET['id'])){
+                    $id = $_GET['id'];
+                }else{
+                    $id = -1;
+                }
                 echo '<a href="bien_tap.php?id='.$id.'" class="btn btn-primary">Trở lại</a>';
             ?>
         </div>
@@ -112,7 +116,7 @@
             <?php
             // begin add so dap an
             if(isset($_POST['btn'])){
-                $ten_ch = $_POST['ten_cau_hoi'];
+                $ten_ch = trim($_POST['ten_cau_hoi']);
                 $img="";
                 if(isset($_FILES['file_tai_len'])){
                     $target_dir = "../images/";
@@ -123,7 +127,7 @@
                 }else{
                     $img = '';
                 }
-                $sl_da = $_POST['count_da'];
+                $sl_da = trim($_POST['count_da']);
 
                 $list_da = [];
                 $list_datxt = [];
@@ -140,7 +144,7 @@
 
                     if(isset($_POST['txt'.$i])){
                         if($_POST['txt'.$i]!=""){
-                            $list_datxt[$i] = $_POST['txt'.$i];
+                            $list_datxt[$i] = trim($_POST['txt'.$i]);
                             $check_txt++;
                         }else{
                             $list_datxt[$i] = "";

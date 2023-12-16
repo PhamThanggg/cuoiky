@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biên tập</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
     <!-- Begin bootstrap cdn -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -28,7 +29,11 @@
         <div id="action" style="margin: 20px 0 0 13%;">
             <p class="h3">Khóa học
                 <?php
-                $id = $_GET["id"];
+                if(isset($_GET["id"])){
+                    $id = $_GET["id"];
+                }else{
+                    $id=-1;
+                }
                 $_SESSION['id_khoa_hoc'] = $id;
                 include '../connectdb.php';
                 $sql = "SELECT * FROM `khoa_hoc` WHERE id_khoa_hoc='$id'";
@@ -45,7 +50,7 @@
             </p>
             <a href="khoa_hoc.php" class="btn btn-primary">Trở lại</a>
             <?php
-                $id = $_GET["id"];
+                // $id = $_GET["id"];
                 echo "<a href='xembtvn.php?id=$id' class='btn btn-primary'>BTVN</a> <a href='luyen_tap.php?id=$id' class='btn btn-primary'>Luyện tập</a>
                 <a href='lich_such.php?id=$id' class='btn btn-primary'>Lịch sử câu sai</a>";
             ?>
@@ -62,12 +67,31 @@
                 $id = $_GET["id"];
                 echo "<li><a class='dropdown-item' href='cau_hoi_chon1.php?id=$id'>Câu hỏi chọn</a></li>";
                 echo "<li><a class='dropdown-item' href='ch_chon_nhieu.php?id=$id'>Câu hỏi chọn nhiều</a></li>";
+                echo "<li><a class='dropdown-item' href='ch_select_option.php?id=$id'>Câu hỏi select option</a></li>";
                 ?>
             </ul>
 
         </div>
+        
         <div class="d-flex flex-wrap flex-column align-items-center" style="padding: 1%;margin: 5% 0 0 0; ">
             <p class="h3">Danh sách câu hỏi</p>
+            <!-- tim kiem -->
+            <form action="" method="get">
+            <div class="input-group" style="width: 200px; margin-bottom: 10px;">
+            <input type="text" class="form-control" placeholder="Search" name="searchtxt" >
+            <input type="hidden" class="form-control" placeholder="Search" name="id" value="<?php echo $id?>">
+            <div class="input-group-btn" >
+                <button class="btn"  type="submit" style="border: 1px solid #ccc; border-radius: 0; background-color: #ccc;"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            </div>
+            </form>
+                <?php 
+
+                        $id = $_GET["id"];
+                        include "../function.php";
+                        include "../connectdb.php";
+                        $search = isset($_GET['searchtxt'])?$_GET['searchtxt']:"";
+                ?>
             <table class="table table-striped">
                 <tr>
                     <th>STT</th>
@@ -81,10 +105,8 @@
                 <tr>
                     <?php
                     $role = $_SESSION['acc']['role'];
-                    $id_user = $_SESSION['acc']['id'];
-                    $id = $_GET["id"];
-                    include "../function.php";
-                    include "../connectdb.php";
+                    $id_user = $_SESSION['acc']['id'];   
+                    
                     $kq = mysqli_query($conn, "SELECT COUNT(*) FROM `cau_hoi` WHERE `status`=1");
                     $roww = mysqli_fetch_array($kq);
                     $so_luong_page = ceil($roww[0] / 10);
@@ -94,7 +116,12 @@
                     $pre = ($curr_page > 1)?$curr_page - 1:1;
                     $next = ($curr_page < $so_luong_page)?$curr_page + 1:$so_luong_page;
 
-                    $result = getQuestionPT($id, $id_user, $curr_page);
+                    if($search){
+                        $result = getQuestionSearch($id, $id_user, $curr_page, $search);
+
+                    }else{
+                        $result = getQuestionPT($id, $id_user, $curr_page);
+                    }
                     $count = 0;
                     $stt = ($curr_page-1)*10;
                     while ($row = mysqli_fetch_array($result)) {
@@ -147,27 +174,31 @@
                     ?>
                 </tr>
             </table>
+            <?php if($count != 0){?>
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     <li class="page-item <?php echo ($curr_page==1)?"disabled":"" ?>">
-                        <a class="page-link" href="<?php echo "bien_tap.php?id=$id&curr_page=$pre"?>" aria-label="Previous">
+                        <a class="page-link" href="<?php echo "bien_tap.php?id=$id&curr_page=$pre"?>"
+                            aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                             <span class="sr-only">Previous</span>
                         </a>
                     </li>
                     <?php for($i = 1; $i <= $so_luong_page; $i++){ ?>
-                        <li class="page-item <?php echo ($i == $curr_page)?"active":"" ?>">
-                            <a class="page-link" href="<?php echo "bien_tap.php?id=$id&curr_page=$i"?>"><?=$i?></a>
-                        </li>
+                    <li class="page-item <?php echo ($i == $curr_page)?"active":"" ?>">
+                        <a class="page-link" href="<?php echo "bien_tap.php?id=$id&curr_page=$i"?>"><?=$i?></a>
+                    </li>
                     <?php } ?>
                     <li class="page-item <?php echo ($curr_page==$so_luong_page)?"disabled":""?>">
-                        <a class="page-link" href="<?php echo "bien_tap.php?id=$id&curr_page=$next"?>" aria-label="Next">
+                        <a class="page-link" href="<?php echo "bien_tap.php?id=$id&curr_page=$next"?>"
+                            aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                             <span class="sr-only">Next</span>
                         </a>
                     </li>
                 </ul>
             </nav>
+            <?php }?>
         </div>
     </main>
     <?php

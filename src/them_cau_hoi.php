@@ -28,7 +28,11 @@
                 <?php echo $_SESSION["ten_khoa_hoc"]; ?>
             </p>
             <?php
-            $id = $_GET['id'];
+            if(isset($_GET['id'])){
+                $id = $_GET['id'];
+            }else{
+                $id = -1;
+            }
             echo "<a href='bien_tap.php?id=$id' class='btn btn-primary'>Trở lại</a>";
             ?>
         </div>
@@ -53,8 +57,8 @@
                 </div>
                 <?php
                 if(isset($_POST["btn"])) {
-                    $name = $_POST["ten_cau_hoi"];
-                    $da = $_POST["da"];
+                    $name = trim($_POST["ten_cau_hoi"]);
+                    $da = trim($_POST["da"]);
                     if($name == "") {
                         echo "Không được để trống tên câu hỏi";
                     } else if($da == "") {

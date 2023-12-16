@@ -41,7 +41,7 @@
                 <?php                
                 include "../function.php";
                 if(isset($_POST["btn"])) {
-                    $name = $_POST["ten_cau_hoi"];
+                    $name = trim($_POST["ten_cau_hoi"]);
                     if($name == "") {
                         echo "<br><div class='alert alert-warning text-center' role='alert'>Không được để trống tên khóa học</div>";
                     } else {                        

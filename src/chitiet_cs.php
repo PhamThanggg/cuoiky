@@ -148,6 +148,33 @@
                 }
                 echo '</div>';
             }
+
+             // begin cau select option
+             if ($row['loai_cau_hoi'] == 4) {
+                // $arr_da = explode(", ", $row['correct']);
+                // tach da đúng trong tiêu đề
+                $dap_an_dung = explode(", ", $row['dap_an']);
+                $ch = explode("...", $dap_an_dung[0]);
+                
+                // tách câu hỏi con thiếu
+                echo '';
+                
+                echo " 
+                <div style='margin: 20px 0 0 13%;' class='form-group' style='display: flex; align-items: center;'>
+                    <p class='exam'>Lần " . ($i+1) . ": </p>
+                    <p style='display: inline;' style='font-size:20px'>" . $row['ten_cau_hoi'] . "</p>
+                </div>
+                <div style='margin: 10px 0 0 13%;' class='input-group mb-3'>
+                <label for='selectOption'>$ch[0]</label>
+                <select name='selectOption' id='selectOption'>
+                    <option value='$dap_an_dung[1]'>$dap_an_dung[1]</option>
+                </select>
+                <label for='selectOption'>$ch[1]</label>
+
+            </div>";
+            }
+            // end cau select option
+            
         // }
         $i++;
     }

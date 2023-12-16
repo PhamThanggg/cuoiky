@@ -104,8 +104,8 @@
             echo '</div>
             </form>';
             if(isset($_POST["btn"])) {
-                $name = $_POST["ten_cau_hoi"];
-                $da = $_POST["da"];
+                $name = trim($_POST["ten_cau_hoi"]);
+                $da = trim($_POST["da"]);
                 if($name == "") {
                     echo "Không được để trống tên câu hỏi";
                 } else if($da == "") {
@@ -129,12 +129,15 @@
                         // }
                     }
                     if(updateCauHoi($name, $da, $arr, $img, $id)) {
-                        echo "<div class='alert alert-success text-center' role='alert'>Cập nhật câu hỏi thành công</div>";
+                        setcookie("tb", "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>", time() + 5);
                         header('Location: xem_truoc.php?id='.$id);
                     } else {
                         echo "<div class='alert alert-warning text-center' role='alert'>Cập nhật câu hỏi thất bại</div>";
                     }
                 }
+            }
+            if($_COOKIE['tb']){
+                echo $_COOKIE['tb'];
             }
         }
 
@@ -197,10 +200,10 @@
            include "../connectdb.php";
             if(isset($_POST['btn'])) {
                 $question = $_POST['ten_cau_hoi'];
-                $da0 = $_POST['da_0'];
-                $da1 = $_POST['da_1'];
-                $da2 = $_POST['da_2'];
-                $da3 = $_POST['da_3'];
+                $da0 = trim($_POST['da_0']);
+                $da1 = trim($_POST['da_1']);
+                $da2 = trim($_POST['da_2']);
+                $da3 = trim($_POST['da_3']);
                 $arr = $da0.", ".$da1.", ".$da2.", ".$da3;
                 $da = "";
 
@@ -213,13 +216,16 @@
                     echo "<div class='alert alert-warning text-center' role='alert'>Bạn phải chọn đáp án</div>";
                 } else {
                     if(updateCauHoi($question, $da, $arr , "", $id)) {
-                        echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
+                        setcookie("tb", "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>", time() + 5);
                         header('Location: xem_truoc.php?id='.$id);
                     } else {
                         echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
                     }
                 }
 
+            }
+            if($_COOKIE['tb']){
+                echo $_COOKIE['tb'];
             }
         }
         // end cau hoi chon 1
@@ -269,78 +275,184 @@
                 </div>
             </div>
             </form>';
-        }
 
-        if(isset($_POST['btn'])){
-            $ten_ch = $_POST['ten_cau_hoi'];
-            $img="";
-            if(isset($_FILES['file_tai_len'])){
-                $target_dir = "../images/";
-                    $target_file = $target_dir.basename($_FILES["file_tai_len"]["name"]);
-                    if(move_uploaded_file($_FILES["file_tai_len"]["tmp_name"], $target_file)) {
-                        $img = basename($_FILES["file_tai_len"]["name"]);
-                    }
-            }else{
-                $img = '';
-            }
-            $sl_da = $count_da;
-
-            $list_da = [];
-            $list_datxt = [];
-            $check_cb=0;
-            $check_txt=0;
-            // add vào mảng
-            for($i=0; $i<$sl_da; $i++){
-                if(isset($_POST[$i])){
-                    $list_da[] = $_POST[$i];
-                    $check_cb++;
+            if(isset($_POST['btn'])){
+                $ten_ch = trim($_POST['ten_cau_hoi']);
+                $img="";
+                if(isset($_FILES['file_tai_len'])){
+                    $target_dir = "../images/";
+                        $target_file = $target_dir.basename($_FILES["file_tai_len"]["name"]);
+                        if(move_uploaded_file($_FILES["file_tai_len"]["tmp_name"], $target_file)) {
+                            $img = basename($_FILES["file_tai_len"]["name"]);
+                        }
                 }else{
-                    $list_da[] = " ";
+                    $img = '';
                 }
-
-                if(isset($_POST['txt'.$i])){
-                    if($_POST['txt'.$i]!=""){
-                        $list_datxt[$i] = $_POST['txt'.$i];
-                        $check_txt++;
+                $sl_da = $count_da;
+    
+                $list_da = [];
+                $list_datxt = [];
+                $check_cb=0;
+                $check_txt=0;
+                // add vào mảng
+                for($i=0; $i<$sl_da; $i++){
+                    if(isset($_POST[$i])){
+                        $list_da[] = $_POST[$i];
+                        $check_cb++;
                     }else{
-                        $list_datxt[] = "";
+                        $list_da[] = " ";
+                    }
+    
+                    if(isset($_POST['txt'.$i])){
+                        if($_POST['txt'.$i]!=""){
+                            $list_datxt[$i] = $_POST['txt'.$i];
+                            $check_txt++;
+                        }else{
+                            $list_datxt[] = "";
+                        }
                     }
                 }
-            }
-            
-            //validate
-            if($ten_ch==''){
-                echo '<br><div class="alert alert-danger text-center" role="alert">Bạn chưa nhập tên câu hỏi</div>';
-            }
-            elseif($check_cb==0){
-                echo '<br><div class="alert alert-danger text-center" role="alert">Bạn phải tích ít nhất 1 đáp án</div>';
-            }elseif($check_txt!=$sl_da){
-                echo '<br><div class="alert alert-danger text-center" role="alert">Bạn chưa điền đầy đủ đáp án</div>';
-            }else{
-                $da_correct='';
-                $da_txt='';
-                for ($i=0; $i < count($list_datxt); $i++) { 
-                    $da_txt .= $list_datxt[$i]. ', ';
-                    $da_correct .= $list_da[$i]. ', ';
+                
+                //validate
+                if($ten_ch==''){
+                    echo '<br><div class="alert alert-danger text-center" role="alert">Bạn chưa nhập tên câu hỏi</div>';
                 }
-                // echo $da_correct. " ". $da_txt;
-                $stt=0;
-                if($_SESSION["acc"]["role"] == 1) {
-                    $stt = 1;
+                elseif($check_cb==0){
+                    echo '<br><div class="alert alert-danger text-center" role="alert">Bạn phải tích ít nhất 1 đáp án</div>';
+                }elseif($check_txt!=$sl_da){
+                    echo '<br><div class="alert alert-danger text-center" role="alert">Bạn chưa điền đầy đủ đáp án</div>';
+                }else{
+                    $da_correct='';
+                    $da_txt='';
+                    for ($i=0; $i < count($list_datxt); $i++) { 
+                        $da_txt .= $list_datxt[$i]. ', ';
+                        $da_correct .= $list_da[$i]. ', ';
+                    }
+                    // echo $da_correct. " ". $da_txt;
+                    $stt=0;
+                    if($_SESSION["acc"]["role"] == 1) {
+                        $stt = 1;
+                    }
+    
+                    include '../connectdb.php';
+                   
+                    if(updateCauHoi($ten_ch, $da_correct, $da_txt, $img, $id )) {
+                        setcookie("tb", "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>", time() + 5);
+                        header('Location: xem_truoc.php?id='.$id);
+                    } else {
+                        echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
+                    }
                 }
-
-                include '../connectdb.php';
-               
-                if(updateCauHoi($ten_ch, $da_correct, $da_txt, $img, $id )) {
-                    echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
-                    header('Location: xem_truoc.php?id='.$id);
-                } else {
-                    echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
+                if($_COOKIE['tb']){
+                    echo $_COOKIE['tb'];
                 }
             }
         }
         // end cau hoi chon nhieu
 
+        // begin cau hoi select option
+        if($row['loai_cau_hoi']==4){
+            $arr_da = explode(", ", $row['correct']);
+            $dap_an = explode(", ", $row['dap_an']);
+           echo ' <form action="" method="POST" enctype="multipart/form-data">
+           <div style="margin: 20px 13%;">
+               <div class="form-group">
+                   <label for="name_quiz">Tên câu hỏi</label>
+                   <input class="form-control" type="text" name="ten_cau_hoi" id="" value="'.$row['ten_cau_hoi'].'">
+               </div>
+
+               <div class="form-group">
+                   <label for="name_quiz">Đáp án còn thiếu</label>
+                   <input class="form-control" type="text" name="ten_cau_hoi1" id="" value="'.$dap_an[0].'">
+               </div>
+
+               <p>Đáp án đúng</p>
+               <div style="margin: 20px 0 0 0;" class="input-group mb-3">
+                   <div class="input-group-text">
+                       <input name="dad" value="da_0" type="radio"';if($dap_an[1]==$arr_da[0]){echo "checked";}else{echo "";} echo ' >
+                   </div>
+                   <input name="da_0" type="text" class="form-control" placeholder="Nhập đáp án" value="'.$arr_da[0].'">
+               </div>
+               <div style="margin: 20px 0 0 0;" class="input-group mb-3">
+                   <div class="input-group-text">
+                       <input name="dad" value="da_1" type="radio"';if($dap_an[1]==$arr_da[1]){echo "checked";}else{echo "";} echo '>
+                   </div>
+                   <input name="da_1" type="text" class="form-control" placeholder="Nhập đáp án" value="'.$arr_da[1].'">
+               </div>
+               <div style="margin: 20px 0 0 0;" class="input-group mb-3">
+                   <div class="input-group-text">
+                       <input name="dad" value="da_2" type="radio"';if($dap_an[1]==$arr_da[2]){echo "checked";}else{echo "";} echo '>
+                   </div>
+                   <input name="da_2" type="text" class="form-control" placeholder="Nhập đáp án" value="'.$arr_da[2].'">
+               </div>
+               <div class="form-group">
+                    <label for="name_quiz">Người thêm</label>
+                    <input class="form-control" value="'.$row['user_name'].'" readonly type="text" name="dang_cau_hoi">
+                </div>
+                <div class="form-group">
+                    <label for="name_quiz">Trạng thái</label>
+                    <input class="form-control" value="'; echo $row["status"]=="1"?"đã duyệt":"chưa duyệt"; echo '" readonly type="text" name="dang_cau_hoi">
+                </div>';
+   
+               if($row["status"]=="0"){
+                   echo '<div style="margin: 20px 0 0 0;" class="d-grid">
+                       <input class="btn btn-primary btn-block" name="btn" type="submit" value="Thay đổi">
+                   </div>';
+               }
+
+           echo '</div>
+           </form>';
+
+           include "../connectdb.php";
+            if(isset($_POST['btn'])) {
+                $question = $_POST['ten_cau_hoi'];
+                $question_da = $_POST['ten_cau_hoi1'];
+                $da0 = trim($_POST['da_0']);
+                $da1 = trim($_POST['da_1']);
+                $da2 = trim($_POST['da_2']);
+               
+                $arr = $da0.", ".$da1.", ".$da2;
+                $da = "";
+                // số lượng dấu "..."
+                $count = substr_count($question_da, "...");
+                // tìm vị trí dấu "..."
+                $index = strpos($question_da, "...");
+                $index1 = strpos($question_da, "....");
+                $index2 = strpos($question_da, ".....");
+                if(isset($_POST['dad'])) {
+                    $da = $_POST[$_POST['dad']];
+                }
+                $cau_hoi = $question_da.', '.$da;
+                // echo $cau_hoi;
+                if($question == "") {
+                    echo "<div class='alert alert-warning text-center' role='alert'>Tên câu hỏi không được để trống</div>";
+                }else if($question_da == "") {
+                    echo "<div class='alert alert-warning text-center' role='alert'>Phần câu văn không được để trống</div>";
+                }else if($count == 0) {
+                    echo "<div class='alert alert-warning text-center' role='alert'>Bạn chưa điền dấu ... vào phần bị thiếu câu trả lời</div>";
+                }else if($index1 == true || $index2 == true) {
+                    echo "<div class='alert alert-warning text-center' role='alert'>Bạn nhập sai dấu ... </div>";
+                }else if($count != 1) {
+                    echo "<div class='alert alert-warning text-center' role='alert'>Vui lòng điền đúng 1 lần dấu ...</div>";
+                } else if($da == "") {
+                    echo "<div class='alert alert-warning text-center' role='alert'>Bạn phải chọn đáp án</div>";
+                } else {
+                    if(updateCauHoi($question, $cau_hoi, $arr , "", $id)) {
+                        setcookie("tb", "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>", time() + 5);
+                        header('Location: xem_truoc.php?id='.$id);
+                    } else {
+                        echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
+                    }
+                }
+
+            }
+            if($_COOKIE['tb']){
+                echo $_COOKIE['tb'];
+            }
+        }
+
+        // end cau hoi select option
+        
           
       }       
       

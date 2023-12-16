@@ -314,6 +314,33 @@ function getQuestionPT($id, $id_user, $curr_page)
 	return $result;
 }
 
+//search
+function getQuestionSearch($id, $id_user, $curr_page, $search)
+{
+	include 'connectdb.php';
+	$offset = ($curr_page - 1) * 10;
+
+	$role = $_SESSION['acc']['role'];
+	$sql = "";
+	if ($role == 1) {
+		$sql = "SELECT * FROM `cau_hoi` 
+		JOIN `user` ON `cau_hoi`.id_user_them = `user`.id_user
+		JOIN `loai_cau_hoi` ON `cau_hoi`.loai_cau_hoi = `loai_cau_hoi`.id_loai
+		WHERE id_khoa_hoc=$id AND ten_cau_hoi LIKE '%$search%'
+		ORDER BY `id_cau_hoi` ASC 
+		LIMIT 10 OFFSET $offset";
+	} else {
+		$sql = "SELECT * FROM `cau_hoi` 
+		JOIN `user` ON `cau_hoi`.`id_user_them` = `user`.`id_user`
+		JOIN `loai_cau_hoi` ON `cau_hoi`.`loai_cau_hoi` = `loai_cau_hoi`.`id_loai`
+		WHERE id_khoa_hoc='$id' AND id_user_them='$id_user' AND ten_cau_hoi LIKE '%$search%'
+		ORDER BY `id_cau_hoi` ASC 
+		LIMIT 10 OFFSET $offset";
+	}
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+
 //lay cau hoi xem chi tiết
 function getDetail($id)
 {
@@ -660,6 +687,31 @@ function getDiemLT(){
 	$sql = "SELECT * FROM `diem` 
 			JOIN `user` ON `user`.id_user = `diem`.id_user
 			JOIN `khoa_hoc` ON `khoa_hoc`.id_khoa_hoc = `diem`.id_khoa_hoc";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+
+// lấy bảng điểm thi
+function getDiemThi($id_user){
+	include 'connectdb.php';
+	$sql = "SELECT * FROM `diem` 
+	JOIN `ky_thi` ON `ky_thi`.`id_KT` = `diem`.`id_KT`
+	WHERE id_user = $id_user AND id_quizz = 1
+	ORDER BY id_diem DESC 
+	LIMIT 10";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+
+// lấy bảng điểm thi
+function getDiemLuyenTap($id_user){
+	include 'connectdb.php';
+	$sql = "SELECT * FROM `diem` 
+	JOIN `khoa_hoc` ON `khoa_hoc`.`id_khoa_hoc` = `diem`.`id_khoa_hoc`
+	WHERE id_user = 1 AND id_quizz = 0
+	ORDER BY id_diem DESC 
+	LIMIT 10
+	";
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }

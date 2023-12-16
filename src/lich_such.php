@@ -28,7 +28,11 @@
         <div id="action" style="margin: 20px 0 0 13%;">
             <p class="h3">Khóa học
                 <?php
-                $id = $_GET["id"];
+                if(isset($_GET["id"])){
+                    $id = $_GET["id"];
+                }else{
+                    $id = -1;
+                }
                 $_SESSION['id_khoa_hoc'] = $id;
                 include '../connectdb.php';
                 $sql = "SELECT * FROM `khoa_hoc` WHERE id_khoa_hoc='$id'";
@@ -61,7 +65,7 @@
                     <?php
                     $role = $_SESSION['acc']['role'];
                     $id_user = $_SESSION['acc']['id'];
-                    $id = $_GET["id"];
+                    // $id = $_GET["id"];
                     include "../function.php";
                     include "../connectdb.php";
                     $kq = mysqli_query($conn, "SELECT COUNT(DISTINCT id_cau_hoi) FROM `lich_su_sai`
@@ -97,28 +101,30 @@
                     ?>
                 </tr>
             </table>
+            <?php if($id!=-1){?>
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     <li class="page-item <?php echo ($curr_page==1)?"disabled":"" ?>">
-                        <a class="page-link" href="<?php echo "bien_tap.php?id=$id&curr_page=$pre"?>" aria-label="Previous">
+                        <a class="page-link" href="<?php echo "lich_such.php?id=$id&curr_page=$pre"?>" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                             <span class="sr-only">Previous</span>
                         </a>
                     </li>
                     <?php for($i = 1; $i <= $so_luong_page; $i++){ ?>
                         <li class="page-item <?php echo ($i == $curr_page)?"active":"" ?>">
-                            <a class="page-link" href="<?php echo "bien_tap.php?id=$id&curr_page=$i"?>"><?=$i?></a>
+                            <a class="page-link" href="<?php echo "lich_such.php?id=$id&curr_page=$i"?>"><?=$i?></a>
                         </li>
                     <?php } ?>
                     <li class="page-item <?php echo ($curr_page==$so_luong_page)?"disabled":""?>">
-                        <a class="page-link" href="<?php echo "bien_tap.php?id=$id&curr_page=$next"?>" aria-label="Next">
+                        <a class="page-link" href="<?php echo "lich_such.php?id=$id&curr_page=$next"?>" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                             <span class="sr-only">Next</span>
                         </a>
                     </li>
                 </ul>
             </nav>
-
+            <?php }?>
+            
         </div>
     </main>
     <?php
