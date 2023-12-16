@@ -22,7 +22,6 @@
     if (!isset($_SESSION["user"])) {
         header("Location: dang_nhap.php");
     }
-    // include 'navbar.php';
     ?>
     <main style="min-height: 100vh; max-width: 100%;padding-top:70px">
 
