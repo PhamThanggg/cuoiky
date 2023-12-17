@@ -71,7 +71,7 @@
             <div id="main-menu" class="main-menu collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li class="active">
-                        <a href="index.html"><i class="menu-icon fa fa-laptop"></i>Admin </a>
+                        <a href="admin.php"><i class="menu-icon fa fa-laptop"></i>Admin </a>
                     </li>
 
                 </ul>
@@ -222,6 +222,11 @@
                                                     </tr>";
                                                     $stt++;
                                                 }
+
+                                                if (isset($_POST["deleteKH"])) {
+                                                    deleteKhoaHoc($_POST["idKT"]);
+                                                    header("Location: admin.php");
+                                                }
                                                 ?>
                                             </tbody>
                                         </table>
@@ -307,6 +312,7 @@
                                                     <th>Tiêu đề</th>
                                                     <th>Ảnh</th>
                                                     <th>Nội dung</th>
+                                                    <th>Hạn đóng</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -324,6 +330,7 @@
                                                     }
                                                     echo "</td>
                                                     <td> <span class='name'>" . $row["content"] . "</span> </td>
+                                                    <td> <span class='name'>" . $row["expired"] . "</span> </td>
                                                         <td><form method='post'>
                                                             <input type='hidden' name='idBTVN' value='" . $row["id"] . "'>
                                                             <button type='submit' name='deleteBT' class='badge badge-complete'>Delete</button>
@@ -364,8 +371,9 @@
                                                     <th style="width: 200px;">Tiêu đề</th>
                                                     <th style="width: 300px;">Nội dung</th>
                                                     <th style="width: 80px;">Số câu</th>
-                                                    <th style="width: 140px;">Số lần được làm</th>
-                                                    <th style="width: 140px;">Thời gian làm</th>
+                                                    <th style="width: 100px;">Số lần làm</th>
+                                                    <th style="width: 120px;">Thời gian làm</th>
+                                                    <th style="width: 120px;">Hạn đóng</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -381,10 +389,11 @@
                                                         <td><span class='name'>" . $row["so_luong_cau"] . "</span></td>
                                                         <td> <span class='name'>" . $row["so_lan"] . "</span> </td>
                                                         <td> <span class='name'>" . $row["thoi_gian_lam"] . " phút </span> </td>
+                                                        <td> <span class='name'>" . $row["thoi_gian_dong"] . " </span> </td>
                                                         <td><form method='post'>
                                                             <input type='hidden' name='idKT' value='" . $row["id_KT"] . "'>
+                                                            <a href='chitiet_kt.php?id_KT=". $row["id_KT"] ."' class='badge badge-complete'>Xem điểm</a>
                                                             <button type='submit' name='deleteKT' class='badge badge-complete'>Delete</button>
-                                                            <a href='chitiet_kt.php?id_KT=". $row["id_KT"] ."' class='badge badge-complete'>Xem</a>
                                                         </form></td>                                                        
                                                     </tr>";
                                                     $stt++;

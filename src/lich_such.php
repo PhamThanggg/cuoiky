@@ -26,7 +26,7 @@
     <main style="min-height: 100vh; max-width: 100%;padding-top:70px">
 
         <div id="action" style="margin: 20px 0 0 13%;">
-            <p class="h3">Khóa học
+            <p class="h3">Lịch sử sai
                 <?php
                 if(isset($_GET["id"])){
                     $id = $_GET["id"];

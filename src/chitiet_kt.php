@@ -36,7 +36,8 @@
 <body>
 <?php
     session_start();
-    if (!isset($_SESSION["user"])) {
+    $role = $_SESSION["acc"]["role"];
+    if (!isset($_SESSION["user"]) || $role != 1) {
         header("Location: dang_nhap.php");
     }
     ?>
@@ -61,7 +62,7 @@
                                     include '../function.php';
                                     $idKT = $_GET['id_KT'];
                                     $stt = 1;
-                                    $resultKT = getDiemLT($idKT);
+                                    $resultKT = getDiemLT($idKT, $role);
                                     while ($row = mysqli_fetch_array($resultKT)) {
                                         echo "<tr>
                                                         <td class='serial'>$stt</td>

@@ -123,9 +123,9 @@
                 // echo $row[0];
 
                 if($row[0]<1){
-                    echo "Không có kỳ thi nào";
+                    echo "Không có kỳ thi nào hoặc kỳ thi đã hết hạn";
                 }else{
-                    $result = getKyTHi();
+                $result = getKyTHi();
                 $stt = 1;
                 while ($row = mysqli_fetch_array($result)) {
 

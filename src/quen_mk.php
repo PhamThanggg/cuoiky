@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Đăng nhập</title>
+	<title>Quên mật khẩu</title>
 	<!-- Begin bootstrap cdn -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="	sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -29,12 +29,17 @@
                         $passMD5 = md5($random);
                         sendEmail($tk, "New passwork", $random);
                         updateAccount($tk, $passMD5);
-                        header("location: khoa_hoc.php");
+						setcookie("mess", "<div class='alert alert-success text-center' role='alert'>Thay đổi mật khẩu thành công, check Email để xem mật khẩu </div>", time() + 3);
+                        header("location: quen_mk.php");
                     }else{
-						echo '<div class="alert alert-danger text-center" role="alert">Tài khoản hoặc mật khẩu không chính xác</div>';
+						echo '<div class="alert alert-danger text-center" role="alert">Thất bại!!! Email không tồn tại</div>';
 					}
                 }
             }
+
+			if(isset($_COOKIE['mess'])){
+				echo $_COOKIE['mess'];
+			}
 		
 		?>
 

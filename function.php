@@ -300,14 +300,14 @@ function getQuestionPT($id, $id_user, $curr_page)
 		JOIN `user` ON `cau_hoi`.id_user_them = `user`.id_user
 		JOIN `loai_cau_hoi` ON `cau_hoi`.loai_cau_hoi = `loai_cau_hoi`.id_loai
 		WHERE id_khoa_hoc='$id'
-		ORDER BY `id_cau_hoi` ASC 
+		ORDER BY `id_cau_hoi` DESC 
 		LIMIT 10 OFFSET $offset";
 	} else {
 		$sql = "SELECT * FROM `cau_hoi` 
 		JOIN `user` ON `cau_hoi`.`id_user_them` = `user`.`id_user`
 		JOIN `loai_cau_hoi` ON `cau_hoi`.`loai_cau_hoi` = `loai_cau_hoi`.`id_loai`
 		WHERE id_khoa_hoc='$id' AND id_user_them='$id_user'
-		ORDER BY `id_cau_hoi` ASC 
+		ORDER BY `id_cau_hoi` DESC
 		LIMIT 10 OFFSET $offset";
 	}
 	$result = mysqli_query($conn, $sql);
@@ -506,7 +506,7 @@ function update_diem($id_user, $id_kh, $id_quizz, $diem, $time_submit)
 function getDiem($id_user, $id_kh, $id_quizz){
 	include 'connectdb.php';
 	$sql = "SELECT * FROM `diem`
-	WHERE id_user=$id_user AND id_khoa_hoc=$id_kh AND thoi_gian='' AND id_quizz=$id_quizz";
+	WHERE id_user=$id_user AND id_khoa_hoc=$id_kh AND thoi_gian='' AND id_quizz=$id_quizz AND thoi_gian_cuoi > NOW()";
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }
@@ -515,7 +515,7 @@ function getDiem($id_user, $id_kh, $id_quizz){
 function getDiemKT($id_user, $id_kh, $id_KT){
 	include 'connectdb.php';
 	$sql = "SELECT * FROM `diem`
-	WHERE id_user=$id_user AND id_khoa_hoc=$id_kh AND thoi_gian='' AND id_KT=$id_KT";
+	WHERE id_user=$id_user AND id_khoa_hoc=$id_kh AND thoi_gian='' AND id_KT=$id_KT AND thoi_gian_cuoi > NOW()";
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }
@@ -610,6 +610,14 @@ function deleteBTVN($id)
 	$result = mysqli_query($conn, $sql);
 }
 
+// delete khóa học
+function deleteKhoaHoc($id)
+{
+	include 'connectdb.php';
+	$sql = "DELETE FROM `khoa_hoc` WHERE id_khoa_hoc=$id";
+	$result = mysqli_query($conn, $sql);
+}
+
 // lấy thong tin ky thi
 function KyThi(){
 	include 'connectdb.php';
@@ -652,7 +660,8 @@ function get_KT($id_KT)
 function count_KT()
 {
 	include 'connectdb.php';
-	$sql = "SELECT COUNT(*) FROM `ky_thi`";
+	$sql = "SELECT COUNT(*) FROM `ky_thi`
+	WHERE `thoi_gian_dong`> NOW()";
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }
@@ -682,12 +691,12 @@ function insertKhoaHoc($name, $img){
 }
 
 // lấy bảng điểm
-function getDiemLT($idKT){
+function getDiemLT($idKT, $role){
 	include 'connectdb.php';
 	$sql = "SELECT * FROM `diem` 
 			JOIN `user` ON `user`.id_user = `diem`.id_user
 			JOIN `khoa_hoc` ON `khoa_hoc`.id_khoa_hoc = `diem`.id_khoa_hoc
-			WHERE `id_KT` = $idKT";
+			WHERE `id_KT` = $idKT AND `role` = $role";
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }

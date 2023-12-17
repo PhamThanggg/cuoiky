@@ -105,9 +105,16 @@
     if (!isLogin()) {
         header("location: dang_nhap.php");
     }
+    include "../connectdb.php";
+    if(isset($_GET["id"])){
+        $id = $_GET["id"];
+    }else{
+        $id = -1;
+    }           
     ?>
 
-    <main style="min-height: 100vh; width: 100%;margin:70px 0">
+    <main style="min-height: 100vh; width: 100%;margin:70px 0; ">
+        <a href="bien_tap.php?id=<?php echo $id?>" class='btn btn-primary' style="margin-left:160px">Trở lại</a>
         <p class="h3" style="margin-left:160px">Khóa học
             <?php
             echo $_SESSION["ten_khoa_hoc"];
@@ -117,12 +124,7 @@
         <div class="row row-cols-1 row-cols-md-3 g-4" style="margin: 0 auto; width: 80%;">
             <div class="content-wrap" style="width:100%">
                 <?php
-                include "../connectdb.php";
-                if(isset($_GET["id"])){
-                    $id = $_GET["id"];
-                }else{
-                    $id = -1;
-                }
+                
                 $result = getBTVN($id);
                 $stt = 1;
                 while ($row = mysqli_fetch_array($result)) {

@@ -58,9 +58,6 @@
     include "navbar.php";
     include "../function.php";
     if (isset($_SESSION["acc"])) {
-        if ($_SESSION["acc"]["role"] !== "1") {
-            header("location: dang_nhap.php");
-        }
         $id_user = $_SESSION["acc"]['id'];
     } else {
         header("location: dang_nhap.php");
@@ -134,8 +131,8 @@
                                         <table class="table ">
                                             <thead>
                                                 <tr>
-                                                    <th class="serial">Tên kỳ thi</th>
-                                                    <th>Thời gian thi</th>
+                                                    <th class="serial">Tên khóa hoc</th>
+                                                    <th>Thời gian làm</th>
                                                     <th>Thời gian nộp bài</th>
                                                     <th>Điểm</th>
                                                     <th>Thao tác</th>

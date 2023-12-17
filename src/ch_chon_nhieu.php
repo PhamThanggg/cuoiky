@@ -98,7 +98,7 @@
                         }
                 }
 
-               if(isset($sl_da) && $sl_da>=2){
+               if(isset($_POST['count_da']) && $_POST['count_da']>=2){
                     $sl_da = $_POST['count_da'];
                     for($i=0; $i<$sl_da; $i++){
                         if(isset($_SESSION["stt"."$i"])){

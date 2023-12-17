@@ -38,7 +38,9 @@
                     if($mk == $remk){
                         if(checkRegister($tk, $mk, $gmail)){
                             echo '<div class="alert alert-success text-center" role="alert">Đăng ký thành công</div>';
-                        }
+                        }else{
+							echo '<div class="alert alert-danger text-center" role="alert">Đăng ký không thành công</div>';
+						}
                     }else{
                         echo '<div class="alert alert-danger text-center" role="alert">Mật khẩu không trùng nhau</div>';
                     }
