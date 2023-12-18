@@ -56,6 +56,7 @@
                         value="<?php echo $da = isset($_POST['da']) ? $_POST['da'] : ''; ?>">
                 </div>
                 <?php
+                include "../function.php";
                 if(isset($_POST["btn"])) {
                     $name = trim($_POST["ten_cau_hoi"]);
                     $da = trim($_POST["da"]);
@@ -71,18 +72,27 @@
                             $allowed = array("jpg", "jpeg", "png", "gif");
                             $duoi = pathinfo($_FILES["image"]["name"])["extension"];
                             if (in_array(strtolower($duoi), $allowed)) {
-                                if(move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                                    $img = basename($_FILES["image"]["name"]);
-                                }
-                                include "../function.php";
+                                if(ktAnhTontai($target_dir, $_FILES["image"]["name"])){
+                                    if(move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                                            $img = basename($_FILES["image"]["name"]);
+                                            if(insertCauHoi($name, $da, "", "1", $img, $id)) {
+                                                echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
+                                            } else {
+                                                echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
+                                            }
+                                        }
+                                }else{
+                                    echo "<div class='alert alert-success text-center' role='alert'>Tên ảnh tồn tại vui lòng đổi tên ảnh hoặc chọn ảnh khác</div>";
+                                }    
+                            } else {
+                                echo "<div class='alert alert-warning text-center' role='alert'>Hãy chọn file ảnh</div>";
+                            }
+                        }else{
                                 if(insertCauHoi($name, $da, "", "1", $img, $id)) {
                                     echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
                                 } else {
                                     echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
                                 }
-                            } else {
-                                echo "<div class='alert alert-warning text-center' role='alert'>Hãy chọn file ảnh</div>";
-                            }
                         }
                     }
                 }

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quizz kiểm tra</title>
+    <title>Ky thi quizz</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -55,13 +55,14 @@
             $id_kh=$rowkt['id_khoa_hoc'];
             $so_lan_cho_phep = $rowkt['so_lan'];
             $thoi_gian_lam = $rowkt['thoi_gian_lam'];
+            $name_kt = $rowkt['tieu_de'];
         }
     ?>
     <section class="main-section" style="margin-top: 70px;">
         <div style="position: fixed; margin-left: 20px;">
             <?php
             echo "<a href='ky_thi.php' class='btn btn-primary'>Trở lại</a>
-            <h2>Kỳ thi</h2>";
+            <h2>Kỳ thi $name_kt</h2>";
             $kq = getDiemKT($id_user, $id_kh, $idKT);
             $thoiGianEnd=0;
             while($roww = mysqli_fetch_array($kq)){

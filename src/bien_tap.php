@@ -121,7 +121,12 @@
                     $search = isset($_GET['searchtxt'])?$_GET['searchtxt']:"";
                     // filter
                     $id_ch = isset($_GET['id_ch'])?$_GET['id_ch']:"";
-                    $kq = mysqli_query($conn, "SELECT COUNT(*) FROM `cau_hoi` WHERE `status`=1");
+                    // đếm số câu
+                    if($_SESSION['acc']['role'] == 1){
+                        $kq = mysqli_query($conn, "SELECT COUNT(*) FROM `cau_hoi`");
+                    }else{
+                        $kq = mysqli_query($conn, "SELECT COUNT(*) FROM `cau_hoi` WHERE id_user_them = $id_user");
+                    }
                     $roww = mysqli_fetch_array($kq);
                     $so_luong_page = ceil($roww[0] / 10);
 

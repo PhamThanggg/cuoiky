@@ -110,23 +110,13 @@
 
             <div class="form-group">
                 <label for="name_quiz">Ảnh cho câu hỏi (Nếu có)</label>
-                <input class="form-control" type="file" name="file_tai_len" id="">
+                <input class="form-control" type="file" name="image" id="">
             </div>
             
             <?php
             // begin add so dap an
             if(isset($_POST['btn'])){
                 $ten_ch = trim($_POST['ten_cau_hoi']);
-                $img="";
-                if(isset($_FILES['file_tai_len'])){
-                    $target_dir = "../images/";
-                        $target_file = $target_dir.basename($_FILES["file_tai_len"]["name"]);
-                        if(move_uploaded_file($_FILES["file_tai_len"]["tmp_name"], $target_file)) {
-                            $img = basename($_FILES["file_tai_len"]["name"]);
-                        }
-                }else{
-                    $img = '';
-                }
                 $sl_da = trim($_POST['count_da']);
 
                 $list_da = [];
@@ -178,15 +168,43 @@
                     if($_SESSION["acc"]["role"] == 1) {
                         $stt = 1;
                     }
-
-                    include '../connectdb.php';
-                    $sql = "INSERT INTO `cau_hoi` (`ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`) VALUES ('$ten_ch' ,'$da_correct', '$da_txt', '3','$img', '$id_user', '$id',$stt)";
-                    $result = mysqli_query($conn, $sql);
-                    if($result) {
-                        echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
-                    } else {
-                        echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
+                    $img = "";
+                    if(isset($_FILES["image"])&& !empty( $_FILES["image"]["name"])) {
+                        $target_dir = "../images/";
+                        $target_file = $target_dir.basename($_FILES["image"]["name"]);
+                        $allowed = array("jpg", "jpeg", "png", "gif");
+                        $duoi = pathinfo($_FILES["image"]["name"])["extension"];
+                        if (in_array(strtolower($duoi), $allowed)) {
+                            if(ktAnhTontai($target_dir, $_FILES["image"]["name"])){
+                                if(move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                                    $img = basename($_FILES["image"]["name"]);
+                                }
+                                include '../connectdb.php';
+                                $sql = "INSERT INTO `cau_hoi` (`ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`) VALUES ('$ten_ch' ,'$da_correct', '$da_txt', '3','$img', '$id_user', '$id',$stt)";
+                                $result = mysqli_query($conn, $sql);
+                                if($result) {
+                                    echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
+                                } else {
+                                    echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
+                                }
+                            }else{
+                                echo "<div class='alert alert-success text-center' role='alert'>Tên ảnh tồn tại vui lòng đổi tên ảnh hoặc chọn ảnh khác</div>";
+                            }  
+                            
+                        } else {
+                            echo "<div class='alert alert-warning text-center' role='alert'>Hãy chọn file ảnh</div>";
+                        }
+                    }else{
+                        include '../connectdb.php';
+                        $sql = "INSERT INTO `cau_hoi` (`ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`) VALUES ('$ten_ch' ,'$da_correct', '$da_txt', '3','$img', '$id_user', '$id',$stt)";
+                        $result = mysqli_query($conn, $sql);
+                        if($result) {
+                            echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
+                        } else {
+                            echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
+                        }
                     }
+
                 }
             }
             ?>

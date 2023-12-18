@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thêm câu hỏi</title>
+    <title>Thêm khóa học</title>
     <!-- Begin bootstrap cdn -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -52,14 +52,18 @@
                             $allowed = array("jpg", "jpeg", "png", "gif");
                             $duoi = pathinfo($_FILES["image"]["name"])["extension"];
                             if (in_array(strtolower($duoi), $allowed)) {
-                                if(move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                                    $img = basename($_FILES["image"]["name"]);
-                                }
-                                if(insertKhoaHoc($name, $img)) {
-                                    echo "<br><div class='alert alert-success text-center' role='alert'>Thêm thành công</div>";
-                                } else {
-                                    echo "<br><div class='alert alert-warning text-center' role='alert'>Thêm thất bại</div>";
-                                }
+                                if(ktAnhTontai($target_dir, $_FILES["image"]["name"])){
+                                    if(move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                                        $img = basename($_FILES["image"]["name"]);
+                                    }
+                                    if(insertKhoaHoc($name, $img)) {
+                                        echo "<br><div class='alert alert-success text-center' role='alert'>Thêm thành công</div>";
+                                    } else {
+                                        echo "<br><div class='alert alert-warning text-center' role='alert'>Thêm thất bại</div>";
+                                    }
+                                }else{
+                                    echo "<div class='alert alert-success text-center' role='alert'>Tên ảnh tồn tại vui lòng đổi tên ảnh hoặc chọn ảnh khác</div>";
+                                } 
                             } else {
                                 echo "<br><div class='alert alert-warning text-center' role='alert'>Chỉ nhận file ảnh</div>";
                             }

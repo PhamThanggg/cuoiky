@@ -112,6 +112,8 @@
                             if($mkNew == $remkNew){
                                 if(updateAccountPass($id, $mkO, $mkNew)){
                                     echo '<div class="alert alert-success text-center" role="alert">Thay đổi mật khẩu thành công</div>';
+                                }else{
+                                    echo '<div class="alert alert-danger text-center" role="alert">Thay đổi mật khẩu không thành công</div>';
                                 }
                             }else{
                                 echo '<div class="alert alert-danger text-center" role="alert">Mật khẩu mới không khớp nhau</div>';

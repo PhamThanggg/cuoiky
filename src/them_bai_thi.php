@@ -114,7 +114,7 @@
 
 
                 <div style="margin: 20px 0 0 0;" class="d-grid">
-                    <input class="btn btn-primary btn-block" name="btn" type="submit" value="Thêm câu hỏi">
+                    <input class="btn btn-primary btn-block" name="btn" type="submit" value="Thêm bài thi">
                 </div>
 
             </div>

@@ -752,3 +752,30 @@ function getDiemLuyenTap($id_user){
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }
+
+
+function ktAnhTontai($tg_dir, $imgName){
+	$dem = 0;
+	if(is_dir($tg_dir)){
+		$readF = opendir($tg_dir);
+		if($readF){
+			while(($file = readdir($readF))){
+				//kt duong dan trong dir
+				$ktfile = $tg_dir. '/'. $file;
+				// echo $ktfile;
+				if(is_file($ktfile)){
+					// echo $file;
+					if($imgName == $file){
+						$dem++;
+						break;
+					}
+				}
+			}
+		}
+	}
+	if($dem==0){
+		return true;
+	}else{
+		return false;
+	}
+}

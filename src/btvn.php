@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thêm câu hỏi</title>
+    <title>Thêm bài tập về nhà</title>
     <!-- Begin bootstrap cdn -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -61,6 +61,8 @@
                     $selectKH = $_POST["selectKH"];
                     if($name == "") {
                         echo "<div class='alert alert-warning text-center' role='alert'>Không được để trống tiêu đề</div>";
+                    }elseif($da == ""){
+                        echo "<div class='alert alert-warning text-center' role='alert'>Không được để trống nội dung</div>";
                     } else {                        
                         $img = "";
                         if(isset($_FILES["image"]) && !empty($_FILES["image"]["name"])) {
@@ -69,14 +71,18 @@
                             $allowed = array("jpg", "jpeg", "png", "gif");
                             $duoi = pathinfo($_FILES["image"]["name"])["extension"];
                             if (in_array(strtolower($duoi), $allowed)) {
-                                if(move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-                                    $img = basename($_FILES["image"]["name"]);
-                                }
-                                if(insertBTVN($selectKH, $name, $img, $da)) {
-                                    echo "<div class='alert alert-success text-center' role='alert'>Thêm thành công</div>";
-                                } else {
-                                    echo "<div class='alert alert-warning text-center' role='alert'>Thêm thất bại</div>";
-                                }
+                                if(ktAnhTontai($target_dir, $_FILES["image"]["name"])){
+                                    if(move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                                        $img = basename($_FILES["image"]["name"]);
+                                    }
+                                    if(insertBTVN($selectKH, $name, $img, $da)) {
+                                        echo "<div class='alert alert-success text-center' role='alert'>Thêm thành công</div>";
+                                    } else {
+                                        echo "<div class='alert alert-warning text-center' role='alert'>Thêm thất bại</div>";
+                                    }
+                                }else{
+                                    echo "<div class='alert alert-success text-center' role='alert'>Tên ảnh tồn tại vui lòng đổi tên ảnh hoặc chọn ảnh khác</div>";
+                                }  
                             } else {
                                 echo "<div class='alert alert-warning text-center' role='alert'>Chỉ nhận file ảnh</div>";
                             }
@@ -90,7 +96,7 @@
 
 
                 <div style="margin: 20px 0 0 0;" class="d-grid">
-                    <input class="btn btn-primary btn-block" name="btn" type="submit" value="Thêm câu hỏi">
+                    <input class="btn btn-primary btn-block" name="btn" type="submit" value="Thêm bài tập">
                 </div>
 
             </div>

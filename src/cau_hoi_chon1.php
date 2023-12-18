@@ -45,7 +45,10 @@
                 <label for="name_quiz">Nhập tên câu hỏi</label>
                 <input class="form-control" type="text" name="ten_cau_hoi" id="">
             </div>
-
+            <div class="form-group">
+                    <label for="name_quiz">Ảnh cho câu hỏi</label>
+                    <input class="form-control" name="image" type="file">
+            </div>
 
             <p>Nhập các lựa chọn và tích đáp án đúng</p>
             <div style='margin: 20px 0 0 0;' class='input-group mb-3'>
@@ -75,6 +78,7 @@
 
             <?php
             include "../connectdb.php";
+            include "../function.php";
             if(isset($_POST['btn'])) {
                 $question = $_POST['ten_cau_hoi'];
                 $da0 = trim($_POST['da_0']);
@@ -92,12 +96,37 @@
                 } else if($da == "") {
                     echo "<div class='alert alert-warning text-center' role='alert'>Bạn phải chọn đáp án</div>";
                 } else {
-                    include "../function.php";
-                    if(insertCauHoi($question, $da, $arr, "2", "", $id)) {
-                        echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
-                    } else {
-                        echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
+                    $img = "";
+                    if(isset($_FILES["image"])&& !empty( $_FILES["image"]["name"])) {
+                        $target_dir = "../images/";
+                        $target_file = $target_dir.basename($_FILES["image"]["name"]);
+                        $allowed = array("jpg", "jpeg", "png", "gif");
+                        $duoi = pathinfo($_FILES["image"]["name"])["extension"];
+                        if (in_array(strtolower($duoi), $allowed)) {
+                            if(ktAnhTontai($target_dir, $_FILES["image"]["name"])){
+                                if(move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                                    $img = basename($_FILES["image"]["name"]);
+                                }
+                                if(insertCauHoi($question, $da, $arr, "2", $img, $id)) {
+                                    echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
+                                } else {
+                                    echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
+                                }
+                            }else{
+                                echo "<div class='alert alert-success text-center' role='alert'>Tên ảnh tồn tại vui lòng đổi tên ảnh hoặc chọn ảnh khác</div>";
+                            }  
+                            
+                        } else {
+                            echo "<div class='alert alert-warning text-center' role='alert'>Hãy chọn file ảnh</div>";
+                        }
+                    }else{
+                        if(insertCauHoi($question, $da, $arr, "2", $img, $id)) {
+                            echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
+                        } else {
+                            echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
+                        }
                     }
+                    
                 }
 
             }
