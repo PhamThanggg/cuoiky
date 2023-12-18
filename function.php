@@ -341,6 +341,33 @@ function getQuestionSearch($id, $id_user, $curr_page, $search)
 	return $result;
 }
 
+//FIlter
+function getQuestionFilter($id, $id_user, $curr_page, $id_ch)
+{
+	include 'connectdb.php';
+	$offset = ($curr_page - 1) * 10;
+
+	$role = $_SESSION['acc']['role'];
+	$sql = "";
+	if ($role == 1) {
+		$sql = "SELECT * FROM `cau_hoi` 
+		JOIN `user` ON `cau_hoi`.id_user_them = `user`.id_user
+		JOIN `loai_cau_hoi` ON `cau_hoi`.loai_cau_hoi = `loai_cau_hoi`.id_loai
+		WHERE id_khoa_hoc=$id AND loai_cau_hoi = $id_ch
+		ORDER BY `id_cau_hoi` ASC 
+		LIMIT 10 OFFSET $offset";
+	} else {
+		$sql = "SELECT * FROM `cau_hoi` 
+		JOIN `user` ON `cau_hoi`.`id_user_them` = `user`.`id_user`
+		JOIN `loai_cau_hoi` ON `cau_hoi`.`loai_cau_hoi` = `loai_cau_hoi`.`id_loai`
+		WHERE id_khoa_hoc='$id' AND id_user_them='$id_user' AND loai_cau_hoi = $id_ch
+		ORDER BY `id_cau_hoi` ASC 
+		LIMIT 10 OFFSET $offset";
+	}
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+
 //lay cau hoi xem chi tiết
 function getDetail($id)
 {

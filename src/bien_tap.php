@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biên tập</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
     <!-- Begin bootstrap cdn -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -19,8 +19,15 @@
     <?php
     ob_start();
     include 'navbar.php';
+    include "../function.php";
+    include "../connectdb.php";
     if (!isset($_SESSION["user"])) {
         header("Location: dang_nhap.php");
+    }
+    if(isset($_GET["id"])){
+        $id = $_GET["id"];
+    }else{
+        $id = -1;
     }
     ?>
     <main style="min-height: 100vh; max-width: 100%;padding-top:70px">
@@ -59,11 +66,7 @@
             </button>
             <ul class="dropdown-menu">
                 <?php
-                $id = $_GET["id"];
                 echo "<li><a class='dropdown-item' href='them_cau_hoi.php?id=$id'>Câu hỏi điền</a></li>";
-                ?>
-                <?php
-                $id = $_GET["id"];
                 echo "<li><a class='dropdown-item' href='cau_hoi_chon1.php?id=$id'>Câu hỏi chọn</a></li>";
                 echo "<li><a class='dropdown-item' href='ch_chon_nhieu.php?id=$id'>Câu hỏi chọn nhiều</a></li>";
                 echo "<li><a class='dropdown-item' href='ch_select_option.php?id=$id'>Câu hỏi select option</a></li>";
@@ -71,26 +74,36 @@
             </ul>
 
         </div>
-        
+
         <div class="d-flex flex-wrap flex-column align-items-center" style="padding: 1%;margin: 5% 0 0 0; ">
             <p class="h3">Danh sách câu hỏi</p>
+            <!-- Lọc câu hỏi -->
+            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" style="margin-right: 1360px; position: relative; top: 40px;">
+                Lọc câu hỏi
+            </button>
+            <ul class="dropdown-menu">
+                <?php
+                echo "<li><a class='dropdown-item' href='bien_tap.php?id=$id'>Hiện tất cả</a></li>";
+                echo "<li><a class='dropdown-item' href='bien_tap.php?id=$id&id_ch=1'>Câu hỏi điền</a></li>";
+                echo "<li><a class='dropdown-item' href='bien_tap.php?id=$id&id_ch=2'>Câu hỏi chọn</a></li>";
+                echo "<li><a class='dropdown-item' href='bien_tap.php?id=$id&id_ch=3'>Câu hỏi chọn nhiều</a></li>";
+                echo "<li><a class='dropdown-item' href='bien_tap.php?id=$id&id_ch=4'>Câu hỏi select option</a></li>";
+                ?>
+            </ul>
+
             <!-- tim kiem -->
             <form action="" method="get">
-            <div class="input-group" style="width: 200px; margin-bottom: 10px;">
-            <input type="text" class="form-control" placeholder="Search" name="searchtxt" >
-            <input type="hidden" class="form-control" placeholder="Search" name="id" value="<?php echo $id?>">
-            <div class="input-group-btn" >
-                <button class="btn"  type="submit" style="border: 1px solid #ccc; border-radius: 0; background-color: #ccc;"><i class="fa-solid fa-magnifying-glass"></i></button>
-            </div>
-            </div>
+                <div class="input-group" style="width: 200px; margin-bottom: 10px;">
+                    <input type="text" class="form-control" placeholder="Search" name="searchtxt">
+                    <input type="hidden" class="form-control" placeholder="Search" name="id" value="<?php echo $id?>">
+                    <div class="input-group-btn">
+                        <button class="btn" type="submit"
+                            style="border: 1px solid #ccc; border-radius: 0; background-color: #ccc;"><i
+                                class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                </div>
             </form>
-                <?php 
-
-                        $id = $_GET["id"];
-                        include "../function.php";
-                        include "../connectdb.php";
-                        $search = isset($_GET['searchtxt'])?$_GET['searchtxt']:"";
-                ?>
+        
             <table class="table table-striped">
                 <tr>
                     <th>STT</th>
@@ -104,8 +117,10 @@
                 <tr>
                     <?php
                     $role = $_SESSION['acc']['role'];
-                    $id_user = $_SESSION['acc']['id'];   
-                    
+                    $id_user = $_SESSION['acc']['id']; 
+                    $search = isset($_GET['searchtxt'])?$_GET['searchtxt']:"";
+                    // filter
+                    $id_ch = isset($_GET['id_ch'])?$_GET['id_ch']:"";
                     $kq = mysqli_query($conn, "SELECT COUNT(*) FROM `cau_hoi` WHERE `status`=1");
                     $roww = mysqli_fetch_array($kq);
                     $so_luong_page = ceil($roww[0] / 10);
@@ -117,9 +132,28 @@
 
                     if($search){
                         $result = getQuestionSearch($id, $id_user, $curr_page, $search);
+                        $kq = mysqli_query($conn, "SELECT COUNT(*) FROM `cau_hoi` WHERE ten_cau_hoi LIKE '%$search%'");
+                        $roww = mysqli_fetch_array($kq);
+                        $so_luong_page = ceil($roww[0] / 10);
+    
+                        // $result = getQuestion($id, $id_user);
+                        $curr_page = isset($_GET['curr_page'])?$_GET['curr_page']:1;
+                        $pre = ($curr_page > 1)?$curr_page - 1:1;
+                        $next = ($curr_page < $so_luong_page)?$curr_page + 1:$so_luong_page;
 
+                    }elseif($id_ch){
+                        $result = getQuestionFilter($id, $id_user, $curr_page, $id_ch);
+                        $kq = mysqli_query($conn, "SELECT COUNT(*) FROM `cau_hoi` WHERE loai_cau_hoi = $id_ch");
+                        $roww = mysqli_fetch_array($kq);
+                        $so_luong_page = ceil($roww[0] / 10);
+    
+                        // $result = getQuestion($id, $id_user);
+                        $curr_page = isset($_GET['curr_page'])?$_GET['curr_page']:1;
+                        $pre = ($curr_page > 1)?$curr_page - 1:1;
+                        $next = ($curr_page < $so_luong_page)?$curr_page + 1:$so_luong_page;
                     }else{
                         $result = getQuestionPT($id, $id_user, $curr_page);
+                        
                     }
                     $count = 0;
                     $stt = ($curr_page-1)*10;
