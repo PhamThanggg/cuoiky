@@ -124,7 +124,6 @@
         <div class="row row-cols-1 row-cols-md-3 g-4" style="margin: 0 auto; width: 80%;">
             <div class="content-wrap" style="width:100%">
                 <?php
-                
                 $result = getBTVN($id);
                 $stt = 1;
                 while ($row = mysqli_fetch_array($result)) {
@@ -140,7 +139,7 @@
                                 <div class='decs-item'></div>
                             </div>
                         </div>
-                        <a href='chitiet_bt.php?idBT=" . $row["id"] . "' class='btn-cus'>Chi tiết</a>
+                        <a href='chitiet_bt.php?idBT=" . $row["id"] . "&idKh=".$_GET["id"]."' class='btn-cus'>Chi tiết</a>
                     </div>";
                     $stt++;
                 }
