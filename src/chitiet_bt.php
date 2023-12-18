@@ -30,8 +30,14 @@
     if (!isLogin()) {
         header("location: dang_nhap.php");
     }
+    if(isset($_GET["idKh"])){
+        $idKH = $_GET["idKh"];
+    }else{
+        $idKH = -1;
+    }  
     ?>
     <main>
+        <a href="xembtvn.php?id=<?php echo $idKH?>" class='btn btn-primary' style="margin-left:160px">Trở lại</a>
         <?php
         if(isset($_GET["idBT"])){
             $id = $_GET["idBT"];
