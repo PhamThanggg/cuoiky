@@ -42,8 +42,7 @@
         if(isset($_SESSION['id_khoa_hoc'])){
             $id_kh = $_SESSION['id_khoa_hoc'];
         }else{
-            $id_kh=-1;
-            
+            header("Location: khoa_hoc.php");
         }
     ?>
     <section class="main-section" style="margin-top: 70px;">

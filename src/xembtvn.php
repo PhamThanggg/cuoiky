@@ -109,7 +109,7 @@
     if(isset($_GET["id"])){
         $id = $_GET["id"];
     }else{
-        $id = -1;
+        header("Location: khoa_hoc.php");
     }           
     ?>
 

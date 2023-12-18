@@ -31,7 +31,7 @@
             if(isset($_GET['id'])){
                 $id = $_GET['id'];
             }else{
-                $id = -1;
+                header("Location: khoa_hoc.php");
             }
             echo "<a href='bien_tap.php?id=$id' class='btn btn-primary'>Trở lại</a>";
             ?>
