@@ -101,7 +101,7 @@
                     ?>
                 </tr>
             </table>
-            <?php if($id!=-1){?>
+            <?php if(isset($_GET["id"]) && $count != 0){?>
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     <li class="page-item <?php echo ($curr_page==1)?"disabled":"" ?>">

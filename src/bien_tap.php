@@ -93,7 +93,7 @@
             <!-- tim kiem -->
             <form action="" method="get">
                 <div class="input-group" style="width: 200px; margin-bottom: 10px;">
-                    <input type="text" class="form-control" placeholder="Search" name="searchtxt">
+                    <input type="text" class="form-control" placeholder="Search" name="searchtxt" value="<?php echo isset($_GET['searchtxt'])?$_GET['searchtxt']:""  ?>">
                     <input type="hidden" class="form-control" placeholder="Search" name="id" value="<?php echo $id?>">
                     <div class="input-group-btn">
                         <button class="btn" type="submit"
@@ -106,9 +106,9 @@
             <table class="table table-striped">
                 <tr>
                     <th>STT</th>
-                    <th>Tên câu hỏi</th>
+                    <th style="width: 400px;">Tên câu hỏi</th>
                     <th>Loại câu hỏi</th>
-                    <th>Đáp án</th>
+                    <th style="width: 400px;" >Đáp án</th>
                     <th>Tác giả</th>
                     <th>Trạng thái</th>
                     <th>Thao tác</th>
@@ -122,9 +122,9 @@
                     $id_ch = isset($_GET['id_ch'])?$_GET['id_ch']:"";
                     // đếm số câu
                     if($_SESSION['acc']['role'] == 1){
-                        $kq = mysqli_query($conn, "SELECT COUNT(*) FROM `cau_hoi`");
+                        $kq = mysqli_query($conn, "SELECT COUNT(*) FROM `cau_hoi` WHERE id_khoa_hoc=$id");
                     }else{
-                        $kq = mysqli_query($conn, "SELECT COUNT(*) FROM `cau_hoi` WHERE id_user_them = $id_user");
+                        $kq = mysqli_query($conn, "SELECT COUNT(*) FROM `cau_hoi` WHERE id_user_them = $id_user AND id_khoa_hoc=$id");
                     }
                     $roww = mysqli_fetch_array($kq);
                     $so_luong_page = ceil($roww[0] / 10);
@@ -136,7 +136,7 @@
 
                     if($search){
                         $result = getQuestionSearch($id, $id_user, $curr_page, $search);
-                        $kq = mysqli_query($conn, "SELECT COUNT(*) FROM `cau_hoi` WHERE ten_cau_hoi LIKE '%$search%'");
+                        $kq = mysqli_query($conn, "SELECT COUNT(*) FROM `cau_hoi` WHERE ten_cau_hoi LIKE '%$search%' AND id_khoa_hoc=$id");
                         $roww = mysqli_fetch_array($kq);
                         $so_luong_page = ceil($roww[0] / 10);
     

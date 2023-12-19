@@ -212,8 +212,20 @@
                         }
 
                         if(isset($_POST['begin'])){
+                            // check số lượng câu hỏi
+                            include '../connectdb.php';
+                            $check = 0;
+                            $sql = mysqli_query($conn, "SELECT COUNT(*) FROM cau_hoi WHERE status = 1 AND id_khoa_hoc = $id");
+                            while($row = mysqli_fetch_array($sql)){
+                                if($row[0] < 10){
+                                    $check++;
+                                }
+                            }
+
                             // ramdom cau hoi
-                            begin_practice($id_kh, $_SESSION['acc']['id'], 10, 0, 0);
+                            if($check == 0){
+                                begin_practice($id_kh, $_SESSION['acc']['id'], 10, 0, 0);
+                            }
                             date_default_timezone_set('Asia/Ho_Chi_Minh');
                             // tgian hiện tại
                             $thoi_gian_begin = date("Y-m-d H:i:s");
@@ -227,12 +239,22 @@
 
                             //insert cac dl vao bang diem
                             $id_lt=0;
-                            insert_diem($id_user, $id_kh, $thoi_gian_begin, $ket_thuc, $id_lt, $thoi_gian_end, "0");
-                            header("Location: luyen_tap.php?id=$id_kh");
+                           
+                            if($check == 0){
+                                insert_diem($id_user, $id_kh, $thoi_gian_begin, $ket_thuc, $id_lt, $thoi_gian_end, "0");
+                                header("Location: luyen_tap.php?id=$id_kh");
+                            }else{
+                                setcookie("mess", '<div style="margin-left: 800px;">Khóa học này không có đủ 10 câu hỏi để luyện tập</div>', time()+2);
+                                header("Location: luyen_tap.php?id=$id_kh");   
+                            }
+
+                        }
+                        if(isset($_COOKIE['mess'])){
+                            echo $_COOKIE['mess'];
                         }
                     ?>
                     
-
+                    
                     <!-- Tính điểm  -->
                     <?php
                         

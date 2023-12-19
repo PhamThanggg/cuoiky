@@ -34,6 +34,20 @@
                     <input class="form-control" type="text" name="ten_cau_hoi"
                         value="<?php echo $name = isset($_POST['ten_cau_hoi']) ? $_POST['ten_cau_hoi'] : ''; ?>">
                 </div>
+                <label for="name_quiz" style="margin: 10px 0 ">Chọn khóa học</label>
+                    <select name="selectKH">
+                        <?php 
+                            include "../function.php";
+                            include '../connectdb.php';
+                            $sql = "SELECT * FROM `khoa_hoc`";
+                            $result = mysqli_query($conn, $sql);
+                            while ($row = mysqli_fetch_array($result)) {
+                                echo "<option value='".$row["id_khoa_hoc"]."'";
+                                if (isset($_POST['selectKH'])) echo "selected";
+                                echo ">".$row["ten_khoa_hoc"]."</option>";
+                            }
+                        ?>
+                    </select>
                 <div class="form-group">
                     <label for="name_quiz">Nhập nội dung</label>
                     <input class="form-control" type="text" name="noi_dung"
@@ -55,18 +69,6 @@
                         value="<?php echo $name = isset($_POST['thoi_gian']) ? $_POST['thoi_gian'] : ''; ?>">
                 </div><br>
                 <div class="form-group">
-                <label for="name_quiz">Chọn khóa học</label>
-                    <select name="selectKH">
-                        <?php 
-                            include "../function.php";
-                            include '../connectdb.php';
-                            $sql = "SELECT * FROM `khoa_hoc`";
-                            $result = mysqli_query($conn, $sql);
-                            while ($row = mysqli_fetch_array($result)) {
-                                echo "<option value='".$row["id_khoa_hoc"]."'>".$row["ten_khoa_hoc"]."</option>";
-                            }
-                        ?>
-                    </select>
                 </div>
                 
                 <?php
@@ -85,6 +87,14 @@
                     $time = trim($_POST["thoi_gian"]);
                     $selectKH = trim($_POST["selectKH"]);
 
+                     // check số lượng câu hỏi
+                     include '../connectdb.php';
+                     $check = 0;
+                     $sql = mysqli_query($conn, "SELECT COUNT(*) FROM cau_hoi WHERE status = 1 AND id_khoa_hoc = $selectKH");
+                     while($row = mysqli_fetch_array($sql)){
+                        $so_cau_khoaH = $row[0];
+                     }
+
                     if($name == "") {
                         echo "<div class='alert alert-warning text-center' role='alert'>Không được để trống tiêu đề</div>";
                     }elseif($content == ""){
@@ -97,6 +107,8 @@
                         echo "<div class='alert alert-warning text-center' role='alert'>Không được để trống thời gian làm</div>";
                     }elseif($count < 10 || $count > $sl){
                         echo "<div class='alert alert-warning text-center' role='alert'>Số câu hỏi phải từ 10 trở lên và < $sl </div>";
+                    }elseif($so_cau_khoaH < 10){
+                        echo "<div class='alert alert-warning text-center' role='alert'>Trong khóa học bạn chọn hệ thống không đủ 10 câu hỏi trở lên </div>";
                     }elseif($time < 1){
                         echo "<div class='alert alert-warning text-center' role='alert'>Thời gian làm phải lớn hơn 0</div>";
                     }elseif($count_learn < 1){
@@ -106,7 +118,7 @@
                             echo "<div class='alert alert-success text-center' role='alert'>Thêm thành công</div>";
                         } else {
                             echo "<div class='alert alert-warning text-center' role='alert'>Thêm thất bại</div>";
-                        }       
+                        }    
                     }
                 }
                 

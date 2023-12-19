@@ -224,7 +224,7 @@
                 }
 
             }
-            if($_COOKIE['tb']){
+            if(isset($_COOKIE['tb'])){
                 echo $_COOKIE['tb'];
             }
         }
