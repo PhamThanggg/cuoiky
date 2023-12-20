@@ -82,7 +82,7 @@
                 // begin add so dap an
                 if(isset($_POST['add_da'])){
                     $sl_da = $_POST['count_da'];
-                        if($sl_da>=2){
+                        if($sl_da>=2 && $sl_da <= 10){
                             for($i=0; $i<$sl_da; $i++){
                                 $_SESSION["stt".$i] = '<div class="input-group mb-3" style="margin-top: 20px;">
                                 <div class="input-group-prepend">
@@ -94,7 +94,12 @@
                                 </div>';
                             }
                         }else{
-                             echo '<br><div class="alert alert-danger text-center" role="alert">Bạn phải thêm ít nhất 2 đáp án</div>';
+                            for($i=0; $i<$sl_da; $i++){
+                                if (isset($_SESSION["stt".$i])) {
+                                    unset($_SESSION["stt".$i]);
+                                }
+                            }
+                             echo '<br><div class="alert alert-danger text-center" role="alert">Bạn phải thêm ít nhất 2 đáp án và số đáp án < 10 </div>';
                         }
                 }
 
@@ -123,6 +128,8 @@
                 $list_datxt = [];
                 $check_cb=0;
                 $check_txt=0;
+
+                $check_leng = 0;
                 // add vào mảng
                 for($i=0; $i<$sl_da; $i++){
                     if(isset($_POST[$i])){
@@ -136,6 +143,11 @@
                         if($_POST['txt'.$i]!=""){
                             $list_datxt[$i] = trim($_POST['txt'.$i]);
                             $check_txt++;
+
+                            // đếm độ dài da
+                            if(strlen($_POST['txt'.$i]) > 100){
+                                $check_leng++;
+                            }
                         }else{
                             $list_datxt[$i] = "";
                         }
@@ -145,14 +157,18 @@
                 //validate
                 if($ten_ch==''){
                     echo '<br><div class="alert alert-danger text-center" role="alert">Bạn chưa nhập tên câu hỏi</div>';
+                }elseif(strlen($ten_ch) > 200){
+                    echo '<div class="alert alert-danger text-center" role="alert"> Tên câu hỏi không được dài quá 200 ký tự</div>';
                 }elseif($sl_da==''){
                     echo '<br><div class="alert alert-danger text-center" role="alert">Bạn chưa thêm số đáp án</div>';
-                }elseif($sl_da < 2){
+                }elseif($sl_da < 2 ){
                     echo '<br><div class="alert alert-danger text-center" role="alert">Bạn phải thêm ít nhất 2 đáp án</div>';
                 }elseif($check_cb==0){
                     echo '<br><div class="alert alert-danger text-center" role="alert">Bạn phải tích ít nhất 1 đáp án</div>';
                 }elseif($check_txt!=$sl_da){
                     echo '<br><div class="alert alert-danger text-center" role="alert">Bạn chưa điền đầy đủ đáp án</div>';
+                }elseif($check_leng != 0){
+                    echo '<br><div class="alert alert-danger text-center" role="alert">Độ dài của từng đáp án không được quá 100 ký tự </div>';
                 }else{
                     $da_correct='';
                     $da_txt='';

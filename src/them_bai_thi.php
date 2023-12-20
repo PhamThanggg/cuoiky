@@ -105,6 +105,10 @@
                         echo "<div class='alert alert-warning text-center' role='alert'>Không được để trống số lần làm</div>";
                     }elseif($time == ""){
                         echo "<div class='alert alert-warning text-center' role='alert'>Không được để trống thời gian làm</div>";
+                    }elseif(strlen($name) > 200 || strlen($content) > 200 ){
+                        echo '<div class="alert alert-danger text-center" role="alert"> Chuỗi trong Tiêu đề, nội dung không được dài quá 200 ký tự</div>';
+                    }elseif(strlen($count) > 10 || strlen($count_learn) > 10 || strlen($time) > 10){
+                        echo '<div class="alert alert-danger text-center" role="alert"> Chuỗi trong số câu, số lần, tgian không được dài quá 10 ký tự</div>';
                     }elseif($count < 10 || $count > $sl){
                         echo "<div class='alert alert-warning text-center' role='alert'>Số câu hỏi phải từ 10 trở lên và < $sl </div>";
                     }elseif($so_cau_khoaH < 10){

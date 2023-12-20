@@ -111,6 +111,8 @@
                             echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập họ tên</div>';
                         }elseif($gmail==""){
                             echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập gmail</div>';
+                        }elseif(strlen($ht) > 45 || strlen($gmail) > 45 ){
+                            echo '<div class="alert alert-danger text-center" role="alert"> Chuỗi trong ô input không được dài quá 45 ký tự</div>';
                         }else{
                             if(updateAccountInfo($user, $ht, $gmail)){
                                 $_SESSION['acc']= array(

@@ -63,6 +63,8 @@
                         echo "<div class='alert alert-warning text-center' role='alert'>Không được để trống tiêu đề</div>";
                     }elseif($da == ""){
                         echo "<div class='alert alert-warning text-center' role='alert'>Không được để trống nội dung</div>";
+                    }elseif(strlen($name) > 200 || strlen($da) > 200){
+                        echo '<div class="alert alert-danger text-center" role="alert">Chuỗi trong mỗi ô input không được dài quá 200 ký tự</div>';
                     } else {                        
                         $img = "";
                         if(isset($_FILES["image"]) && !empty($_FILES["image"]["name"])) {

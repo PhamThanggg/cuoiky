@@ -44,7 +44,9 @@
                     $name = trim($_POST["ten_cau_hoi"]);
                     if($name == "") {
                         echo "<br><div class='alert alert-warning text-center' role='alert'>Không được để trống tên khóa học</div>";
-                    } else {                        
+                    }elseif(strlen($name) > 45 ){
+                        echo '<div class="alert alert-danger text-center" role="alert">Chuỗi trong mỗi ô input không được dài quá 45 ký tự</div>';
+                    }else {                        
                         $img = "";
                         if(isset($_FILES["image"]) && !empty($_FILES["image"]["name"])) {
                             $target_dir = "../images/";

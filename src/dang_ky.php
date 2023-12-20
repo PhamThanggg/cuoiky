@@ -28,8 +28,10 @@
                     echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập lại mật khẩu </div>';
                 }elseif($gmail==""){
                     echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập email </div>';
-                }elseif(checkTV($tk) || checkDauCach($tk)){
-                    echo '<div class="alert alert-danger text-center" role="alert">Tên tài khoản phải được viết liền không dấu</div>';
+                }elseif($gmail==""){
+                    echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập email </div>';
+                }elseif(strlen($tk) > 45 || strlen($mk) > 45 || strlen($gmail) > 45){
+                    echo '<div class="alert alert-danger text-center" role="alert">Mỗi ô input không được dài quá 45 ký tự</div>';
                 }elseif(checkTV($mk) || checkDauCach($mk)){
                     echo '<div class="alert alert-danger text-center" role="alert">Mật khẩu phải được viết liền không dấu</div>';
                 }elseif(checkTV($gmail) || checkDauCach($gmail)){

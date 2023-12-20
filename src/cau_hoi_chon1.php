@@ -93,8 +93,14 @@
                 }
                 if($question == "") {
                     echo "<div class='alert alert-warning text-center' role='alert'>Tên câu hỏi không được để trống</div>";
+                }elseif($da0 == "" || $da1 == "" ||  $da2 == "" || $da3 == "" ){
+                    echo '<div class="alert alert-danger text-center" role="alert"> Đáp án không được để trống</div>';
                 } else if($da == "") {
                     echo "<div class='alert alert-warning text-center' role='alert'>Bạn phải chọn đáp án</div>";
+                }elseif(strlen($question) > 200){
+                    echo '<div class="alert alert-danger text-center" role="alert"> Câu hỏi không được dài quá 200 ký tự</div>';
+                }elseif(strlen($da0) > 100 || strlen($da1) > 100 || strlen($da2) > 100 || strlen($da3) > 100 ){
+                    echo '<div class="alert alert-danger text-center" role="alert"> Đáp án không được dài quá 100 ký tự</div>';
                 } else {
                     $img = "";
                     if(isset($_FILES["image"])&& !empty( $_FILES["image"]["name"])) {

@@ -106,6 +106,8 @@
                             echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập mật khẩu mới</div>';
                         }elseif($remkNew == ""){
                             echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập lại mật khẩu mới</div>';
+                        }elseif(strlen($mkNew) > 45){
+                            echo '<div class="alert alert-danger text-center" role="alert"> Chuỗi trong ô input không được dài quá 45 ký tự</div>';
                         }elseif(checkTV($mkNew) || checkDauCach($mkNew)){
                             echo '<div class="alert alert-danger text-center" role="alert">Mật khẩu mới phải được viết liền không dấu</div>';
                         }else{

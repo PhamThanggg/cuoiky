@@ -101,7 +101,7 @@
                                                     echo getQs();
                                                     ?>
                                                 </span></div>
-                                            <div class="stat-heading">Templates</div>
+                                            <div class="stat-heading">Câu hỏi</div>
                                         </div>
                                     </div>
                                 </div>
@@ -122,7 +122,7 @@
                                                     getUser();
                                                     ?>
                                                 </span></div>
-                                            <div class="stat-heading">Clients</div>
+                                            <div class="stat-heading">Tài khoản</div>
                                         </div>
                                     </div>
                                 </div>

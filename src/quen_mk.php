@@ -23,6 +23,8 @@
 
                 if($tk==""){
                     echo '<div class="alert alert-danger text-center" role="alert">Bạn chưa nhập tên tài khoản</div>';
+                }elseif(strlen($tk) > 45){
+                    echo '<div class="alert alert-danger text-center" role="alert">Mỗi ô input không được dài quá 45 ký tự</div>';
                 }else{
                     if(checkAccount($tk)){
                         $random = rand(100000, 999999);

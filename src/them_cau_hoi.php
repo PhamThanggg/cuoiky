@@ -64,6 +64,8 @@
                         echo "Không được để trống tên câu hỏi";
                     } else if($da == "") {
                         echo "Không được để trống đáp án";
+                    }elseif(strlen($name) > 200 || strlen($da) > 200 ){
+                        echo '<div class="alert alert-danger text-center" role="alert"> Chuỗi trong ô input không được dài quá 200 ký tự</div>';
                     } else {
                         $img = "";
                         if(isset($_FILES["image"])&& !empty( $_FILES["image"]["name"])) {

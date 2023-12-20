@@ -723,7 +723,7 @@ function getDiemLT($idKT, $role){
 	$sql = "SELECT * FROM `diem` 
 			JOIN `user` ON `user`.id_user = `diem`.id_user
 			JOIN `khoa_hoc` ON `khoa_hoc`.id_khoa_hoc = `diem`.id_khoa_hoc
-			WHERE `id_KT` = $idKT AND `role` = $role";
+			WHERE `id_KT` = $idKT ";
 	$result = mysqli_query($conn, $sql);
 	return $result;
 }
