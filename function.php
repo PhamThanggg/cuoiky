@@ -826,7 +826,7 @@ function insertBaiThi($da_chon,$id_user, $id_KT, $lanthi, $id_diem, $id_ch, $che
 
 	// $sql = "INSERT INTO `ky_thi`(`tieu_de`, `noi_dung`, `so_luong_cau`, `so_lan`, `thoi_gian_mo`, `thoi_gian_dong`, `id_khoa_hoc`, `thoi_gian_lam`) 
 	// VALUES ('$tieu_de','$noi_dung','$so_luong','$so_lan','$ngay_gio','$expired','$id_kh','$thoi_gian')";
-	$result = mysqli_query($conn, $sql);
+	$result1 = mysqli_query($conn, $sql);
 }
 
 
@@ -847,8 +847,8 @@ function demCd(){
 }
 function kyThy($id_cd, $sl, $id_kh, $id_user, $id_KT, $id_quizz){
 	include 'connectdb.php';
-	$sql = "SELECT * FROM `cau_hoi` WHERE  LIMIT $sl";
-	$result = mysqli_query($conn, $sql);
+	// $sql = "SELECT * FROM `cau_hoi` WHERE  LIMIT $sl";
+	// $result = mysqli_query($conn, $sql);
 	
 	$sqly = "SELECT * FROM cau_hoi 
 	WHERE (status = 1 AND id_khoa_hoc = $id_kh AND `id_cd` = $id_cd)
@@ -868,7 +868,6 @@ function kyThy($id_cd, $sl, $id_kh, $id_user, $id_KT, $id_quizz){
 			VALUES ('$r1', '$r2', '$r3', '$r4', '$r5', '$r6', '$id_user', '$r8', '$r9', '$id_KT', $id_quizz)";
 		$result = mysqli_query($conn, $sql);
 	}
-
-
 	return $result;
+
 }

@@ -218,6 +218,9 @@
                             </div><br>';
                         }
 
+
+
+
                         if(isset($_POST['begin'])){
                             if(count_userKT($id_user, $idKT)){
                                 $count = mysqli_fetch_array(count_userKT($id_user, $idKT));
