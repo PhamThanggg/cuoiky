@@ -323,7 +323,7 @@
                             }
 
                             
-                            $diem1Cau = 100/$stt;
+                            $diem1Cau = 100/$stt;   
                             $diem = 0;
                             $lanthi = 1;
                             for($i=0; $i < $stt; $i++){
