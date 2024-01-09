@@ -44,6 +44,18 @@
                         value="<?php echo $name = isset($_POST['ten_cau_hoi']) ? $_POST['ten_cau_hoi'] : ''; ?>">
                 </div>
                 <div class="form-group">
+                    <select name="selectKH">
+                        <?php 
+                            include "../function.php";
+                            include '../connectdb.php';
+                            $resultCd = layCd();
+                            while ($row = mysqli_fetch_array($resultCd)) {
+                                echo "<option value='".$row["id_cd"]."'>".$row["ten_cd"]."</option>";
+                            }
+                        ?>
+                    </select>
+                </div>                
+                <div class="form-group">
                     <label for="name_quiz">Ảnh cho câu hỏi</label>
                     <input class="form-control" name="image" type="file">
                 </div>
@@ -56,10 +68,10 @@
                         value="<?php echo $da = isset($_POST['da']) ? $_POST['da'] : ''; ?>">
                 </div>
                 <?php
-                include "../function.php";
                 if(isset($_POST["btn"])) {
                     $name = trim($_POST["ten_cau_hoi"]);
                     $da = trim($_POST["da"]);
+                    $selectKH = $_POST["selectKH"];
                     if($name == "") {
                         echo "Không được để trống tên câu hỏi";
                     } else if($da == "") {
@@ -77,7 +89,7 @@
                                 if(ktAnhTontai($target_dir, $_FILES["image"]["name"])){
                                     if(move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
                                             $img = basename($_FILES["image"]["name"]);
-                                            if(insertCauHoi($name, $da, "", "1", $img, $id)) {
+                                            if(insertCauHoi($name, $da, "", "1", $img, $id, $selectKH)) {
                                                 echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
                                             } else {
                                                 echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";
@@ -90,7 +102,7 @@
                                 echo "<div class='alert alert-warning text-center' role='alert'>Hãy chọn file ảnh</div>";
                             }
                         }else{
-                                if(insertCauHoi($name, $da, "", "1", $img, $id)) {
+                                if(insertCauHoi($name, $da, "", "1", $img, $id, $selectKH)) {
                                     echo "<div class='alert alert-success text-center' role='alert'>Thêm câu hỏi thành công</div>";
                                 } else {
                                     echo "<div class='alert alert-warning text-center' role='alert'>Thêm câu hỏi thất bại</div>";

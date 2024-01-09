@@ -237,7 +237,7 @@ function updateAccountPass($id, $mkO, $mk)
 }
 
 // ham insert cau hoi
-function insertCauHoi($question, $da, $arr, $type, $img, $id)
+function insertCauHoi($question, $da, $arr, $type, $img, $id, $id_cd)
 {
 	include 'connectdb.php';
 	$user = $_SESSION["acc"]["id"];
@@ -245,7 +245,7 @@ function insertCauHoi($question, $da, $arr, $type, $img, $id)
 	if ($_SESSION["acc"]["role"] == 1) {
 		$stt = 1;
 	}
-	$sql = "INSERT INTO `cau_hoi` (`ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`) VALUES ('$question' ,'$da', '$arr', '$type', '$img', '$user', '$id',$stt)";
+	$sql = "INSERT INTO `cau_hoi` (`ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`, `id_cd`) VALUES ('$question' ,'$da', '$arr', '$type', '$img', '$user', '$id',$stt, $id_cd)";
 	$result = mysqli_query($conn, $sql);
 	if ($result) {
 		return true;
@@ -800,6 +800,7 @@ function ktAnhTontai($tg_dir, $imgName){
 	}
 }
 
+
 function insertBaiThi($da_chon,$id_user, $id_KT, $lanthi, $id_diem, $id_ch, $checkds){
 	include 'connectdb.php';
 	$sqly = "SELECT * FROM cau_hoi WHERE id_cau_hoi = $id_ch";
@@ -826,5 +827,48 @@ function insertBaiThi($da_chon,$id_user, $id_KT, $lanthi, $id_diem, $id_ch, $che
 	// $sql = "INSERT INTO `ky_thi`(`tieu_de`, `noi_dung`, `so_luong_cau`, `so_lan`, `thoi_gian_mo`, `thoi_gian_dong`, `id_khoa_hoc`, `thoi_gian_lam`) 
 	// VALUES ('$tieu_de','$noi_dung','$so_luong','$so_lan','$ngay_gio','$expired','$id_kh','$thoi_gian')";
 	$result = mysqli_query($conn, $sql);
+}
+
+
+// lay cau ki thi
+function layCd(){
+	include 'connectdb.php';
+	$sql = "SELECT * FROM `chude_kh`";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+function demCd(){
+	include 'connectdb.php';
+	$sql = "SELECT COUNT(*) FROM `chude_kh`";
+	$result = mysqli_query($conn, $sql);
+	while ($row = mysqli_fetch_array($result)) {
+		return ($row[0]);
+	}
+}
+function kyThy($id_cd, $sl, $id_kh, $id_user, $id_KT, $id_quizz){
+	include 'connectdb.php';
+	$sql = "SELECT * FROM `cau_hoi` WHERE  LIMIT $sl";
+	$result = mysqli_query($conn, $sql);
+	
+	$sqly = "SELECT * FROM cau_hoi 
+	WHERE (status = 1 AND id_khoa_hoc = $id_kh AND `id_cd` = $id_cd)
+	ORDER BY RAND() LIMIT $sl";
+	$result1 = mysqli_query($conn, $sqly);
+	while ($row = mysqli_fetch_array($result1)) {
+		$r1 = $row['id_cau_hoi'];
+		$r2 = $row['ten_cau_hoi'];
+		$r3 = $row['dap_an'];
+		$r4 = $row['correct'];
+		$r5 = $row['loai_cau_hoi'];
+		$r6 = $row['anh_cau_hoi'];
+		$r7 = $row['id_user_them'];
+		$r8 = $row['id_khoa_hoc'];
+		$r9 = $row['status'];
+		$sql = "INSERT INTO luyen_tap (`id_cau_hoi`, `ten_cau_hoi`, `dap_an`, `correct`,`loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `status`, `id_KT`, `id_quizz`)
+			VALUES ('$r1', '$r2', '$r3', '$r4', '$r5', '$r6', '$id_user', '$r8', '$r9', '$id_KT', $id_quizz)";
+		$result = mysqli_query($conn, $sql);
+	}
+
+
 	return $result;
 }

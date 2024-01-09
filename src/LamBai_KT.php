@@ -222,14 +222,36 @@
                             if(count_userKT($id_user, $idKT)){
                                 $count = mysqli_fetch_array(count_userKT($id_user, $idKT));
                             }
-                            // echo $count[0];
-                            if($count[0] < $so_lan_cho_phep){
+                            if($count[0] < $so_lan_cho_phep){                              
                                 include '../connectdb.php';
                                 $sql_KT = "SELECT * FROM ky_thi WHERE id_KT=$idKT";
                                 $result1 = mysqli_query($conn, $sql_KT);
                                 while($rowKT = mysqli_fetch_array($result1)){
+
+                                    // lấy ngẫu nhiên theo chủ đề
+                                    $emptyArray = array();
+                                    $emptyArraySl = array();
+                                    $slch=$rowKT['so_luong_cau'];
+                                    $resultCd = layCd();
+                                    while ($row = mysqli_fetch_array($resultCd)) {
+                                        $emptyArray[] = $row['id_cd'];
+                                        $emptyArraySl[] = ceil($slch/demCd());
+                                    }
+                                    $slcc=0;
+                                    foreach ($emptyArraySl as $key => $value) {
+                                        $slcc += $value;
+                                    }
+                                    if($slcc > $slch){
+                                        end($emptyArraySl); // Di chuyển con trỏ đến phần tử cuối cùng
+                                        $key = key($emptyArraySl);
+                                        $emptyArraySl[$key]=(array_slice($emptyArraySl, -1)[0])-($slcc-$slch);
+                                    }
+                                    for($x = 0; $x < count($emptyArraySl); $x++){
+                                        kyThy($emptyArray[$x], $emptyArraySl[$x], $rowKT['id_khoa_hoc'],$_SESSION['acc']['id'], $idKT, 1);
+                                    }
+
                                     // ramdom cau hoi
-                                    begin_practice($rowKT['id_khoa_hoc'],$_SESSION['acc']['id'],  $rowKT['so_luong_cau'], $idKT, 1);
+                                    // begin_practice($rowKT['id_khoa_hoc'],$_SESSION['acc']['id'],  $rowKT['so_luong_cau'], $idKT, 1);
                                 }
     
                                 date_default_timezone_set('Asia/Ho_Chi_Minh');
