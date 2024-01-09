@@ -269,11 +269,13 @@
                     <input type="text" class="form-control" name="txt'.$i.'" placeholder="Nhập đáp án" value="'.$arr[$i].'">
                     </div>';
                 }
-    
+               if($row["status"]=="0"){
+                
                 echo '<div style="margin: 20px 0 0 0;" class="d-grid">
                     <input class="btn btn-primary btn-block" name="btn" type="submit" value="Thêm câu hỏi">
-                </div>
-            </div>
+                </div>';
+               }
+            echo '</div>
             </form>';
 
             if(isset($_POST['btn'])){

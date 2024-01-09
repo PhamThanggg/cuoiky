@@ -92,11 +92,15 @@
                                                 $stt = 1;
                                                 $result = getDiemThi($id_user);
                                                 while ($row = mysqli_fetch_array($result)) {
+                                                    $id_diem = $row['id_diem'];
+                                                    $id_KT = $row['id_KT'];
+                                                    // echo $id_diem;
                                                     echo "<tr>
                                                     <td class='serial'>". $row['tieu_de'] . "</td>
                                                         <td> <span class='name'>" . $row['thoi_gian_mo'] . "</span> </td>
                                                         <td> <span class='name'>" . $row['thoi_gian'] . "</span> </td>
                                                         <td> <span class='product'>" . $row['diem'] . "</span> </td>
+                                                        <td> <a href='chi_tiet_baiThi.php?id_diem=$id_diem&id_KT=$id_KT' >Chi tiet</a></td>
                                                         <td>
                                                             <form method='post'>
                                                             <input type='hidden' name='idUser' value='" . "" . "'>

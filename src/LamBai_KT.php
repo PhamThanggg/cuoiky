@@ -93,7 +93,6 @@
                                     $list_id_ch=[];
                                     $result = get_limit10($id_kh, $_SESSION['acc']['id']);
                                     while($row = mysqli_fetch_array($result)){
-                                        
                                         // begin câu hỏi điền
                                         echo "<h5 class='card-title py-2' style='margin-top: 10px;'>Câu "; echo ($stt+1). ": "; echo $row['ten_cau_hoi']." </h5>";
                                         if($row['loai_cau_hoi']==1){
@@ -258,13 +257,29 @@
 
                     <!-- Tính điểm  -->
                     <?php
+
+                        include '../connectdb.php';
+                        $sql_D = "SELECT * FROM `diem` WHERE `id_KT` = $idKT AND `id_quizz` = 1 AND `id_user` = $id_user
+                        ORDER BY `id_diem` DESC LIMIT 1";
+                        $resultt = mysqli_query($conn, $sql_D);
+                        while($rowKT = mysqli_fetch_array($resultt)){
+                            $id_diem = $rowKT['id_diem'];
+                            $id_KTT = $rowKT['id_KT'];
+                        }
+                        // echo $id_KTT;
+
+                        $sqlCount = "SELECT COUNT(*) FROM `diem` WHERE `id_KT` = 14 AND `id_quizz` = 1 AND `id_user` = 1";
+                        $resulcn = mysqli_query($conn, $sqlCount);
+                        while($rowKT = mysqli_fetch_array($resulcn)){
+                            $lanthi = $rowKT[0] + 1;
+                        }
                         
                         $listGet_cr = [];
                         // begin submit
                         if(isset($_POST['submit'])){
                             $stt1=0;
                             
-                            for($i = 0; $i < 10; $i++){
+                            for($i = 0; $i < $stt; $i++){
                                 // cau hoi điền
                                 if(isset($_POST["cau_dien$i"])){
                                     $listGet_cr[] = $_POST["cau_dien$i"];
@@ -307,13 +322,20 @@
                                 $stt1++;
                             }
 
+                            
+                            $diem1Cau = 100/$stt;
                             $diem = 0;
-                            for($i=0; $i < 10; $i++){
+                            $lanthi = 1;
+                            for($i=0; $i < $stt; $i++){
                                 if($list_correct[$i]==$listGet_cr[$i]){
-                                    $diem += 10;
+                                    $diem += $diem1Cau;
+
+                                    insertBaiThi($listGet_cr[$i], $id_user, $id_KTT, $lanthi, $id_diem , $list_id_ch[$i], 1);
                                 }else{
                                     // neu sai thi add vao bang lich_su_sai
                                     insertFail($list_id_ch[$i], $id_user, $listGet_cr[$i]);
+
+                                    insertBaiThi($listGet_cr[$i], $id_user, $id_KTT, $lanthi, $id_diem , $list_id_ch[$i], 0);
                                 }
                             }
                             setcookie("diem", "<p style='text-align: center; font-size: 20px;' >Điểm của bạn: $diem</p>", time() + 5);

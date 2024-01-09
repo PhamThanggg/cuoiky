@@ -298,7 +298,7 @@
                                 // cau hoi select option
                                 elseif(isset($_POST["selectOption$stt1"])){
                                     $da = $_SESSION['select'.$stt1].", ".$_POST["selectOption$stt1"];
-                                    echo $da;
+                                    // echo $da;
                                     $listGet_cr[]=$da;
                                 }else{
                                     $listGet_cr[] = "";

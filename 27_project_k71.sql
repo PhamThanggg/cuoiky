@@ -2,8 +2,7 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Máy chủ: 127.0.0.1:3307
--- Thời gian đã tạo: Th12 19, 2023 lúc 06:05 PM
+-- Thời gian đã tạo: Th12 20, 2023 lúc 08:01 AM
 -- Phiên bản máy phục vụ: 10.4.28-MariaDB
 -- Phiên bản PHP: 8.1.17
 
@@ -38,6 +37,13 @@ CREATE TABLE `btvn` (
   `quantity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `btvn`
+--
+
+INSERT INTO `btvn` (`id`, `id_khoa_hoc`, `name`, `img`, `content`, `createDate`, `expired`, `quantity`) VALUES
+(5, 4, 'Bài tập tuần 1', '', 'Làm quen với php', '2023-12-20 12:41:06', '2023-12-23 12:41:06', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -47,8 +53,8 @@ CREATE TABLE `btvn` (
 CREATE TABLE `cau_hoi` (
   `id_cau_hoi` int(11) NOT NULL,
   `ten_cau_hoi` varchar(400) DEFAULT NULL,
-  `dap_an` varchar(400) NOT NULL,
-  `correct` varchar(400) NOT NULL,
+  `dap_an` varchar(1000) NOT NULL,
+  `correct` varchar(1000) NOT NULL,
   `loai_cau_hoi` int(10) DEFAULT NULL,
   `anh_cau_hoi` varchar(200) DEFAULT NULL,
   `id_user_them` int(11) DEFAULT NULL,
@@ -178,7 +184,8 @@ CREATE TABLE `ky_thi` (
 --
 
 INSERT INTO `ky_thi` (`id_KT`, `tieu_de`, `noi_dung`, `so_luong_cau`, `so_lan`, `thoi_gian_mo`, `thoi_gian_dong`, `id_khoa_hoc`, `thoi_gian_lam`) VALUES
-(14, 'Thi GK1', 'Làm trong 20p', 20, 2, '2023-12-20 00:04:36', '2023-12-23 00:04:36', 4, 20);
+(14, 'Thi GK1', 'Làm trong 20p', 20, 2, '2023-12-20 00:04:36', '2023-12-23 00:04:36', 4, 20),
+(15, 'Thi cuối kỳ', 'Làm trong 30p', 15, 2, '2023-12-20 12:47:57', '2023-12-23 12:47:57', 4, 30);
 
 -- --------------------------------------------------------
 
@@ -189,8 +196,8 @@ INSERT INTO `ky_thi` (`id_KT`, `tieu_de`, `noi_dung`, `so_luong_cau`, `so_lan`, 
 CREATE TABLE `lich_su_sai` (
   `id_cau_hoi` int(11) NOT NULL,
   `ten_cau_hoi` varchar(500) NOT NULL,
-  `dap_an` varchar(400) NOT NULL,
-  `correct` varchar(500) NOT NULL,
+  `dap_an` varchar(1000) NOT NULL,
+  `correct` varchar(1000) NOT NULL,
   `loai_cau_hoi` int(10) NOT NULL,
   `anh_cau_hoi` varchar(300) NOT NULL,
   `id_user_them` int(11) NOT NULL,
@@ -288,8 +295,8 @@ INSERT INTO `loai_cau_hoi` (`id_loai`, `loai_CH`) VALUES
 CREATE TABLE `luyen_tap` (
   `id_cau_hoi` int(11) NOT NULL DEFAULT 0,
   `ten_cau_hoi` varchar(500) DEFAULT NULL,
-  `dap_an` varchar(500) NOT NULL,
-  `correct` varchar(500) NOT NULL,
+  `dap_an` varchar(1000) NOT NULL,
+  `correct` varchar(1000) NOT NULL,
   `loai_cau_hoi` int(10) DEFAULT NULL,
   `anh_cau_hoi` varchar(300) DEFAULT NULL,
   `id_user_them` int(11) DEFAULT NULL,
@@ -400,13 +407,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT cho bảng `btvn`
 --
 ALTER TABLE `btvn`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT cho bảng `cau_hoi`
 --
 ALTER TABLE `cau_hoi`
-  MODIFY `id_cau_hoi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=100;
+  MODIFY `id_cau_hoi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
 
 --
 -- AUTO_INCREMENT cho bảng `dap_an`
@@ -418,7 +425,7 @@ ALTER TABLE `dap_an`
 -- AUTO_INCREMENT cho bảng `diem`
 --
 ALTER TABLE `diem`
-  MODIFY `id_diem` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `id_diem` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT cho bảng `khoa_hoc`
@@ -430,7 +437,7 @@ ALTER TABLE `khoa_hoc`
 -- AUTO_INCREMENT cho bảng `ky_thi`
 --
 ALTER TABLE `ky_thi`
-  MODIFY `id_KT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_KT` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT cho bảng `loai_cau_hoi`
@@ -442,7 +449,7 @@ ALTER TABLE `loai_cau_hoi`
 -- AUTO_INCREMENT cho bảng `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Các ràng buộc cho các bảng đã đổ

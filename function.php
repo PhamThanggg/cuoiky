@@ -397,6 +397,16 @@ function getDetailSaiAll($id, $id_user)
 	return $result;
 }
 
+// lich su ktriem tra
+function getKiThiSaiAll($id_diem, $id_user, $id_KT)
+{
+	include 'connectdb.php';
+	$sql = "SELECT * FROM `lich_su_thi`
+		WHERE id_diem = $id_diem AND id_user_them=$id_user AND id_KT = $id_KT AND thoi_gian_xem > NOW()";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+
 // ham lay so nguoi dung
 function getUser()
 {
@@ -683,6 +693,16 @@ function get_KT($id_KT)
 	return $result;
 }
 
+// lay ten khoa hoc
+function getNameKH($id_kh)
+{
+	include 'connectdb.php';
+	$sql = "SELECT * FROM `khoa_hoc`
+	WHERE id_khoa_hoc=$id_kh";
+	$result = mysqli_query($conn, $sql);
+	return $result;
+}
+
 // đếm số ky thi
 function count_KT()
 {
@@ -778,4 +798,33 @@ function ktAnhTontai($tg_dir, $imgName){
 	}else{
 		return false;
 	}
+}
+
+function insertBaiThi($da_chon,$id_user, $id_KT, $lanthi, $id_diem, $id_ch, $checkds){
+	include 'connectdb.php';
+	$sqly = "SELECT * FROM cau_hoi WHERE id_cau_hoi = $id_ch";
+	$result1 = mysqli_query($conn, $sqly);
+	while ($row = mysqli_fetch_array($result1)) {
+		$r1 = $row['id_cau_hoi'];
+		$ten_ch = $row['ten_cau_hoi'];
+		// $r3 = $row['dap_an'];
+		$list_da = $row['correct'];
+		$loai_cau_hoi = $row['loai_cau_hoi'];
+		$anh_cau_hoi = $row['anh_cau_hoi'];
+		// $id_user = $row['id_user_them'];
+		$id_khoa_hoc = $row['id_khoa_hoc'];
+		$r9 = $row['status'];
+	}
+
+	date_default_timezone_set('Asia/Ho_Chi_Minh');
+	$ngay_gio = date("Y-m-d H:i:s");
+	$expired = date("Y-m-d H:i:s", strtotime($ngay_gio . " +90 days"));
+
+	$sql = "INSERT INTO `lich_su_thi`(`ten_cau_hoi`, `dap_an`, `correct`, `loai_cau_hoi`, `anh_cau_hoi`, `id_user_them`, `id_khoa_hoc`, `id_KT`, `lan_thi`, `id_diem`, `id_cau_hoi`, `thoi_gian_xem`, `checkds`) 
+	VALUES ('$ten_ch','$da_chon','$list_da','$loai_cau_hoi','$anh_cau_hoi','$id_user','$id_khoa_hoc','$id_KT','$lanthi','$id_diem', '$id_ch', '$expired', '$checkds')";
+
+	// $sql = "INSERT INTO `ky_thi`(`tieu_de`, `noi_dung`, `so_luong_cau`, `so_lan`, `thoi_gian_mo`, `thoi_gian_dong`, `id_khoa_hoc`, `thoi_gian_lam`) 
+	// VALUES ('$tieu_de','$noi_dung','$so_luong','$so_lan','$ngay_gio','$expired','$id_kh','$thoi_gian')";
+	$result = mysqli_query($conn, $sql);
+	return $result;
 }
